@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.bar.TitleBar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/titlebar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_666666"
+    app:leftColor="@color/white_ffffff"
+    app:leftIcon="@mipmap/bar_icon_back_white"
+    app:leftTitle="返回"
+    app:title="功能说明：商品图片、商品信息、店铺信息、物流信息、猜你喜欢、商品详情等信息的展示"
+    app:titleColor="@color/white_ffffff" />
+
+    <!--
+https://github.com/getActivity/TitleBar/blob/master/app/src/main/res/layout/activity_main.xml
+    <declare-styleable name="TitleBar">
+        整体样式
+        <attr name="barStyle">
+            <enum name="light" value="0x10" />日间模式
+            <enum name="night" value="0x20" />夜间模式
+            <enum name="transparent" value="0x30" />透明模式
+            <enum name="ripple" value="0x40" />水波纹模式
+        </attr>
+        中间
+        <attr name="title" format="string" />
+        <attr name="titleColor" format="color" />
+        <attr name="titleSize" format="dimension" />
+        左边
+        <attr name="leftTitle" format="string" />
+        <attr name="leftIcon" format="reference" /> leftIcon 优先于 backButton
+        <attr name="backButton" format="boolean" /> 返回按钮（默认开）
+        <attr name="leftColor" format="color" />
+        <attr name="leftSize" format="dimension" />
+        <attr name="leftBackground" format="reference|color" />
+        右边
+        <attr name="rightTitle" format="string" />
+        <attr name="rightIcon" format="reference" />
+        <attr name="rightColor" format="color" />
+        <attr name="rightSize" format="dimension" />
+        <attr name="rightBackground" format="reference|color" />
+        分割线
+        <attr name="lineVisible" format="boolean" />
+        <attr name="lineColor" format="reference|color" />
+        <attr name="lineSize" format="dimension" />
+    </declare-styleable>
+    -->

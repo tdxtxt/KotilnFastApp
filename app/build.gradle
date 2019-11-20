@@ -13,6 +13,8 @@ android {
         targetSdkVersion versions.targetSdk
         versionCode versions.versionCode
         versionName versions.versionName
+        multiDexEnabled true
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }//解决AndroidStudio3.0 注解报错
     }
     buildTypes {
         release {
@@ -29,4 +31,9 @@ dependencies {
     implementation rootProject.ext.google.recyclerview
     implementation rootProject.ext.google.design
     implementation rootProject.ext.google.appcompat
+
+    implementation project(path: ':baselib')
+    //控件id注入库
+    implementation rootProject.ext.butterknifeLibs
+//    implementation rootProject.ext.fastDev.title
 }

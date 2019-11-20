@@ -1,12 +1,9 @@
 package com.fastdev.ton
 
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
+import com.baselib.ui.activity.BaseActivity
+import com.baselib.ui.activity.CommToolBarActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
+    override fun getLayoutResId() = R.layout.activity_main
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
 }

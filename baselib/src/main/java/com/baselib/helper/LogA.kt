@@ -1,5 +1,6 @@
 package com.baselib.helper
 
+import com.google.gson.JsonObject
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
@@ -37,10 +38,10 @@ class LogA {
             })
         }
 
-        fun d(message: String?) = if(isLog) Logger.d(message) else Unit
-        fun i(message: String?) = if(isLog) Logger.i(message?: "") else Unit
-        fun w(message: String?, e: Throwable?) = if(isLog) Logger.w("$message:${e?.toString()}") else Unit
-        fun e(message: String?) = if(isLog) Logger.e(message?: "") else Unit
+        fun d(message: Any?) = if(isLog) Logger.d(message) else Unit
+        fun i(message: Any?) = if(isLog) Logger.i(message?.toString()?: "") else Unit
+        fun w(message: Any?, e: Throwable?) = if(isLog) Logger.w("$message:${e?.toString()}") else Unit
+        fun e(message: Any?) = if(isLog) Logger.e(message?.toString()?: "") else Unit
         fun json(json: String) = if (isLog) Logger.json(json) else Unit
     }
 }

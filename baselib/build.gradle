@@ -53,6 +53,8 @@ dependencies {
     implementation rootProject.ext.fastDev["refresh-header"]
     implementation rootProject.ext.fastDev.logger
     implementation rootProject.ext.fastDev.hawk
+    api rootProject.ext.fastDev.title
+    implementation rootProject.ext.fastDev.statusBar
 
     annotationProcessor rootProject.ext.annotationProcessorLibs
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

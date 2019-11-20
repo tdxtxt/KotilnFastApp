@@ -67,7 +67,7 @@ open class NativeBaseDialog constructor(val context: Context, layoutId: Int, sty
      */
     fun <T : NativeBaseDialog> show(): T {
         if (dialog == null) return this as T
-        if (getActivity() != null && getActivity()!!.isFinishing()) return this as T
+        if (getActivity()?.isFinishing == true) return this as T
         if (dialog.isShowing) {
             dialog.dismiss()
         }
