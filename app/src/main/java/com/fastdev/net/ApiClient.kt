@@ -1,0 +1,19 @@
+package com.fastdev.net
+
+import com.baselib.net.NetMgr
+import com.fastdev.net.host.Host1Api
+import com.fastdev.ui.BuildConfig
+
+class ApiClient {
+    companion object {
+        private var HOST1 = BuildConfig.HOST1
+
+        fun getService() =  NetMgr.getInstance().get(HOST1, Host1Api::class.java)
+
+        fun changeHost(host: String){
+            HOST1 = host
+        }
+
+        fun getHost1() = HOST1
+    }
+}
