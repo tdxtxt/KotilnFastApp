@@ -36,13 +36,13 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
     }
 
     /**
-     * 全屏显示界面
+     * 状态栏
      */
     open fun initStatusBar(){
         ImmersionBar.with(this)
-                .transparentBar()
+                .transparentBar()//透明的状态栏
                 .statusBarDarkFont(true)//false字体白色，true字体黑色
-                .fullScreen(true)
+                .fullScreen(true)//全入侵
                 .transparentNavigationBar()
                 .init()
     }
