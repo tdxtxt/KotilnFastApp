@@ -110,7 +110,9 @@ ext{
             /**标题栏 https://github.com/getActivity/TitleBar**/
             title : "com.hjq:titlebar:6.0",
             /**沉浸式状态栏 https://github.com/gyf-dev/ImmersionBar**/
-            statusBar: "com.gyf.immersionbar:immersionbar:3.0.0"
+            statusBar: "com.gyf.immersionbar:immersionbar:3.0.0",
+            /**状态页面 https://github.com/li-xiaojun/StateLayout**/
+            stateview:"com.lxj:statelayout:1.0.5"
 
     ]
 

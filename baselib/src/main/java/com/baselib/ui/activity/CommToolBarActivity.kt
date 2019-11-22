@@ -1,16 +1,13 @@
 package com.baselib.ui.activity
 
 import android.os.Bundle
-import android.support.annotation.ColorRes
 import com.hjq.bar.TitleBar
 import com.hjq.bar.OnTitleBarListener
 import android.view.View
-import android.view.WindowManager
 import com.baselib.R
-import com.baselib.helper.LogA
 import com.baselib.ui.activity.callback.TitleClickListener
-import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ImmersionBar
+import com.lxj.statelayout.StateLayout
 
 
 abstract class CommToolBarActivity : BaseActivity() {
@@ -20,7 +17,9 @@ abstract class CommToolBarActivity : BaseActivity() {
     /**
      * 布局中TitleBar控件id默认R.id.titlebar，若自定义id，需要重写此方法
      */
-    protected fun getToolBarResId() = com.baselib.R.id.titlebar
+    open fun getToolBarResId() = R.id.titlebar
+
+    open fun getContentViewResId() = R.id.view_content
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,5 +66,13 @@ abstract class CommToolBarActivity : BaseActivity() {
                 .init()
     }
 
+    override fun initStateView(): StateLayout{
+        val content: View = findViewById(getContentViewResId())
+        return StateLayout (this)
+                .apply {
+                    if (content == null) wrap(this@CommToolBarActivity) else wrap(content)
+                    showLoading()
+                }
+    }
 
 }

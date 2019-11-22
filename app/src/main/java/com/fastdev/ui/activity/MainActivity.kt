@@ -1,9 +1,9 @@
 package com.fastdev.ui.activity
 
-import com.baselib.ui.activity.BaseActivity
+import com.baselib.ui.activity.CommToolBarActivity
 import com.fastdev.ui.R
 
-class MainActivity : BaseActivity() {
+class MainActivity : CommToolBarActivity() {
     override fun getLayoutResId() = R.layout.activity_main
 
 }
