@@ -5,7 +5,7 @@ import android.os.Looper
 import android.support.annotation.StringRes
 import android.text.TextUtils
 import android.widget.Toast
-import com.baselib.DevApp
+import com.baselib.app.DevApp
 
 class ToastHelper {
     companion object {

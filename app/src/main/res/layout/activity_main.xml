@@ -7,15 +7,16 @@
 
     <include layout="@layout/layout_comm_toolbar" />
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/view_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!" />
-    </FrameLayout>
+        <ImageView
+            android:id="@+id/iv_test"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@color/colorPrimary" />
+    </LinearLayout>
 </LinearLayout>

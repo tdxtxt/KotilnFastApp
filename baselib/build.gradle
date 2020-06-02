@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 
 android {
@@ -35,6 +36,7 @@ dependencies {
     //图片库
     implementation (rootProject.ext.image.glide){exclude group: "com.android.support"}
     implementation rootProject.ext.image.glideOkhttp
+    kapt rootProject.ext.image.glideCompiler
 
     compileOnly rootProject.ext.butterknifeLibs
 
@@ -48,7 +50,6 @@ dependencies {
         transitive = true
         exclude group: 'com.android.support'
     }
-    implementation rootProject.ext.fastDev.loadsir
     implementation rootProject.ext.fastDev.refresh
     implementation rootProject.ext.fastDev["refresh-header"]
     implementation rootProject.ext.fastDev.logger
@@ -56,6 +57,7 @@ dependencies {
     api rootProject.ext.fastDev.title
     implementation rootProject.ext.fastDev.statusBar
     implementation rootProject.ext.fastDev.stateview
+    implementation rootProject.ext.fastDev.permission
 
     annotationProcessor rootProject.ext.annotationProcessorLibs
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

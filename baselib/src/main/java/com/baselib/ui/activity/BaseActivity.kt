@@ -52,7 +52,7 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
                         ToastHelper.showToast("点击重试")
                     })*/
             .wrap(this)
-            .showLoading()
+            .showContent()
 
     /**
      * 状态栏

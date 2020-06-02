@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException
 /**
  * 实现配置基类
  */
-class BaseNetProvider : NetProvider {
+open class BaseNetProvider : NetProvider {
     private var CONNECT_TIME_OUT: Long = 30
     private var READ_TIME_OUT: Long = 180
     private var WRITE_TIME_OUT: Long = 30
@@ -22,7 +22,6 @@ class BaseNetProvider : NetProvider {
     override fun configInterceptors(): Array<Interceptor>? = null
 
     override fun configHttps(builder: OkHttpClient.Builder) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun configCookie(): CookieJar? = null

@@ -3,15 +3,12 @@ package com.fastdev.net.host
 import com.baselib.helper.HashMapParams
 import com.fastdev.bean.ResponseBody
 import io.reactivex.Flowable
-import retrofit2.http.Field
-import retrofit2.http.FieldMap
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
-interface Host1Api {
-    @FormUrlEncoded
-    @POST("api/xxx")
-    fun testApi1(@FieldMap params: HashMapParams): Flowable<ResponseBody<String>>
+open interface Host1Api {
+    //获取公众号列表
+    @GET("wxarticle/chapters/json")
+    fun testApi1(): Flowable<ResponseBody<String>>
 
     @FormUrlEncoded
     @POST("api/xxxyyy")

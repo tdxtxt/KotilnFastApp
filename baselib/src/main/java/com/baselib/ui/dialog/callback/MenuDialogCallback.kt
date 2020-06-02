@@ -3,7 +3,7 @@ package com.baselib.ui.dialog.callback
 import android.app.Dialog
 import android.support.annotation.StringRes
 import android.view.View
-import com.baselib.DevApp
+import com.baselib.app.DevApp
 
 open class MenuDialogCallback constructor(val menuText: String?){
     constructor(): this("") {}

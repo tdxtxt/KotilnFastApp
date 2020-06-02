@@ -1,6 +1,6 @@
 package com.baselib.net.error
 
-import com.baselib.DevApp
+import com.baselib.app.DevApp
 import com.baselib.R
 
 class NetError constructor(var type: Int,cause: Throwable) : Exception(cause) {

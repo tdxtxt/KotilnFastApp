@@ -71,7 +71,7 @@ abstract class CommToolBarActivity : BaseActivity() {
         return StateLayout (this)
                 .apply {
                     if (content == null) wrap(this@CommToolBarActivity) else wrap(content)
-                    showLoading()
+                    showContent()
                 }
     }
 
