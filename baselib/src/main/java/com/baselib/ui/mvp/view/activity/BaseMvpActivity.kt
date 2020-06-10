@@ -23,7 +23,9 @@ open abstract class BaseMvpActivity<V : BaseMvpView, P : BaseMvpPresenter<V>> : 
     /**
      * 创建被代理对象,传入默认Presenter的工厂
      */
-    private var mProxy: BaseMvpProxy<V, P> = BaseMvpProxy<V, P>(PresenterMvpFactoryImpl.createFactory(javaClass, createPresenter()))
+    private val mProxy: BaseMvpProxy<V, P> by lazy {
+        BaseMvpProxy<V, P>(PresenterMvpFactoryImpl.createFactory(javaClass, createPresenter()))
+    }
 
     abstract fun createPresenter(): P
 

@@ -28,6 +28,13 @@ open class BaseMvpPresenter<V : BaseMvpView> {
     }
 
     /**
+     * View是否绑定
+     */
+    fun isViewAttached(): Boolean {
+        return mView != null
+    }
+
+    /**
      * 解除绑定View
      */
     fun onDetachMvpView(){

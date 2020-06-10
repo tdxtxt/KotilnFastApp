@@ -58,6 +58,7 @@ dependencies {
     implementation rootProject.ext.fastDev.statusBar
     implementation rootProject.ext.fastDev.stateview
     implementation rootProject.ext.fastDev.permission
+    api rootProject.ext.fastDev["adapter-recyclerview"]
 
     annotationProcessor rootProject.ext.annotationProcessorLibs
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

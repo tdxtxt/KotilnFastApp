@@ -9,7 +9,7 @@ class HttpLogger : HttpLoggingInterceptor.Logger {
 
     override fun log(message: String) {
         //请求或者响应开始
-        if(message.startsWith("--> POST"))
+        if(message.startsWith("--> POST") || message.startsWith("--> GET"))
             mMessage.setLength(0)
 
         mMessage.append(message).append("\n")

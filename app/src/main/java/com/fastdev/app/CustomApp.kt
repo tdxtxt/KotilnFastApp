@@ -25,7 +25,7 @@ class CustomApp : DevApp() {
             //设置字体不跟随系统变化
             setTextSize()
             //设置分享
-//            ShareHelper.initSDK(this)
+//            SocialHelper.initSDK(this)
         }
     }
 

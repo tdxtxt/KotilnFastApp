@@ -85,7 +85,7 @@ ext{
             /**运行时权限 https://github.com/tbruyelle/RxPermissions/tree/master  minSdkVersion>=11;使用RxPermissions申请权限，必须在Activity.onCreate()或者View.onFinishInflate()中处理。**/
             rxpermissions : 'com.github.tbruyelle:rxpermissions:0.10.2',
             /**功能全面的自定义标题栏 https://github.com/wuhenzhizao/android-titlebar**/
-            titlebar : 'com.wuhenzhizao:titlebar:1.0.7',
+            titlebar : 'com.wuhenzhizao:titlebar:1.2.0',
             /**状态页面[加载中&重试&无数据状态页面] https://github.com/li-xiaojun/StateLayout**/
             stateview:"com.lxj:statelayout:1.0.5",
             /**事件总线 https://github.com/greenrobot/EventBus**/
@@ -102,7 +102,7 @@ ext{
             /**更新插件 https://github.com/yjfnypeu/UpdatePlugin**/
             updateplugin : "com.github.yjfnypeu:UpdatePlugin:3.1.2",
             /**RecyclerView通用adapter https://github.com/CymChad/BaseRecyclerViewAdapterHelper**/
-            "adapter-recyclerview" : "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.44",
+            "adapter-recyclerview" : "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50",
             /**指示器 https://github.com/hackware1993/MagicIndicator**/
             indicator : 'com.github.hackware1993:MagicIndicator:1.5.0',
             /**标题栏 https://github.com/getActivity/TitleBar**/

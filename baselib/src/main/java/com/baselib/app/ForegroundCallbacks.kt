@@ -75,11 +75,12 @@ class ForegroundCallbacks : Application.ActivityLifecycleCallbacks {
         }
     }
     override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-        ActStackHelper.INSTANCE.addActivity(activity)
+        checkAppStatus(activity)
+        ActStackHelper.addActivity(activity)
     }
 
     override fun onActivityDestroyed(activity: Activity?) {
-        ActStackHelper.INSTANCE.removeActivity(activity)
+        ActStackHelper.removeActivity(activity)
     }
 
     override fun onActivityStarted(activity: Activity?) {
@@ -89,5 +90,20 @@ class ForegroundCallbacks : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStopped(activity: Activity?) {
+    }
+
+    private fun checkAppStatus(activity: Activity?){
+        var packageManager = activity?.application?.packageManager
+        var intent = packageManager?.getLaunchIntentForPackage(activity?.packageName)
+        var launchComponentName = intent?.component
+        var componentName = activity?.componentName
+        if(componentName.toString() == launchComponentName.toString()){//是第一个启动的activity
+            AppStatusManager.INSTANCE.setAppStatus(AppStatusConstant.STATUS_NORMAL)
+        }else{//不是第一个启动的activity
+            when(AppStatusManager.INSTANCE.getAppStatus()){
+                AppStatusConstant.STATUS_FORCE_KILLED -> ActStackHelper.restartApp(activity)
+                AppStatusConstant.STATUS_NORMAL -> Unit
+            }
+        }
     }
 }

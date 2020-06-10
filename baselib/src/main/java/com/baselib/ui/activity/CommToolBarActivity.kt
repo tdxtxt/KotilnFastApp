@@ -62,7 +62,7 @@ abstract class CommToolBarActivity : BaseActivity() {
                 .fitsSystemWindows(true)//解决重叠问题
                 .statusBarDarkFont(false)//false字体白色，true字体黑色
                 .fullScreen(true)
-                .transparentNavigationBar()
+//                .transparentNavigationBar()
                 .init()
     }
 

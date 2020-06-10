@@ -6,7 +6,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import com.baselib.R
-import com.baselib.helper.DialogHelper
 import com.baselib.ui.dialog.NativeBaseDialog
 import com.baselib.ui.dialog.callback.MenuDialogCallback
 
@@ -60,7 +59,7 @@ class NativeCommDialog(context: Context) : NativeBaseDialog(context, R.layout.ba
             tvBtnLeft.text = callbackLeft?.menuText
             tvBtnLeft.setOnClickListener {
                 callbackLeft?.onClick(super.rootView, super.dialog)
-                if (autoDismiss) hide()
+                if (autoDismiss) dismiss()
             }
         } else {
             tvBtnLeft.visibility = View.GONE
@@ -75,7 +74,7 @@ class NativeCommDialog(context: Context) : NativeBaseDialog(context, R.layout.ba
             tvBtnCenter.text = callbackCenter?.menuText
             tvBtnCenter.setOnClickListener {
                 callbackCenter?.onClick(super.rootView, dialog)
-                if (autoDismiss) hide()
+                if (autoDismiss) dismiss()
             }
         } else {
             tvBtnCenter.visibility = View.GONE
@@ -90,7 +89,7 @@ class NativeCommDialog(context: Context) : NativeBaseDialog(context, R.layout.ba
             tvBtnRight.text = callbackRight?.menuText
             tvBtnRight.setOnClickListener {
                 callbackRight?.onClick(super.rootView, dialog)
-                if (autoDismiss) hide()
+                if (autoDismiss) dismiss()
             }
         } else {
             tvBtnRight.visibility = View.GONE

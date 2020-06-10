@@ -1,13 +1,12 @@
 package com.baselib.ui.activity
 
+import android.app.Activity
 import android.os.Bundle
-import android.support.annotation.ColorRes
 import android.view.KeyEvent
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.baselib.R
 import com.baselib.helper.DialogHelper
-import com.baselib.helper.ToastHelper
 import com.baselib.ui.dialog.NativeBaseDialog
 import com.baselib.ui.dialog.child.NativeProgressDialog
 import com.baselib.ui.mvp.view.IView
@@ -25,12 +24,14 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
  * @返回参数说明： 无
  */
 abstract class BaseActivity : RxAppCompatActivity(),IView {
+    protected lateinit var activity: Activity
     private var mProgressDialog: NativeProgressDialog? = null
     private lateinit var unbinder: Unbinder
     private lateinit var stateLayout: StateLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity = this
         setContentView(getLayoutResId())
         initStatusBar()
         unbinder = ButterKnife.bind(this)
@@ -69,14 +70,18 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
     abstract fun getLayoutResId(): Int
     open fun initUi(){}
 
+    override fun getProgressBar(): NativeProgressDialog? {
+        if (mProgressDialog == null) mProgressDialog = DialogHelper.createProgressDialog(this, "请耐心等待，正在处理...", true)
+        return mProgressDialog
+    }
+
     override fun showProgressBar() {
         if (isFinishing) return
-        if (mProgressDialog == null) mProgressDialog = DialogHelper.createProgressDialog(this, "请耐心等待，正在处理...", true)
-        mProgressDialog?.setCancelableOnTouchOutside<NativeBaseDialog>(false)?.show<NativeBaseDialog>()
+        getProgressBar()?.setCancelableOnTouchOutside<NativeBaseDialog>(false)?.show<NativeBaseDialog>()
     }
 
     override fun hideProgressBar() {
-        mProgressDialog?.hide()
+        mProgressDialog?.dismiss()
     }
 
     override fun showLoadingView() {

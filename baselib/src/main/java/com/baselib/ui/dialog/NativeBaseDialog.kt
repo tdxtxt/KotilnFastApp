@@ -3,6 +3,8 @@ package com.baselib.ui.dialog
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.os.Build
+import android.os.CancellationSignal
 import android.support.v7.app.AppCompatDialog
 import android.view.*
 import com.baselib.R
@@ -16,10 +18,17 @@ import com.baselib.helper.ScreenHelper
  * @返回参数说明： 无
  */
 open class NativeBaseDialog constructor(val context: Context, layoutId: Int, style: Int){
-    protected var dialog: Dialog = AppCompatDialog(context,style)
+    var dialog: Dialog = AppCompatDialog(context,style)
             .apply {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    //设置5.0以上系统状态栏
+//                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                }
                 window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             }
+//    fun getDialog() = dialog
+
     protected lateinit var rootView: View
     //是否消失
     private var mCancelable = true
@@ -29,7 +38,7 @@ open class NativeBaseDialog constructor(val context: Context, layoutId: Int, sty
     constructor(context: Context, layoutId: Int): this(context,layoutId, R.style.smart_show_dialog)
 
     init {
-
+//        dialog.supportRequestWindowFeature(1)
         inflate(context, layoutId, null)
         rootView.viewTreeObserver.addOnGlobalLayoutListener(OnViewGlobalLayoutListener(rootView, provideDialogMaxHeight(context)))
         initView(dialog,rootView)
@@ -41,7 +50,13 @@ open class NativeBaseDialog constructor(val context: Context, layoutId: Int, sty
             setContentView(rootView,rootLp)
             setOnShowListener {  }
             setOnDismissListener { onDestroy() }
+            setOnCancelListener { cancelListener?.invoke() }
         }
+    }
+
+    private var cancelListener: (() -> Unit)? = null
+    fun setCancelListener(cancelListener: () -> Unit){
+        this.cancelListener = cancelListener
     }
 
     /**
@@ -65,14 +80,41 @@ open class NativeBaseDialog constructor(val context: Context, layoutId: Int, sty
     /**
      * 子类都必须调用此方法
      */
-    fun <T : NativeBaseDialog> show(): T {
+    fun <T : NativeBaseDialog> show(anim: Anim = Anim.CENTER): T {
         if (dialog == null) return this as T
         if (getActivity()?.isFinishing == true) return this as T
         if (dialog.isShowing) {
             dialog.dismiss()
         }
-        dialog.show()
+        dialog.apply {
+            with(window){
+                setGravity(when (anim) {
+                    Anim.CENTER -> Gravity.CENTER
+                    Anim.BOTTOM -> Gravity.BOTTOM
+                })
+                setWindowAnimations(when (anim){
+                    Anim.CENTER -> android.R.style.Animation_Dialog
+                    Anim.BOTTOM -> R.style.SDKBottomDialog_Animation
+                })
+            }
+            show()
+        }
         return this as T
+    }
+
+    fun <T : NativeBaseDialog> show() = show<NativeBaseDialog>(Anim.CENTER)
+
+    fun <T : NativeBaseDialog> showAtBottom() = show<NativeBaseDialog>(Anim.BOTTOM)
+
+    /**
+     * 销毁dialog
+     */
+    fun dismiss() {
+        if (dialog == null || !dialog.isShowing) return
+
+        val bindAct = getActivity()
+        if (bindAct != null && !bindAct!!.isFinishing())
+            dialog.dismiss()
     }
 
     /**
@@ -83,14 +125,14 @@ open class NativeBaseDialog constructor(val context: Context, layoutId: Int, sty
 
         val bindAct = getActivity()
         if (bindAct != null && !bindAct!!.isFinishing())
-            dialog.dismiss()
+            dialog.hide()
     }
 
     /**
      * 子类若要手动释放资源，需重写此方法
      */
     fun onDestroy() {
-        hide()
+        dismiss()
     }
 
     private fun getActivity(): Activity? {
@@ -143,5 +185,9 @@ open class NativeBaseDialog constructor(val context: Context, layoutId: Int, sty
             if (view.getHeight() > maxHeight)
                 view.getLayoutParams().height = maxHeight
         }
+    }
+    enum class Anim {
+        BOTTOM,
+        CENTER,
     }
 }
