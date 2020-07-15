@@ -5,8 +5,8 @@ import com.hjq.bar.TitleBar
 import com.hjq.bar.OnTitleBarListener
 import android.view.View
 import com.baselib.R
+import com.baselib.helper.StatusBarHelper
 import com.baselib.ui.activity.callback.TitleClickListener
-import com.gyf.immersionbar.ImmersionBar
 import com.lxj.statelayout.StateLayout
 
 
@@ -19,7 +19,7 @@ abstract class CommToolBarActivity : BaseActivity() {
      */
     open fun getToolBarResId() = R.id.titlebar
 
-    open fun getContentViewResId() = R.id.view_content
+    open fun getContentView() = findViewById<View>(R.id.view_content)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,22 +57,12 @@ abstract class CommToolBarActivity : BaseActivity() {
 
 
      override fun initStatusBar() {
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.black_666666)//bar背景颜色
-                .fitsSystemWindows(true)//解决重叠问题
-                .statusBarDarkFont(false)//false字体白色，true字体黑色
-                .fullScreen(true)
-//                .transparentNavigationBar()
-                .init()
+         StatusBarHelper.setDarkMode(activity)
+         StatusBarHelper.setStatusBarHeight(activity, activity.findViewById(android.R.id.content))
     }
 
-    override fun initStateView(): StateLayout{
-        val content: View = findViewById(getContentViewResId())
-        return StateLayout (this)
-                .apply {
-                    if (content == null) wrap(this@CommToolBarActivity) else wrap(content)
-                    showContent()
-                }
-    }
+    override fun initStateView() = if(getContentView() != null) StateLayout(this).apply {
+            configStateView(getContentView(), this)
+        }.showContent() else null
 
 }

@@ -5,7 +5,7 @@ import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
 import okhttp3.*
 import org.json.JSONException
-import retrofit2.adapter.rxjava2.HttpException
+import retrofit2.HttpException
 import java.net.ConnectException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/black_666666"
     app:leftColor="@color/white_ffffff"
-    app:leftIcon="@mipmap/bar_icon_back_white"
+    app:leftIcon="@drawable/bar_icon_back_white"
     app:leftTitle="返回"
     app:title="功能说明：商品图片、商品信息、店铺信息、物流信息、猜你喜欢、商品详情等信息的展示"
     app:titleColor="@color/white_ffffff" />

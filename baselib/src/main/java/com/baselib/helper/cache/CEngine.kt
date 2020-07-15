@@ -15,11 +15,11 @@ interface CEngine {
     fun putBoolean(key: String, value: Boolean): Boolean?
     fun <T> put(key: String, data: T?): Boolean?
 
-    fun getString(key: String, defaultValue: String = ""): String?
-    fun getInt(key: String, defaultValue: Int = 0): Int?
-    fun getFloat(key: String, defaultValue: Float = 0F): Float?
-    fun getDouble(key: String, defaultValue: Double = 0.0): Double?
-    fun getBoolean(key: String, defaultValue: Boolean = false): Boolean?
+    fun getString(key: String, defaultValue: String = ""): String
+    fun getInt(key: String, defaultValue: Int = 0): Int
+    fun getFloat(key: String, defaultValue: Float = 0F): Float
+    fun getDouble(key: String, defaultValue: Double = 0.0): Double
+    fun getBoolean(key: String, defaultValue: Boolean = false): Boolean
     fun <T> get(key: String): T?
 
     fun removeAll(): Boolean?

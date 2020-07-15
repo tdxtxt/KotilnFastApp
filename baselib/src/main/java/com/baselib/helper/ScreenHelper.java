@@ -161,7 +161,7 @@ public class ScreenHelper {
     /**
      * 截屏
      * @param activity          The activity.
-     * @param isDeleteStatusBar True to delete status bar, false otherwise.
+     * @param isDeleteStatusBar True to delete status com.hjq.bar, false otherwise.
      * @return the bitmap of screen
      */
     public static Bitmap screenShot(@NonNull final Activity activity, boolean isDeleteStatusBar) {

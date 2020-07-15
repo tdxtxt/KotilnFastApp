@@ -27,4 +27,5 @@ class NativeProgressDialog(context : Context) : NativeBaseDialog(context, R.layo
     override fun provideDialogWidth(context: Context) = ViewGroup.LayoutParams.MATCH_PARENT
 
     override fun provideDialogHeight(context: Context) = ViewGroup.LayoutParams.MATCH_PARENT
+
 }

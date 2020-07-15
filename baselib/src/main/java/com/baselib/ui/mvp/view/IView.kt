@@ -10,6 +10,5 @@ interface IView {
     fun showLoadingView()
     fun showContentView()
     fun showEmptyView()
-    fun showCustomView()
     fun showErrorView(e: Throwable)
 }

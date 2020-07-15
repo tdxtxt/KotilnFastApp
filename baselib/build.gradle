@@ -29,9 +29,7 @@ dependencies {
     api project(path: ':openlib')
 
     //google官方lib
-    implementation rootProject.ext.google.recyclerview
-    implementation rootProject.ext.google.design
-    implementation rootProject.ext.google.appcompat
+    implementation rootProject.ext.supprotLibs
 
     //图片库
     implementation (rootProject.ext.image.glide){exclude group: "com.android.support"}
@@ -44,7 +42,6 @@ dependencies {
     api rootProject.ext.netLibs
 
     //快捷开发库
-    implementation rootProject.ext.fastDev.rxpermissions
     implementation rootProject.ext.fastDev.eventbus
     implementation (rootProject.ext.fastDev.dialog){
         transitive = true
@@ -54,8 +51,7 @@ dependencies {
     implementation rootProject.ext.fastDev["refresh-header"]
     implementation rootProject.ext.fastDev.logger
     implementation rootProject.ext.fastDev.hawk
-    api rootProject.ext.fastDev.title
-    implementation rootProject.ext.fastDev.statusBar
+//    implementation rootProject.ext.fastDev.statusBar
     implementation rootProject.ext.fastDev.stateview
     implementation rootProject.ext.fastDev.permission
     api rootProject.ext.fastDev["adapter-recyclerview"]

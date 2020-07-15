@@ -3,6 +3,7 @@ package com.baselib.helper.cache
 import com.baselib.app.DevApp
 import com.orhanobut.hawk.Hawk
 import com.orhanobut.hawk.NoEncryption
+import com.orhanobut.hawk.Storage
 
 /**
  * 创建时间： 2020/5/22

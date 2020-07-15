@@ -1,6 +1,5 @@
 package com.fastdev.net.host
 
-import com.baselib.helper.HashMapParams
 import com.fastdev.bean.ResponseBody
 import io.reactivex.Flowable
 import retrofit2.http.*

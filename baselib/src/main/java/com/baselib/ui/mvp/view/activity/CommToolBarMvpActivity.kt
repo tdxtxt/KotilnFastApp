@@ -1,6 +1,7 @@
 package com.baselib.ui.mvp.view.activity
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import com.baselib.helper.LogA
 import com.baselib.ui.activity.CommToolBarActivity
@@ -46,8 +47,8 @@ open abstract class CommToolBarMvpActivity<V : BaseMvpView, P : BaseMvpPresenter
         mProxy.onResume()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
         Log.e("perfect-mvp", "V onSaveInstanceState")
         outState?.putBundle(PRESENTER_SAVE_KEY, mProxy.onSaveInstanceState())
     }

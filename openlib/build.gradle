@@ -22,8 +22,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation rootProject.ext.google.recyclerview
-    implementation rootProject.ext.google.design
-    implementation rootProject.ext.google.appcompat
+    implementation rootProject.ext.supprotLibs
 }
 

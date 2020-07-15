@@ -6,6 +6,7 @@ import com.baselib.app.DevApp
 import com.baselib.helper.ActStackHelper
 import com.baselib.net.NetMgr
 import com.fastdev.net.config.TonNetProvider
+import io.reactivex.plugins.RxJavaPlugins
 
 /**
  * 创建时间： 2020/5/27
@@ -26,6 +27,8 @@ class CustomApp : DevApp() {
             setTextSize()
             //设置分享
 //            SocialHelper.initSDK(this)
+            //rxjava全局异常处理 https://juejin.im/post/5ecc10626fb9a047e25d5aac
+            RxJavaPlugins.setErrorHandler { it.printStackTrace() }
         }
     }
 

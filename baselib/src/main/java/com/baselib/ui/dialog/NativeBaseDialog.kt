@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Build
 import android.os.CancellationSignal
-import android.support.v7.app.AppCompatDialog
 import android.view.*
+import androidx.appcompat.app.AppCompatDialog
 import com.baselib.R
 import com.baselib.helper.ScreenHelper
 

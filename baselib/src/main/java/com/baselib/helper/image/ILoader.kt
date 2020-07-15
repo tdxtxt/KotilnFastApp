@@ -1,7 +1,7 @@
 package com.baselib.helper.image
 
-import android.support.annotation.DrawableRes
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import java.io.File
 
 /**

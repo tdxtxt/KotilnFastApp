@@ -1,12 +1,21 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <!--Base主题-->
+    <style name="Base.App.Theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 应用的主要色调，actionBar默认使用该颜色，Toolbar导航栏的底色 -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- 应用的主要暗色调，statusBarColor 默认使用该颜色 -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--  CheckBox，RadioButton，SwitchCompat等一般控件的选中效果默认采用该颜色 -->
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!--启动界面主题-->
+    <style name="App.Theme.Launch" parent="Base.App.Theme">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
 </resources>
