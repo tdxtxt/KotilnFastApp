@@ -1,9 +1,9 @@
 package com.baselib.ui.mvp.view
 
-import com.baselib.ui.dialog.child.NativeProgressDialog
+import com.baselib.ui.dialog.child.ProgressDialog
 
 interface IView {
-    fun getProgressBar(): NativeProgressDialog?
+    fun getProgressBar(): ProgressDialog?
     fun hideProgressBar()
     fun showProgressBar()
 

@@ -1,14 +1,13 @@
 package com.baselib.ui.dialog.callback
 
-import android.app.Dialog
-import android.support.annotation.StringRes
 import android.view.View
-import com.baselib.app.DevApp
+import com.baselib.ui.dialog.impl.IBDialog
 
-open class MenuDialogCallback constructor(val menuText: String?){
-    constructor(): this("") {}
+abstract class MenuDialogCallback{
+    var menuText = ""
+    var click: ((rootView: View?, dialog: IBDialog?) -> Unit)? = null
 
-    constructor(@StringRes menuTextResId: Int): this(DevApp.mContext?.getString(menuTextResId)) {}
-
-    fun onClick(rootView: View, dialog: Dialog) {}
+    fun onClick(click: (rootView: View?, dialog: IBDialog?) -> Unit){
+        this.click = click
+    }
 }

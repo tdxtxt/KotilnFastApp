@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import com.baselib.net.NetMgr
 import com.baselib.net.error.NetError
 import com.baselib.net.model.IModel
-import com.baselib.ui.dialog.child.NativeProgressDialog
+import com.baselib.ui.dialog.child.ProgressDialog
 import com.trello.rxlifecycle3.LifecycleProvider
-import com.trello.rxlifecycle3.android.ActivityEvent
-import com.trello.rxlifecycle3.android.FragmentEvent
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -87,11 +85,11 @@ import io.reactivex.schedulers.Schedulers
      * 统一的弹框转圈进度框事务
      */
     @SuppressLint("CheckResult")
-    fun <T> Flowable<T>.composeProgress(progressDialog: NativeProgressDialog?) = this.compose { upstream ->
+    fun <T> Flowable<T>.composeProgress(progressDialog: ProgressDialog?) = this.compose { upstream ->
         upstream.observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     progressDialog?.setCancelListener{ it.cancel() }
-                    progressDialog?.show<NativeProgressDialog>()
+                    progressDialog?.show()
                 }
                 .doOnComplete {
                     progressDialog?.dismiss()

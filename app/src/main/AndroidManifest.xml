@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!--android:requestLegacyExternalStorage="true"-->
     <application
         android:name="com.fastdev.app.CustomApp"
         android:allowBackup="true"

@@ -2,14 +2,10 @@ package com.baselib.ui.mvp.view.activity
 
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
 import com.baselib.ui.activity.BaseActivity
-import com.baselib.ui.mvp.BaseMvpView
-import com.baselib.ui.mvp.factory.PresenterMvpFactory
-import com.baselib.ui.mvp.factory.PresenterMvpFactoryImpl
+import com.baselib.ui.mvp.view.BaseMvpView
+import com.baselib.ui.mvp.PresenterDelegate
 import com.baselib.ui.mvp.presenter.BaseMvpPresenter
-import com.baselib.ui.mvp.proxy.BaseMvpProxy
-import com.baselib.ui.mvp.proxy.PresenterProxyInterface
 
 /**
  * @作者： ton
@@ -18,60 +14,37 @@ import com.baselib.ui.mvp.proxy.PresenterProxyInterface
  * @传入参数说明：
  * @返回参数说明：
  */
-open abstract class BaseMvpActivity<V : BaseMvpView, P : BaseMvpPresenter<V>> : BaseActivity(), PresenterProxyInterface<V, P> {
-    private val PRESENTER_SAVE_KEY = "presenter_save_key"
-
-    /**
-     * 创建被代理对象,传入默认Presenter的工厂
-     */
-    private val mProxy: BaseMvpProxy<V, P> by lazy {
-        BaseMvpProxy<V, P>(PresenterMvpFactoryImpl.createFactory(javaClass, createPresenter()))
-    }
-
-    abstract fun createPresenter(): P
+open abstract class BaseMvpActivity : BaseActivity(), BaseMvpView {
+    private val mvpDelegate: PresenterDelegate<BaseMvpView> = PresenterDelegate()
+    abstract fun <V : BaseMvpView> createPresenter(): BaseMvpPresenter<V>?
+    abstract fun <V : BaseMvpView> createMvpView(): V?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("perfect-mvp", "V onCreate")
-        Log.e("perfect-mvp", "V onCreate mProxy = $mProxy")
-        Log.e("perfect-mvp", "V onCreate this = " + this.hashCode())
 
-        if (savedInstanceState != null) {
-            mProxy.onRestoreInstanceState(savedInstanceState.getBundle(PRESENTER_SAVE_KEY)!!)
-        }
-        mProxy.onCreate(this as V)
+        mvpDelegate.delegate(createPresenter())
+        mvpDelegate.attach(createMvpView())
     }
 
     override fun onResume() {
         super.onResume()
-        Log.e("perfect-mvp", "V onResume")
-        mProxy.onResume()
+        mvpDelegate.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mvpDelegate.detachOnPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
         super.onSaveInstanceState(outState, outPersistentState)
-        Log.e("perfect-mvp", "V onSaveInstanceState")
-        outState?.putBundle(PRESENTER_SAVE_KEY, mProxy.onSaveInstanceState())
+        mvpDelegate.saveInstanceState(outState)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e("perfect-mvp", "V onDestroy = ")
-        mProxy.onDestroy()
+        mvpDelegate.detach()
     }
 
-    override fun setPresenterFactory(presenterFactory: PresenterMvpFactory<V, P>) {
-        Log.e("perfect-mvp", "V setPresenterFactory")
-        mProxy.setPresenterFactory(presenterFactory)
-    }
-
-    override fun getPresenterFactory(): PresenterMvpFactory<V, P> {
-        Log.e("perfect-mvp", "V getPresenterFactory")
-        return mProxy.getPresenterFactory()
-    }
-
-    override fun getMvpPresenter(): P? {
-        Log.e("perfect-mvp", "V getMvpPresenter")
-        return mProxy.getMvpPresenter()
-    }
+    override fun getActivity() = this
 }

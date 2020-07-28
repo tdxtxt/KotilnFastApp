@@ -1,5 +1,6 @@
 package com.baselib.ui.activity
 
+import android.graphics.Color
 import android.os.Bundle
 import com.hjq.bar.TitleBar
 import com.hjq.bar.OnTitleBarListener
@@ -58,6 +59,7 @@ abstract class CommToolBarActivity : BaseActivity() {
 
      override fun initStatusBar() {
          StatusBarHelper.setDarkMode(activity)
+//         StatusBarHelper.setStatusBarColor(window, Color.WHITE, 1)
          StatusBarHelper.setStatusBarHeight(activity, activity.findViewById(android.R.id.content))
     }
 

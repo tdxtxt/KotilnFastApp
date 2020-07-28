@@ -23,7 +23,7 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="SDKBottomDialog.Animation" parent="Animation.AppCompat.Dialog">
+    <style name="BottomDialog.Animation" parent="Animation.AppCompat.Dialog">
         <item name="android:windowEnterAnimation">@anim/baselib_slide_in_form_bottom</item>
         <item name="android:windowExitAnimation">@anim/baselib_slide_out_form_top</item>
     </style>

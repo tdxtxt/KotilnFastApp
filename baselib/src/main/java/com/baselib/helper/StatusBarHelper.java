@@ -39,14 +39,16 @@ public class StatusBarHelper {
      * 设置入侵到状态栏view的新增高度
      */
     public static void setStatusBarHeight(Context context, View view) {
-        if (view instanceof ViewGroup) {
-            view.setPadding(view.getPaddingLeft(),
-                    view.getPaddingTop() + getStatusBarHeight(context), view.getPaddingRight(),
-                    view.getPaddingBottom());
-        } else {
-            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            layoutParams.height = getStatusBarHeight(context);
-            view.setLayoutParams(layoutParams);
+        if (OSUtils.isMiui() || OSUtils.isFlyme() || OSUtils.isOppo() || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view instanceof ViewGroup) {
+                view.setPadding(view.getPaddingLeft(),
+                        view.getPaddingTop() + getStatusBarHeight(context), view.getPaddingRight(),
+                        view.getPaddingBottom());
+            } else {
+                ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                layoutParams.height = getStatusBarHeight(context);
+                view.setLayoutParams(layoutParams);
+            }
         }
     }
 
@@ -64,6 +66,9 @@ public class StatusBarHelper {
             transparentStatusBarAbove21(activity.getWindow());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             transparentStatusBarAbove21(activity.getWindow());
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = activity.getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
 

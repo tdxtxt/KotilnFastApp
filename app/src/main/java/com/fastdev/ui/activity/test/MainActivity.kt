@@ -5,9 +5,14 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.text.TextUtils
+import com.baselib.helper.DialogHelper
 import com.baselib.helper.ImageLoaderHelper
+import com.baselib.helper.ToastHelper
 import com.baselib.ui.activity.CommToolBarActivity
+import com.baselib.ui.dialog.callback.MenuDialogCallback
 import com.fastdev.ui.R
+import com.fastdev.ui.dialog.ShareDialog
+import com.pingerx.socialgo.core.model.ShareEntity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -20,13 +25,16 @@ class MainActivity : CommToolBarActivity() {
         iv_test.setOnClickListener {
 //            SocialHelper.shareText(activity, "", "")
 //            ApiClient.getService().testApi2("sss").composeBindLifecycle(this).composeProgress(getProgressBar()).subscribe({ LogA.i(it) }, { LogA.i(it) })
-            startOtherApp("com.hundsun.cqsxbank.mobilepay")
+//            startOtherApp("com.hundsun.cqsxbank.mobilepay")
+            ShareDialog(activity = activity).show(ShareEntity.CREATOR.buildImageObj("https://camo.githubusercontent.com/f03e30826c75c61c21d287c537e4d4d707afc6d4/687474703a2f2f7777312e73696e61696d672e636e2f6c617267652f37316233386632636c793167316a6e616732647a626a3230366130383277656d2e6a7067"))
+//            DialogHelper.showCommDialog(activity, "温馨提示", "你好我好大家好喜喜呃", leftMenu = {menuText = "确认"}, rightMenu = {menuText = "取消"})?.setCancelable(false)
         }
     }
 
 
     private fun startOtherApp(packageName: String){
-        startActivity(packageManager.getLaunchIntentForPackage(packageName).apply { setFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
+        if(isInstallApp(this, packageName))
+            startActivity(packageManager.getLaunchIntentForPackage(packageName).apply { setFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
     }
 
     fun isInstallApp(context: Context, packageName: String): Boolean{
@@ -35,7 +43,22 @@ class MainActivity : CommToolBarActivity() {
                     .getApplicationInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES)
             true
         } catch (e: PackageManager.NameNotFoundException) {
+            ToastHelper.showToast("未安装")
             false
         }
+    }
+
+    // app 是否安装
+    fun isAppInstall(context: Context, pkgName: String): Boolean {
+        val pm = context.packageManager ?: return false
+        val packages = pm.getInstalledPackages(0)
+        var result = false
+        for (info in packages) {
+            if (TextUtils.equals(info.packageName.toLowerCase(), pkgName)) {
+                result = true
+                break
+            }
+        }
+        return result
     }
 }

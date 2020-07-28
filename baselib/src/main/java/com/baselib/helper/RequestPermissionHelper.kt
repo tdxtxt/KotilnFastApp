@@ -10,9 +10,12 @@ import com.permissionx.guolindev.PermissionX
  * @since 2020.5.27
  */
 object RequestPermissionHelper{
-    fun requestPermission(activity: FragmentActivity, vararg permissions: String, listener: (PermissionListener.() -> Unit)){
-        val callback = object : PermissionListener() {}
-        callback.listener()
+    fun requestPermission(activity: FragmentActivity, vararg permissions: String, listener: (PermissionListener.() -> Unit)?){
+        var callback: PermissionListener? = null
+        if(listener != null){
+            callback = object : PermissionListener() {}
+            callback.listener()
+        }
         PermissionX.init(activity)
                 .permissions(Manifest.permission.CAMERA)
                 .onExplainRequestReason { scope, deniedList ->
@@ -23,18 +26,21 @@ object RequestPermissionHelper{
                 }
                 .request { allGranted, grantedList, deniedList ->
                     if (allGranted) {//允许的权限 grantedList
-                        callback.onGranted?.invoke(grantedList)
+                        callback?.onGranted?.invoke(grantedList)
                     } else {//被拒绝的权限 deniedList
-                        callback.onDenied?.invoke(deniedList)
+                        callback?.onDenied?.invoke(deniedList)
                     }
                 }
     }
     /**
      * 请求相机权限
      */
-    fun requestCameraPermission(activity: FragmentActivity, listener: (PermissionListener.() -> Unit)){
-        val callback = object : PermissionListener() {}
-        callback.listener()
+    fun requestCameraPermission(activity: FragmentActivity, listener: (PermissionListener.() -> Unit)?){
+        var callback: PermissionListener? = null
+        if(listener != null){
+            callback = object : PermissionListener() {}
+            callback.listener()
+        }
         PermissionX.init(activity)
                 .permissions(Manifest.permission.CAMERA)
                 .onExplainRequestReason { scope, deniedList ->
@@ -45,9 +51,9 @@ object RequestPermissionHelper{
                 }
                 .request { allGranted, grantedList, deniedList ->
                     if (allGranted) {//允许的权限 grantedList
-                        callback.onGranted?.invoke(grantedList)
+                        callback?.onGranted?.invoke(grantedList)
                     } else {//被拒绝的权限 deniedList
-                        callback.onDenied?.invoke(deniedList)
+                        callback?.onDenied?.invoke(deniedList)
                     }
                 }
     }
@@ -55,9 +61,12 @@ object RequestPermissionHelper{
     /**
      * 请求存储权限
      */
-    fun requestStoragePermission(activity: FragmentActivity, listener: (PermissionListener.() -> Unit)){
-        val callback = object : PermissionListener() {}
-        callback.listener()
+    fun requestStoragePermission(activity: FragmentActivity, listener: (PermissionListener.() -> Unit)?){
+        var callback: PermissionListener? = null
+        if(listener != null){
+            callback = object : PermissionListener() {}
+            callback.listener()
+        }
         PermissionX.init(activity)
                 .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
                 .onExplainRequestReason { scope, deniedList ->
@@ -68,9 +77,9 @@ object RequestPermissionHelper{
                 }
                 .request { allGranted, grantedList, deniedList ->
                     if (allGranted) {//允许的权限 grantedList
-                        callback.onGranted?.invoke(grantedList)
+                        callback?.onGranted?.invoke(grantedList)
                     } else {//被拒绝的权限 deniedList
-                        callback.onDenied?.invoke(deniedList)
+                        callback?.onDenied?.invoke(deniedList)
                     }
                 }
     }

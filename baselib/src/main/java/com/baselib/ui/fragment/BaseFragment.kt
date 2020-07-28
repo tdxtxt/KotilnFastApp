@@ -1,18 +1,18 @@
 package com.baselib.ui.fragment
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.baselib.R
 import com.baselib.helper.DialogHelper
 import com.baselib.helper.HashMapParams
 import com.baselib.ui.activity.BaseActivity
-import com.baselib.ui.dialog.child.NativeProgressDialog
+import com.baselib.ui.dialog.child.ProgressDialog
 import com.baselib.ui.mvp.view.IView
 import com.lxj.statelayout.StateLayout
 import com.trello.rxlifecycle3.components.support.RxFragment
@@ -22,7 +22,7 @@ abstract class BaseFragment : RxFragment(), IView {
     protected lateinit var mRootView: View
     private var unbinder: Unbinder? = null
     private var stateLayout: StateLayout? = null
-    private var mProgressDialog: NativeProgressDialog? = null
+    private var mProgressDialog: ProgressDialog? = null
 
     protected abstract fun getLayoutId(): Int
 
@@ -72,15 +72,15 @@ abstract class BaseFragment : RxFragment(), IView {
     }.showContent()
 
 
-    override fun getProgressBar(): NativeProgressDialog? {
+    override fun getProgressBar(): ProgressDialog? {
         if (mProgressDialog == null){
-            mProgressDialog = if(activity is BaseActivity) (activity as BaseActivity).getProgressBar() else DialogHelper.createProgressDialog(activity, "请耐心等待，正在处理...", true)
+            mProgressDialog = if(activity is BaseActivity) (activity as BaseActivity).getProgressBar() else DialogHelper.createProgressDialog(activity as FragmentActivity, "请耐心等待，正在处理...", true)
         }
         return mProgressDialog
     }
 
     override fun showProgressBar() {
-        getProgressBar()?.show<NativeProgressDialog>()
+        getProgressBar()?.show()
     }
 
     override fun hideProgressBar() {
@@ -107,7 +107,7 @@ abstract class BaseFragment : RxFragment(), IView {
     override fun onDestroyView() {
         super.onDestroyView()
         unbinder?.unbind()
-        getProgressBar()?.onDestroy()
+        getProgressBar()?.dismiss()
     }
 
     companion object {
