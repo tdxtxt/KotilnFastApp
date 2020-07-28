@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.baselib.R
 import com.baselib.helper.DialogHelper
 import com.baselib.helper.HashMapParams
@@ -20,7 +18,7 @@ import com.trello.rxlifecycle3.components.support.RxFragment
 abstract class BaseFragment : RxFragment(), IView {
     public lateinit var activity: Activity
     protected lateinit var mRootView: View
-    private var unbinder: Unbinder? = null
+//    private var unbinder: Unbinder? = null
     private var stateLayout: StateLayout? = null
     private var mProgressDialog: ProgressDialog? = null
 
@@ -37,7 +35,7 @@ abstract class BaseFragment : RxFragment(), IView {
         this.activity = getActivity()!!
         mRootView = inflater?.inflate(getLayoutId(),container, false)?:
                 View.inflate(activity,getLayoutId(),container)
-        unbinder = ButterKnife.bind(this, mRootView)
+//        unbinder = ButterKnife.bind(this, mRootView)
         return initStateView().apply { stateLayout = this }
     }
 
@@ -106,7 +104,7 @@ abstract class BaseFragment : RxFragment(), IView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        unbinder?.unbind()
+//        unbinder?.unbind()
         getProgressBar()?.dismiss()
     }
 

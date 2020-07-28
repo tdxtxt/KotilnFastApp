@@ -36,20 +36,14 @@ dependencies {
     implementation rootProject.ext.image.glideOkhttp
     kapt rootProject.ext.image.glideCompiler
 
-    compileOnly rootProject.ext.butterknifeLibs
-
     //rxjava + retrofit相关
     api rootProject.ext.netLibs
 
     //快捷开发库
     implementation rootProject.ext.fastDev.eventbus
-    implementation (rootProject.ext.fastDev.dialog){
-        transitive = true
-        exclude group: 'com.android.support'
-    }
     implementation rootProject.ext.fastDev.refresh
     implementation rootProject.ext.fastDev["refresh-header"]
-    implementation rootProject.ext.fastDev.logger
+    implementation (rootProject.ext.fastDev.logger){exclude group: "com.android.support"}
     implementation rootProject.ext.fastDev.hawk
 //    implementation rootProject.ext.fastDev.statusBar
     implementation rootProject.ext.fastDev.stateview

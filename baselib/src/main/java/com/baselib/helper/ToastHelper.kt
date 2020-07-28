@@ -2,9 +2,9 @@ package com.baselib.helper
 
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.StringRes
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.annotation.StringRes
 import com.baselib.app.DevApp
 
 class ToastHelper {

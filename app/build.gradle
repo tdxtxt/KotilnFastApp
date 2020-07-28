@@ -92,7 +92,4 @@ dependencies {
     implementation(name: 'socialgo-wechat-1.0.2', ext: 'aar')
 
     implementation project(path: ':baselib')
-    //控件id注入库
-    implementation rootProject.ext.butterknifeLibs
-//    implementation rootProject.ext.fastDev.title
 }

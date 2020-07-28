@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
+
+import androidx.annotation.ColorInt;
 
 
 /**

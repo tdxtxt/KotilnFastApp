@@ -5,8 +5,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.baselib.R
 import com.baselib.helper.DialogHelper
 import com.baselib.helper.StatusBarHelper
@@ -26,7 +24,6 @@ import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
 abstract class BaseActivity : RxAppCompatActivity(),IView {
     protected lateinit var activity: FragmentActivity
     private var mProgressDialog: ProgressDialog? = null
-    private lateinit var unbinder: Unbinder
     private var stateLayout: StateLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +31,6 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
         activity = this
         if(getLayoutResId() > 0) setContentView(getLayoutResId())
         initStatusBar()
-        unbinder = ButterKnife.bind(this)
         stateLayout = initStateView()
         initUi()
 //        overridePendingTransition(R.anim.baselib_slide_in_form_right, 0)//进入的切换动画
@@ -120,7 +116,6 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (unbinder != null) unbinder.unbind()
         hideProgressBar()
     }
 
