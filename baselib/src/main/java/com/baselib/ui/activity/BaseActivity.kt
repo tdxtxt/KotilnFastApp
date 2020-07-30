@@ -1,14 +1,22 @@
 package com.baselib.ui.activity
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import com.baselib.R
+import com.baselib.callback.StartForResultListener
 import com.baselib.helper.DialogHelper
+import com.baselib.helper.HashMapParams
+import com.baselib.helper.LogA
 import com.baselib.helper.StatusBarHelper
 import com.baselib.ui.dialog.child.ProgressDialog
+import com.baselib.ui.fragment.impl.StartForResultFragment1
+import com.baselib.ui.fragment.impl.StartForResultFragment2
 import com.baselib.ui.mvp.view.IView
 import com.lxj.statelayout.StateLayout
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
@@ -29,12 +37,22 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
+        parseParams(intent) //解析参数
         if(getLayoutResId() > 0) setContentView(getLayoutResId())
         initStatusBar()
         stateLayout = initStateView()
         initUi()
 //        overridePendingTransition(R.anim.baselib_slide_in_form_right, 0)//进入的切换动画
     }
+
+    private fun parseParams(intent: Intent?) {
+        if (intent == null) return
+        var extraBundle: Bundle? = intent.getBundleExtra("Bundle")
+        if (extraBundle == null) extraBundle = intent.extras
+        getParams(extraBundle)
+    }
+    fun getParams(bundle: Bundle?){}
+
 
     open fun configStateView(view: View, stateLayout: StateLayout){
         stateLayout.apply {
@@ -108,6 +126,57 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
         } else super.onKeyDown(keyCode, event)
     }
 
+    fun startActivityForResult(clazz: Class<*>, listener: (StartForResultListener.() -> Unit)?){
+        startActivityForResult(this, clazz, null, listener)
+    }
+
+    fun startActivityForResult(clazz: Class<*>, params: HashMapParams?, listener: (StartForResultListener.() -> Unit)?){
+        startActivityForResult(this, clazz, params, listener)
+    }
+
+    companion object{
+        fun startActivityForResult(activity: Activity?, clazz: Class<*>, params: HashMapParams?, listener: (StartForResultListener.() -> Unit)?){
+            if(activity == null) return
+            if (!isActivityValid(activity)) {
+                LogA.i("startActivityForResult ------>  Activity is null or has finished")
+                return
+            }
+            if(activity is FragmentActivity){
+                var fragment: StartForResultFragment1 = (activity.supportFragmentManager.findFragmentByTag("__start_for_result")?:
+                StartForResultFragment1().apply {
+                    activity.supportFragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
+                    activity.supportFragmentManager.executePendingTransactions()
+                }) as StartForResultFragment1
+
+                fragment.setListener(listener)
+                val intent = Intent()
+                if(params != null) intent.putExtra("Bundle", params?.toBundle())
+                intent.setClass(activity, clazz)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)//单例
+                fragment.startActivityForResult(intent, 0x001122)
+            }else{
+                var fragment: StartForResultFragment2 = (activity.fragmentManager.findFragmentByTag("__start_for_result")?:
+                StartForResultFragment2().apply {
+                    activity.fragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
+                    activity.fragmentManager.executePendingTransactions()
+                }) as StartForResultFragment2
+
+                fragment.setListener(listener)
+                val intent = Intent()
+                if(params != null) intent.putExtra("Bundle", params?.toBundle())
+                intent.setClass(activity, clazz)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)//单例
+                fragment.startActivityForResult(intent, 0x001122)
+            }
+
+        }
+        private fun isActivityValid(activity: Activity?): Boolean {
+            if (activity == null || activity.isFinishing) {
+                return false
+            }
+            return !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed)
+        }
+    }
 
     override fun finish() {
         super.finish()

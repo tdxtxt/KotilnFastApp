@@ -1,14 +1,12 @@
 package com.baselib.helper
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import com.baselib.ui.dialog.callback.MenuDialogCallback
+import com.baselib.callback.MenuDialogCallback
 import com.baselib.ui.dialog.child.CommDialog
 import com.baselib.ui.dialog.child.ProgressDialog
 import com.lxj.xpopup.core.BasePopupView

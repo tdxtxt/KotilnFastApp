@@ -1,4 +1,4 @@
-package com.baselib.ui.activity.callback
+package com.baselib.callback
 
 import android.view.View
 

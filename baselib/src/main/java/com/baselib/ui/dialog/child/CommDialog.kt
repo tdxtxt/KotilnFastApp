@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import com.baselib.R
 import com.baselib.ui.dialog.CenterBaseDialog
 import com.baselib.ui.dialog.impl.IBDialog
-import com.baselib.ui.dialog.callback.MenuDialogCallback
+import com.baselib.callback.MenuDialogCallback
 
 /**
  * @作者： tangdx

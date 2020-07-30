@@ -5,11 +5,9 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.text.TextUtils
-import com.baselib.helper.DialogHelper
 import com.baselib.helper.ImageLoaderHelper
 import com.baselib.helper.ToastHelper
 import com.baselib.ui.activity.CommToolBarActivity
-import com.baselib.ui.dialog.callback.MenuDialogCallback
 import com.fastdev.ui.R
 import com.fastdev.ui.dialog.ShareDialog
 import com.pingerx.socialgo.core.model.ShareEntity

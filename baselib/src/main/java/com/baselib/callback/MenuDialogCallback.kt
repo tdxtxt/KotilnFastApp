@@ -1,4 +1,4 @@
-package com.baselib.ui.dialog.callback
+package com.baselib.callback
 
 import android.view.View
 import com.baselib.ui.dialog.impl.IBDialog

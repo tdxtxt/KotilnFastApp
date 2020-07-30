@@ -1,13 +1,12 @@
 package com.baselib.ui.activity
 
-import android.graphics.Color
 import android.os.Bundle
 import com.hjq.bar.TitleBar
 import com.hjq.bar.OnTitleBarListener
 import android.view.View
 import com.baselib.R
 import com.baselib.helper.StatusBarHelper
-import com.baselib.ui.activity.callback.TitleClickListener
+import com.baselib.callback.TitleClickListener
 import com.lxj.statelayout.StateLayout
 
 
