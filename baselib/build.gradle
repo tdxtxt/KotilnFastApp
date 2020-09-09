@@ -30,6 +30,7 @@ dependencies {
 
     //google官方lib
     implementation rootProject.ext.supprotLibs
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     //图片库
     implementation (rootProject.ext.image.glide){exclude group: "com.android.support"}

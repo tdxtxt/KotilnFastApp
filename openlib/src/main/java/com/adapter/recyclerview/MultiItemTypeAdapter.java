@@ -140,6 +140,12 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         compatibilityDataSizeChanged(newData.size());
     }
 
+    public void setNewData(Collection<? extends T> newData){
+        mDatas.clear();
+        mDatas.addAll(newData);
+        notifyDataSetChanged();
+    }
+
     public void remove(int position) {
         if(position < 0 || position >= mDatas.size()) return;
         mDatas.remove(position);

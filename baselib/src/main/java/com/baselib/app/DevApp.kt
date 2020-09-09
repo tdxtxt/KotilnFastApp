@@ -2,6 +2,7 @@ package com.baselib.app
 
 import android.app.Application
 import android.content.Context
+import androidx.multidex.MultiDex
 import com.baselib.helper.CacheHelper
 import com.baselib.helper.LogA
 
@@ -13,6 +14,11 @@ import com.baselib.helper.LogA
  * @返回参数说明： 无
  */
 open abstract class DevApp : Application(){
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
+    }
 
     override fun onCreate() {
         super.onCreate()

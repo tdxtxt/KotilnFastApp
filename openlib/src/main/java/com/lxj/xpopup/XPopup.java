@@ -253,8 +253,9 @@ public class XPopup {
          * @param popupPosition
          * @return
          */
-        public Builder popupPosition(PopupPosition popupPosition) {
+        public Builder popupPosition(PopupPosition popupPosition, float relativePosition) {
             this.popupInfo.popupPosition = popupPosition;
+            this.popupInfo.relativePosition = relativePosition;
             return this;
         }
 

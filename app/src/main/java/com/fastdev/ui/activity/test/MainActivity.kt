@@ -8,10 +8,14 @@ import android.text.TextUtils
 import com.baselib.helper.ImageLoaderHelper
 import com.baselib.helper.ToastHelper
 import com.baselib.ui.activity.CommToolBarActivity
+import com.fastdev.bean.body.CardType
 import com.fastdev.ui.R
 import com.fastdev.ui.dialog.ShareDialog
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.enums.PopupPosition
 import com.pingerx.socialgo.core.model.ShareEntity
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jaaksi.pickerview.picker.OptionPicker
 
 
 class MainActivity : CommToolBarActivity() {
@@ -24,8 +28,20 @@ class MainActivity : CommToolBarActivity() {
 //            SocialHelper.shareText(activity, "", "")
 //            ApiClient.getService().testApi2("sss").composeBindLifecycle(this).composeProgress(getProgressBar()).subscribe({ LogA.i(it) }, { LogA.i(it) })
 //            startOtherApp("com.hundsun.cqsxbank.mobilepay")
-            ShareDialog(activity = activity).show(ShareEntity.CREATOR.buildImageObj("https://camo.githubusercontent.com/f03e30826c75c61c21d287c537e4d4d707afc6d4/687474703a2f2f7777312e73696e61696d672e636e2f6c617267652f37316233386632636c793167316a6e616732647a626a3230366130383277656d2e6a7067"))
+//            ShareDialog(activity = activity).show(ShareEntity.CREATOR.buildImageObj("https://camo.githubusercontent.com/f03e30826c75c61c21d287c537e4d4d707afc6d4/687474703a2f2f7777312e73696e61696d672e636e2f6c617267652f37316233386632636c793167316a6e616732647a626a3230366130383277656d2e6a7067"))
 //            DialogHelper.showCommDialog(activity, "温馨提示", "你好我好大家好喜喜呃", leftMenu = {menuText = "确认"}, rightMenu = {menuText = "取消"})?.setCancelable(false)
+
+            XPopup.Builder(activity)
+                    .hasShadowBg(false).isDarkTheme(true).popupAnimation(null).offsetX(10)
+                    .atView(it).popupPosition(PopupPosition.Bottom,0.9f).asAttachList(
+                            arrayOf("账户管理", "首页"), null){ position, text ->
+                    }.show()
+
+//            OptionPicker.Builder(this, 1, OptionPicker.OnOptionSelectListener { picker, selectedPosition, selectedOptions ->
+//            }).create().apply {
+//                setData(CardType.getCardTypes())
+//                show()
+//            }
         }
     }
 

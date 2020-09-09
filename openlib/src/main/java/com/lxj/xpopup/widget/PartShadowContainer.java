@@ -1,9 +1,12 @@
 package com.lxj.xpopup.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,26 +14,55 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
+import com.lxj.xpopup.enums.PopupPosition;
 import com.lxj.xpopup.interfaces.OnClickOutsideListener;
 import com.lxj.xpopup.util.XPopupUtils;
+import com.lxj.xpopup.widget.sharp.SharpView;
+import com.lxj.xpopup.widget.sharp.SharpViewRenderProxy;
+import com.openlib.R;
 
 /**
  * Description:
  * Create by dance, at 2019/1/10
  */
 public class PartShadowContainer extends FrameLayout {
+    SharpViewRenderProxy mSharpViewRenderProxy;
     public boolean isDismissOnTouchOutside = true;
 
     public PartShadowContainer(@NonNull Context context) {
         super(context);
+        init(context, null, 0);
     }
 
     public PartShadowContainer(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
+        init(context, attrs, 0);
     }
 
     public PartShadowContainer(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr);
+    }
+
+    private void init(Context context, AttributeSet attrs, int defStyleAttr){
+        mSharpViewRenderProxy = new SharpViewRenderProxy(this, context, attrs, defStyleAttr);
+        mSharpViewRenderProxy.setSharpSize(16f);
+    }
+
+    public void setSharpRelativePosition(float relativePosition){
+        mSharpViewRenderProxy.setRelativePosition(relativePosition);
+    }
+
+    public void setSharpBackgroundColor(int colorRes){
+        mSharpViewRenderProxy.setBackgroundColor(ResourcesCompat.getColor(getResources(), colorRes, null));
+    }
+
+    public void setSharpArrowDirection(PopupPosition arrowDirection){
+        mSharpViewRenderProxy.setArrowDirection(arrowDirection);
+    }
+
+    public void setRadius(float radius){
+        mSharpViewRenderProxy.setRadius(radius);
     }
 
     private float x, y;

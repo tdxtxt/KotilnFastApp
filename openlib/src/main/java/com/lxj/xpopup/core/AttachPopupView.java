@@ -6,6 +6,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +66,12 @@ public abstract class AttachPopupView extends BasePopupView {
                 doAttach();
             }
         });
+
+        attachPopupContainer.setRadius(12);
+        attachPopupContainer.setSharpRelativePosition(popupInfo.relativePosition);
+        attachPopupContainer.setSharpArrowDirection(popupInfo.popupPosition.nonValue());
+        attachPopupContainer.setSharpBackgroundColor(popupInfo.isDarkTheme ? R.color._xpopup_dark_color : R.color._xpopup_white_color);
+
     }
 
     protected void applyBg(){
@@ -82,6 +90,7 @@ public abstract class AttachPopupView extends BasePopupView {
                 } else {
                     attachPopupContainer.setBackgroundColor(Color.WHITE);
                 }
+                //设置阴影
                 attachPopupContainer.setElevation(XPopupUtils.dp2px(getContext(), 20));
             } else {
                 //优先使用implView的背景

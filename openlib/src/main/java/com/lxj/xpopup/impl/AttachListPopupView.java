@@ -49,7 +49,7 @@ public class AttachListPopupView extends AttachPopupView {
         super.initPopupContent();
         recyclerView = findViewById(R.id.recyclerView);
         if(recyclerView instanceof VerticalRecyclerView){
-            ((VerticalRecyclerView)recyclerView).setupDivider(popupInfo.isDarkTheme);
+//            ((VerticalRecyclerView)recyclerView).setupDivider(popupInfo.isDarkTheme);
         }else {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
@@ -68,6 +68,11 @@ public class AttachListPopupView extends AttachPopupView {
 
                 if(bindItemLayoutId==0 && popupInfo.isDarkTheme){
                     holder.<TextView>getView(R.id.tv_text).setTextColor(getResources().getColor(R.color._xpopup_white_color));
+                }
+                if(position == getItemCount() - 1){
+                    holder.getView(R.id.view_line).setVisibility(View.GONE);
+                }else{
+                    holder.getView(R.id.view_line).setVisibility(View.VISIBLE);
                 }
             }
         };
@@ -89,7 +94,8 @@ public class AttachListPopupView extends AttachPopupView {
     @Override
     protected void applyDarkTheme() {
         super.applyDarkTheme();
-        recyclerView.setBackgroundColor(getResources().getColor(R.color._xpopup_dark_color));
+//        recyclerView.setBackgroundResource(R.drawable._xpopup_round3_dark_bg);
+//        attachPopupContainer.setBackgroundResource(R.drawable._xpopup_round3_dark_bg);
     }
 
     String[] data;

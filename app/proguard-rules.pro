@@ -37,17 +37,17 @@
 #2.默认保留区
  -keep public class * extends android.app.Activity # 保持哪些类不被混淆
  -keep public class * extends android.app.Application # 保持哪些类不被混淆
- -keep public class * extends android.app.MultiDexApplication
+# -keep public class * extends android.app.MultiDexApplication
  -keep public class * extends android.app.Service # 保持哪些类不被混淆
  -keep public class * extends android.content.BroadcastReceiver # 保持哪些类不被混淆
  -keep public class * extends android.content.ContentProvider # 保持哪些类不被混淆
  -keep public class * extends android.app.backup.BackupAgentHelper # 保持哪些类不被混淆
  -keep public class * extends android.preference.Preference # 保持哪些类不被混淆
- -keep public class com.android.vending.licensing.ILicensingService # 保持哪些类不被混淆
+# -keep public class com.android.vending.licensing.ILicensingService # 保持哪些类不被混淆
  -keep public class * extends android.view.View
- -keep class android.support.** {*;}
- -keep class android.support.v4.view.** { *; }
- -keep class android.view.View$OnUnhandledKeyEventListener { *; }
+# -keep class android.support.** {*;}
+# -keep class android.support.v4.view.** { *; }
+# -keep class android.view.View$OnUnhandledKeyEventListener { *; }
 
  -keepclasseswithmembernames class * { # 保持 native 方法不被混淆
     native <methods>;
@@ -62,9 +62,9 @@
    public static **[] values();
    public static ** valueOf(java.lang.String);
 }
--keepclassmembers class * implements android.os.Parcelable {#保持Parcelable不被混淆
-   public static final android.os.Parcelable$Creator *;
-}
+#-keepclassmembers class * implements android.os.Parcelable {#保持Parcelable不被混淆
+#   public static final android.os.Parcelable$Creator *;
+#}
  #保持注解继承类不混淆
 -keep class * extends java.lang.annotation.Annotation {*;}
  #保持Serializable实现类不被混淆
@@ -112,19 +112,19 @@
  public <methods>;
 }
 #3.webview
--keepclassmembers class fqcn.of.javascript.interface.for.webview {
-   public *;
-}
--keepclassmembers class * extends android.webkit.webViewClient {
-    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
-    public boolean *(android.webkit.WebView, java.lang.String);
-}
--keepclassmembers class * extends android.webkit.webViewClient {
-    public void *(android.webkit.webView, jav.lang.String);
-}
--dontwarn android.support.v4.**
--keep class android.support.v4.** { *; }
--keep interface android.support.v4.app.** { *; }
--keep public class * extends android.support.v4.**
--keep public class * extends android.app.Fragment
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+#-keepclassmembers class * extends android.webkit.webViewClient {
+#    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+#    public boolean *(android.webkit.WebView, java.lang.String);
+#}
+#-keepclassmembers class * extends android.webkit.webViewClient {
+#    public void *(android.webkit.webView, jav.lang.String);
+#}
+#-dontwarn android.support.v4.**
+#-keep class android.support.v4.** { *; }
+#-keep interface android.support.v4.app.** { *; }
+#-keep public class * extends android.support.v4.**
+#-keep public class * extends android.app.Fragment
 
