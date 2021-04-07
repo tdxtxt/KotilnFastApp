@@ -1,5 +1,7 @@
 package com.lxj.xpopup.interfaces;
 
+import android.view.Window;
+
 import com.lxj.xpopup.core.BasePopupView;
 
 /**
@@ -8,6 +10,10 @@ import com.lxj.xpopup.core.BasePopupView;
  * Create by dance, at 2018/12/21
  */
 public interface XPopupCallback {
+    /**
+     * 配置window属性
+     */
+    void configWindow(Window window);
     /**
      * 弹窗的onCreate方法执行完调用
      */

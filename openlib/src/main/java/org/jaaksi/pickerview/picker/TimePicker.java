@@ -85,15 +85,22 @@ public class TimePicker extends BasePicker
 
   private Formatter mFormatter;
   private OnTimeSelectListener mOnTimeSelectListener;
+  private OnTimePeriodSelectListener mOnTimePeriodSelectListener;
+  private OnTimeScrollListener mOnTimeScrollListener;
 
-  private TimePicker(Context context, int type, OnTimeSelectListener listener) {
+  private TimePicker(Context context, int type, OnTimeSelectListener listener, OnTimePeriodSelectListener periodSelectListener) {
     super(context);
     mType = type;
     mOnTimeSelectListener = listener;
+    mOnTimePeriodSelectListener = periodSelectListener;
   }
 
   public void setFormatter(Formatter formatter) {
     mFormatter = formatter;
+  }
+
+  public void setOnTimeScrollListener(OnTimeScrollListener listener){
+    this.mOnTimeScrollListener = listener;
   }
 
   /**
@@ -140,6 +147,22 @@ public class TimePicker extends BasePicker
     ignoreSecond(calendar);
     calendar.add(Calendar.MINUTE, getValidTimeOffset(calendar, false));
     this.mEndDate = calendar;
+  }
+
+  /**
+   * @deprecated 此方法有问题
+   */
+  public void updateRangDate(long startDate, long endDate, long selectMillis){
+    setRangDate(startDate, endDate);
+    setSelectedDate(selectMillis);
+  }
+
+  public Calendar getEndDate(){
+    return mEndDate;
+  }
+
+  public Calendar getStartDate(){
+    return mStartDate;
   }
 
   /**
@@ -718,6 +741,7 @@ public class TimePicker extends BasePicker
         resetMinuteAdapter(false);
         break;
     }
+    if(mOnTimeScrollListener != null) mOnTimeScrollListener.onTimeScroll(this, getSelectedDates());
   }
 
   @Override
@@ -725,6 +749,13 @@ public class TimePicker extends BasePicker
     if (mOnTimeSelectListener != null) {
       Date date = getSelectedDates();
       if (date != null) mOnTimeSelectListener.onTimeSelect(this, date);
+    }
+  }
+
+  @Override
+  public void onConfirm(Date start, Date end) {
+    if(mOnTimePeriodSelectListener != null){
+      mOnTimePeriodSelectListener.onTimeSelect(this, start, end);
     }
   }
 
@@ -758,6 +789,8 @@ public class TimePicker extends BasePicker
 
     private Formatter mFormatter;
     private OnTimeSelectListener mOnTimeSelectListener;
+    private OnTimePeriodSelectListener mOnTimePeriodSelectListener;
+    private OnTimeScrollListener mOnTimeScrollListener;
     private Interceptor mInterceptor;
 
     // 时间分钟间隔
@@ -778,6 +811,22 @@ public class TimePicker extends BasePicker
       mContext = context;
       mType = type;
       mOnTimeSelectListener = listener;
+    }
+
+    /**
+     * 强制设置的属性直接在构造方法中设置
+     *
+     * @param listener listener
+     */
+    public Builder(Context context, int type, OnTimePeriodSelectListener listener) {
+      mContext = context;
+      mType = type;
+      mOnTimePeriodSelectListener = listener;
+    }
+
+    public Builder setOnTimeScrollListener(OnTimeScrollListener listener){
+      mOnTimeScrollListener = listener;
+      return this;
     }
 
     /**
@@ -858,16 +907,19 @@ public class TimePicker extends BasePicker
     }
 
     public TimePicker create() {
-      TimePicker picker = new TimePicker(mContext, mType, mOnTimeSelectListener);
+      TimePicker picker = new TimePicker(mContext, mType, mOnTimeSelectListener, mOnTimePeriodSelectListener);
+      picker.mOnTimeScrollListener = mOnTimeScrollListener;
       // 不支持重复设置的，都在builder中控制，一次性行为
-      picker.needDialog = needDialog;
-      picker.iPickerDialog = iPickerDialog;
-      picker.initPickerView();
-      picker.setInterceptor(mInterceptor);
       picker.mTimeMinuteOffset = mTimeMinuteOffset;
       picker.mContainsStarDate = mContainsStarDate;
       picker.mContainsEndDate = mContainsEndDate;
       picker.setRangDate(mStartDate, mEndDate);
+
+      picker.needDialog = needDialog;
+      picker.iPickerDialog = iPickerDialog;
+      picker.initPickerView();
+      picker.setInterceptor(mInterceptor);
+
       if (mFormatter == null) {
         mFormatter = new DefaultFormatter();
       }
@@ -937,5 +989,24 @@ public class TimePicker extends BasePicker
      * @param date 选择的时间
      */
     void onTimeSelect(TimePicker picker, Date date);
+  }
+
+  public interface OnTimePeriodSelectListener {
+    /**
+     * 点击确定按钮选择时间后回调
+     *
+     * @param start 起始选择的时间
+     * @param end 终止选择的时间
+     */
+    void onTimeSelect(TimePicker picker, Date start, Date end);
+  }
+
+  public interface OnTimeScrollListener {
+    /**
+     * 时间滚动时的回调
+     *
+     * @param date 选择的时间
+     */
+    void onTimeScroll(TimePicker picker, Date date);
   }
 }

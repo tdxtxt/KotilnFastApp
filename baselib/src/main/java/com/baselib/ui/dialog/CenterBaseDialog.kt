@@ -3,6 +3,7 @@ package com.baselib.ui.dialog
 import android.app.Activity
 import android.view.ContextThemeWrapper
 import android.view.View
+import android.view.Window
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentActivity
 import com.baselib.helper.lifecycleOwner
@@ -35,6 +36,9 @@ abstract class CenterBaseDialog constructor(val context: FragmentActivity) : IBD
     }
     val builder: XPopup.Builder = XPopup.Builder(context).setPopupCallback(object : XPopupCallback{
         override fun onBackPressed(popupView: BasePopupView?) = false  //如果你自己想拦截返回按键事件，则重写这个方法，返回true即可
+        override fun configWindow(window: Window?) {
+        }
+
         override fun onDismiss(popupView: BasePopupView?) {
             mCancelListener?.invoke()
         }

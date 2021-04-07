@@ -19,5 +19,5 @@ public interface IPickerDialog {
   /**
    * 设置title
    */
-  void setTitle(String value);
+  void setTitle(String value, OnPickerTitleListener click);
 }

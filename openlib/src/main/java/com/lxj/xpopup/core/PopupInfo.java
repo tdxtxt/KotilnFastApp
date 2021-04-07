@@ -3,6 +3,8 @@ package com.lxj.xpopup.core;
 import android.graphics.PointF;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+
 import com.lxj.xpopup.animator.PopupAnimator;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.enums.PopupPosition;
@@ -31,6 +33,7 @@ public class PopupInfo {
     public Boolean autoOpenSoftInput = false;//是否自动打开输入法
     public XPopupCallback xPopupCallback;
 
+    public Window window;//window
     public ViewGroup decorView; //每个弹窗所属的DecorView
     public Boolean isMoveUpToKeyboard = true; //是否移动到软键盘上面，默认弹窗会移到软键盘上面
     public PopupPosition popupPosition = null; //弹窗出现在目标的什么位置

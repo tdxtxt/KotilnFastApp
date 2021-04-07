@@ -216,6 +216,9 @@ public abstract class BasePopupView extends FrameLayout implements OnNavigationB
         if(dialog==null){
             dialog = new FullScreenDialog(getContext())
                     .setContent(this);
+            popupInfo.window = dialog.getWindow();
+            if (popupInfo != null && popupInfo.xPopupCallback != null)
+                popupInfo.xPopupCallback.configWindow(dialog.getWindow());
         }
         dialog.show();
     }

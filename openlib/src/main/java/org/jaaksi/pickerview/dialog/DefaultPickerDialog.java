@@ -75,8 +75,16 @@ public class DefaultPickerDialog extends Dialog implements IPickerDialog, View.O
   }
 
   @Override
-  public void setTitle(String value) {
-      getTitleView().setText(value);
+  public void setTitle(final String value, final OnPickerTitleListener click) {
+    getTitleView().setText(value);
+    if (click != null)
+      getTitleView().setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          click.onClick(value);
+          dismiss();
+        }
+      });
   }
 
   @CallSuper

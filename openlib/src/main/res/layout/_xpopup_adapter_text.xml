@@ -48,6 +48,6 @@
         android:layout_height="0.5dp"
         android:layout_gravity="bottom"
         android:visibility="gone"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="20dp"
         android:background="#575757" />
 </LinearLayout>

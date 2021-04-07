@@ -61,6 +61,6 @@ fun BasePopupView.lifecycleOwner(owner: LifecycleOwner? = null): BasePopupView {
 internal class DialogLifecycleObserver(private val dismiss: () -> Unit) : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() = dismiss()
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() = dismiss()
+//    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+//    fun onPause() = dismiss()
 }

@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.jaaksi.pickerview.dialog.DefaultPickerDialog;
 import org.jaaksi.pickerview.dialog.IGlobalDialogCreator;
 import org.jaaksi.pickerview.dialog.IPickerDialog;
+import org.jaaksi.pickerview.dialog.OnPickerTitleListener;
 import org.jaaksi.pickerview.widget.PickerView;
 
 import androidx.annotation.ColorInt;
@@ -255,14 +257,26 @@ public abstract class BasePicker {
    * 显示picker的title
    */
   public void setTitle(String value) {
+    setTitle(value, null);
+  }
+
+  /**
+   * 显示picker的title
+   */
+  public void setTitle(String value, OnPickerTitleListener click) {
     if (/*!needDialog || */iPickerDialog == null) return;
-    iPickerDialog.setTitle(value);
+    iPickerDialog.setTitle(value, click);
   }
 
   /**
    * 点击确定按钮的回调
    */
   public abstract void onConfirm();
+
+  /**
+   * 点击确定按钮的回调
+   */
+  public void onConfirm(Date start, Date end){};
 
   /**
    * 用于子类修改设置PickerView属性

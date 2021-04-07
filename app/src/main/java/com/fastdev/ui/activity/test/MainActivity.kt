@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.text.TextUtils
+import com.baselib.helper.DialogHelper
 import com.baselib.helper.ImageLoaderHelper
 import com.baselib.helper.ToastHelper
 import com.baselib.ui.activity.CommToolBarActivity
@@ -31,17 +32,20 @@ class MainActivity : CommToolBarActivity() {
 //            ShareDialog(activity = activity).show(ShareEntity.CREATOR.buildImageObj("https://camo.githubusercontent.com/f03e30826c75c61c21d287c537e4d4d707afc6d4/687474703a2f2f7777312e73696e61696d672e636e2f6c617267652f37316233386632636c793167316a6e616732647a626a3230366130383277656d2e6a7067"))
 //            DialogHelper.showCommDialog(activity, "温馨提示", "你好我好大家好喜喜呃", leftMenu = {menuText = "确认"}, rightMenu = {menuText = "取消"})?.setCancelable(false)
 
+//            XPopup.Builder(activity).asConfirm("你好", "xiexie"){
+
+//            }.show()
             XPopup.Builder(activity)
                     .hasShadowBg(false).isDarkTheme(true).popupAnimation(null).offsetX(10)
                     .atView(it).popupPosition(PopupPosition.Bottom,0.9f).asAttachList(
                             arrayOf("账户管理", "首页"), null){ position, text ->
                     }.show()
 
-//            OptionPicker.Builder(this, 1, OptionPicker.OnOptionSelectListener { picker, selectedPosition, selectedOptions ->
-//            }).create().apply {
-//                setData(CardType.getCardTypes())
-//                show()
-//            }
+            /*OptionPicker.Builder(this, 1, OptionPicker.OnOptionSelectListener { picker, selectedPosition, selectedOptions ->
+            }).create().apply {
+                setData(CardType.getCardTypes())
+                show()
+            }*/
         }
     }
 

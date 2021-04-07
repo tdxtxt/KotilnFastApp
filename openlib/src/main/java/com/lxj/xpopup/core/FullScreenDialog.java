@@ -29,7 +29,7 @@ public class FullScreenDialog extends Dialog {
         super.onCreate(savedInstanceState);
         if (getWindow() == null) return;
         if (contentView != null && contentView.popupInfo.enableShowWhenAppBackground) {
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (Build.VERSION.SDK_INT >= 26) {//应用程序叠加窗口显示在所有窗口之上
                 getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
             } else {
                 getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);

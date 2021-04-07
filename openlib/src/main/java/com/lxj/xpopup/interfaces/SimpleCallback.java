@@ -1,5 +1,7 @@
 package com.lxj.xpopup.interfaces;
 
+import android.view.Window;
+
 import com.lxj.xpopup.core.BasePopupView;
 
 /**
@@ -7,6 +9,11 @@ import com.lxj.xpopup.core.BasePopupView;
  * Create by dance, at 2019/6/13
  */
 public class SimpleCallback implements XPopupCallback {
+    @Override
+    public void configWindow(Window window) {
+
+    }
+
     @Override
     public void onCreated(BasePopupView popupView) {
 

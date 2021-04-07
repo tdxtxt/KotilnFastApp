@@ -58,6 +58,12 @@ public class PartShadowContainer extends FrameLayout {
     }
 
     public void setSharpArrowDirection(PopupPosition arrowDirection){
+        switch (arrowDirection){
+            case Bottom: setPadding(0, 0, 0, 16);
+            case Right: setPadding(0, 0, 16, 0);
+            case Left: setPadding(16, 0, 0, 0);
+            case Top: setPadding(0, 16, 0, 0);
+        }
         mSharpViewRenderProxy.setArrowDirection(arrowDirection);
     }
 
