@@ -1,6 +1,5 @@
 package com.fastdev.net.config
 
-import com.baselib.net.error.NetError
 import com.baselib.net.okhttpconfig.BaseNetProvider
 import okhttp3.FormBody
 import okhttp3.Interceptor
@@ -14,12 +13,6 @@ import java.util.HashMap
  * 功能描述:
  */
 class TonNetProvider : BaseNetProvider() {
-    override fun handleError(error: NetError): Boolean {
-        return if (error.type == NetError.AuthError) true.apply {
-            //请跳转到登陆页面
-        } else false
-    }
-
     override fun configInterceptors(): Array<Interceptor>? {
         return arrayOf(ParamsInterceptor(), HeadInterceptor(), ResponseInterceptor())
     }

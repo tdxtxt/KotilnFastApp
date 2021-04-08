@@ -5,9 +5,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import com.baselib.net.NetMgr
-import com.baselib.net.error.NetError
-import com.baselib.net.model.IModel
 import com.baselib.ui.dialog.child.ProgressDialog
 import com.trello.rxlifecycle3.LifecycleProvider
 import io.reactivex.Flowable
@@ -58,33 +55,6 @@ import io.reactivex.schedulers.Schedulers
                 }
     }).composeUIThread()
 
-    /**
-     * 主要用于网络请求
-     */
-    @SuppressLint("CheckResult")
-    fun <T : IModel> Flowable<T>.composeApi(key: String): Flowable<T> = this.compose { upstream ->
-        upstream.flatMap { model ->
-            when {
-                model == null -> Flowable.error(
-                        NetError(NetError.NoDataError, model?.getMessage() ?: "数据为空"))
-                model.isSuccess() -> Flowable.just(model)
-                else -> Flowable.just(model)
-            }
-        }.onErrorResumeNext(Function {
-            var error = NetMgr.getInstance().getProvider().convertError(it)
-            if (NetMgr.getInstance().getProvider().handleError(error)) Flowable.empty()
-            else when (error.type) {
-                NetError.NoDataError,
-                NetError.NoConnectError,
-                NetError.TimeOutError,
-                NetError.ParseError -> {
-                    ToastHelper.showToast(error.message)
-                    Flowable.error(it)
-                }
-                else -> Flowable.empty()
-            }
-        })
-    }.composeUIThread()
 
     /**
      * 统一的弹框转圈进度框事务
@@ -104,19 +74,19 @@ import io.reactivex.schedulers.Schedulers
                 }
     }
 
-fun <T> Observable<T>.lifecycleOwner(owner: LifecycleOwner? = null) = this.compose { upstream ->
-    upstream.observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                it.apply {
-                    val observer = RxjavaLifecycleObserver(::dispose)
-                    owner?.lifecycle?.addObserver(observer)
+    fun <T> Observable<T>.lifecycleOwner(owner: LifecycleOwner? = null) = this.compose { upstream ->
+        upstream.observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    it.apply {
+                        val observer = RxjavaLifecycleObserver(::dispose)
+                        owner?.lifecycle?.addObserver(observer)
+                    }
                 }
-            }
-}
+    }
 
 
-internal class RxjavaLifecycleObserver(private val cancel: () -> Unit) : LifecycleObserver {
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() = cancel()
-}
+    internal class RxjavaLifecycleObserver(private val cancel: () -> Unit) : LifecycleObserver {
+        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        fun onDestroy() = cancel()
+    }
 

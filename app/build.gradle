@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -31,9 +33,10 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildTypes {
         debug {
             //是否打印LOG true-false
@@ -76,7 +79,7 @@ android {
         all*.exclude group: 'com.android.support'
         resolutionStrategy {
             force 'com.google.code.gson:gson:2.8.5'  //强制使用版本
-            force 'androidx.appcompat:appcompat:1.0.2'  //强制使用版本
+            force 'androidx.appcompat:appcompat:1.1.2'  //强制使用版本
 //            failOnVersionConflict() //版本冲突时报错
         }
     }
@@ -90,6 +93,11 @@ dependencies {
     implementation(name: 'socialgo-core-1.0.2', ext: 'aar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.3.1'
     implementation(name: 'socialgo-wechat-1.0.2', ext: 'aar')
+
+    implementation "com.google.dagger:hilt-android:2.28-alpha"
+    kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
+
+    api rootProject.ext.fastDev["indicator"]
 
     implementation project(path: ':baselib')
 }

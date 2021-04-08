@@ -1,7 +1,6 @@
 package com.fastdev.ui.activity.welcome;
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import com.baselib.helper.*
 import com.baselib.ui.activity.BaseActivity
@@ -21,9 +20,9 @@ import java.util.concurrent.TimeUnit
  * @since 2020/6/11
  */
 class WelcomeActivity : BaseActivity() {
-    private val countDownTime = 3L//倒计时时间
+    private val countDownTime = 1L//显示闪屏页1秒
 
-    override fun getLayoutResId() = R.layout.act_welcome
+    override fun getLayoutResId() = R.layout.act_wellcome
 
     var isBack = false
     //返回按键拦截
@@ -47,7 +46,7 @@ class WelcomeActivity : BaseActivity() {
     override fun initUi() {
         if(NetworkHelper.isConnected()){//有网络
             //请求广告接口获取广告图片,是否显示广告
-            ApiClient.getService().testApi2("xxx").composeBindLifecycle(this).subscribe {}
+            ApiClient.getService().testApi2("xxx").composeBindLifecycle(this).subscribe()
         }
         //倒计时3秒
         Flowable.interval(0, 1, TimeUnit.SECONDS)//延迟0，间隔1s，单位秒

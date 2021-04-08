@@ -31,9 +31,8 @@ class NetError constructor(var type: Int,cause: Throwable) : Exception(cause) {
             AuthError -> ""
             NoDataError -> ""
             BusinessError -> ""
-            UnknownError -> exception?.message?: super.message
-
-            else -> exception?.message?: super.message
+            UnknownError -> "未知错误${exception?.message?: super.message}"
+            else -> "未知错误${exception?.message?: super.message}"
         }
     }
 }

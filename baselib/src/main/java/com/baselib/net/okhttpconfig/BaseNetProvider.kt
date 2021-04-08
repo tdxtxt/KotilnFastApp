@@ -1,14 +1,6 @@
 package com.baselib.net.okhttpconfig
 
-import com.baselib.net.error.NetError
-import com.google.gson.JsonParseException
-import com.google.gson.JsonSyntaxException
 import okhttp3.*
-import org.json.JSONException
-import retrofit2.HttpException
-import java.net.ConnectException
-import java.net.UnknownHostException
-import java.util.concurrent.TimeoutException
 
 /**
  * 实现配置基类
@@ -36,24 +28,6 @@ open class BaseNetProvider : NetProvider {
 
     override fun configLogEnable() = isLog
 
-    override fun handleError(error: NetError): Boolean {
-        return NetError.AuthError === error.type
-    }
-
-    override fun convertError(e: Throwable) =
-            when (e) {
-                is NetError -> e
-                is UnknownHostException -> NetError(NetError.NoConnectError, e)//断网
-                is ConnectException -> NetError(NetError.NoConnectError, e)//主机错误
-                is JSONException -> NetError(NetError.ParseError, e)
-                is JsonParseException -> NetError(NetError.ParseError, e)
-                is JsonSyntaxException -> NetError(NetError.ParseError, e)
-                is HttpException -> NetError(NetError.ServiceError, e)
-                is retrofit2.HttpException -> NetError(NetError.ServiceError, e)
-                is TimeoutException -> NetError(NetError.TimeOutError, e)
-                else -> NetError(NetError.UnknownError, e)
-            }
-
 
     class HeaderHandler : RequestHandler {
         override fun onBeforeRequest(request: Request, chain: Interceptor.Chain): Request {
@@ -72,6 +46,6 @@ open class BaseNetProvider : NetProvider {
             }
             return response
         }
-
     }
+
 }

@@ -7,11 +7,18 @@ import com.baselib.net.okhttpconfig.NetProvider
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONException
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.IllegalStateException
+import java.net.SocketException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import java.text.ParseException
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLException
 
 /**
  * @作者： ton
@@ -72,7 +79,7 @@ class NetMgr {
             return retrofitMap["upload-pic$baseUrl"]!!
         }
 
-        var provider: NetProvider = providerMap[baseUrl]?: sProvider
+        val provider: NetProvider = providerMap[baseUrl]?: sProvider
 
         val builder = OkHttpClient.Builder()
         val client = builder.build()
@@ -120,23 +127,23 @@ class NetMgr {
 
         if(clientMap.get(baseUrl) != null) return clientMap.get(baseUrl)!!
 
-        var builder = OkHttpClient.Builder()
+        val builder = OkHttpClient.Builder()
 
         builder.connectTimeout(provider.configConnectTimeoutSecs(), TimeUnit.SECONDS)
         builder.readTimeout(provider.configReadTimeoutSecs(), TimeUnit.SECONDS)
         builder.writeTimeout(provider.configWriteTimeoutSecs(), TimeUnit.SECONDS)
 
-        var cookieJar = provider.configCookie()
+        val cookieJar = provider.configCookie()
         if(cookieJar != null) builder.cookieJar(cookieJar)
 
         provider.configHttps(builder)
 
-        var handler = provider.configHandler()
+        val handler = provider.configHandler()
         if (handler != null) {
             builder.addInterceptor(NetInterceptor(handler))
         }
 
-        var interceptors = provider.configInterceptors()
+        val interceptors = provider.configInterceptors()
         if (interceptors != null) {
             for (interceptor in interceptors) {
                 builder.addInterceptor(interceptor)
@@ -157,6 +164,21 @@ class NetMgr {
 
     private fun checkBaseUrl(baseUrl: String) = TextUtils.isEmpty(baseUrl)
 
+    fun handleError(e: Throwable): String? {
+        return when(e){
+            is UnknownHostException -> "网络不可用"
+            is SocketTimeoutException -> "请求网络超时"
+            is SocketException, is SSLException -> "网络不可用"
+            is HttpException -> when(e.code()){
+                in 500 until 600 -> "服务器处理请求出错"
+                in 400 until 500 -> "服务器无法处理请求"
+                in 300 until 400 -> "请求被重定向到其他页面"
+                else -> "未知错误${e.message}"
+            }
+            is ParseException, is JSONException -> "数据解析错误"
+            else -> "未知错误${e.message}"
+        }
+    }
 
 
     companion object {//单例

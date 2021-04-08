@@ -86,8 +86,8 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
     open fun initUi(){}
 
     override fun getProgressBar(): ProgressDialog? {
-        if (mProgressDialog == null) mProgressDialog = DialogHelper.createProgressDialog(this, "请耐心等待，正在处理...", true)
-        return mProgressDialog
+        if (mProgressDialog == null) mProgressDialog = DialogHelper.createProgressDialog(this, "正在加载...", true)
+        return mProgressDialog?.setDesc("正在加载...")?.apply { setCancelable(true) }
     }
 
     override fun showProgressBar() {
@@ -142,7 +142,7 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
                 return
             }
             if(activity is FragmentActivity){
-                var fragment: StartForResultFragment1 = (activity.supportFragmentManager.findFragmentByTag("__start_for_result")?:
+                val fragment: StartForResultFragment1 = (activity.supportFragmentManager.findFragmentByTag("__start_for_result")?:
                 StartForResultFragment1().apply {
                     activity.supportFragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
                     activity.supportFragmentManager.executePendingTransactions()
@@ -155,7 +155,7 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)//单例
                 fragment.startActivityForResult(intent, 0x001122)
             }else{
-                var fragment: StartForResultFragment2 = (activity.fragmentManager.findFragmentByTag("__start_for_result")?:
+                val fragment: StartForResultFragment2 = (activity.fragmentManager.findFragmentByTag("__start_for_result")?:
                 StartForResultFragment2().apply {
                     activity.fragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
                     activity.fragmentManager.executePendingTransactions()

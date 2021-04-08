@@ -1,6 +1,5 @@
 package com.baselib.net.okhttpconfig
 
-import com.baselib.net.error.NetError
 import okhttp3.CookieJar
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -23,8 +22,4 @@ interface NetProvider {
     fun configWriteTimeoutSecs(): Long
     //配置是否打印log日志
     fun configLogEnable(): Boolean
-    //配置错误处理，返回true表示以及处理了，返回false表示还可以继续处理
-    fun handleError(error: NetError): Boolean
-    //转换错误
-    fun convertError(throwable: Throwable): NetError
 }

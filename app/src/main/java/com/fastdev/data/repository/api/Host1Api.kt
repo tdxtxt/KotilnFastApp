@@ -1,6 +1,6 @@
-package com.fastdev.net.host
+package com.fastdev.data.repository.api
 
-import com.fastdev.bean.ResponseBody
+import com.fastdev.data.ResponseBody
 import io.reactivex.Flowable
 import retrofit2.http.*
 

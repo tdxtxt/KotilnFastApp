@@ -5,18 +5,13 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.text.TextUtils
-import com.baselib.helper.DialogHelper
 import com.baselib.helper.ImageLoaderHelper
 import com.baselib.helper.ToastHelper
 import com.baselib.ui.activity.CommToolBarActivity
-import com.fastdev.bean.body.CardType
 import com.fastdev.ui.R
-import com.fastdev.ui.dialog.ShareDialog
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.enums.PopupPosition
-import com.pingerx.socialgo.core.model.ShareEntity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jaaksi.pickerview.picker.OptionPicker
 
 
 class MainActivity : CommToolBarActivity() {
@@ -39,6 +34,7 @@ class MainActivity : CommToolBarActivity() {
                     .hasShadowBg(false).isDarkTheme(true).popupAnimation(null).offsetX(10)
                     .atView(it).popupPosition(PopupPosition.Bottom,0.9f).asAttachList(
                             arrayOf("账户管理", "首页"), null){ position, text ->
+                        ToastHelper.showToast(text)
                     }.show()
 
             /*OptionPicker.Builder(this, 1, OptionPicker.OnOptionSelectListener { picker, selectedPosition, selectedOptions ->
