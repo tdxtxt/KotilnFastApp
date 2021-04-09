@@ -19,7 +19,7 @@ class MainActivity : CommToolBarActivity() {
 
     override fun initUi() {
         showContentView()
-        ImageLoaderHelper.loadImage(iv_test, "https://mtest.sanxiapay.com/uxunimg/cust/shop/syscontent/2018/01/8/98618207493227154252.bmp")
+        ImageLoaderHelper.loadImage(iv_test, "")
         iv_test.setOnClickListener {
 //            SocialHelper.shareText(activity, "", "")
 //            ApiClient.getService().testApi2("sss").composeBindLifecycle(this).composeProgress(getProgressBar()).subscribe({ LogA.i(it) }, { LogA.i(it) })
