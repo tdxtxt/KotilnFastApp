@@ -17,6 +17,12 @@
         <item name="android:layout_height">1dp</item>
     </style>
 
+    <style name="line_horizontal_padding_15dp">
+        <item name="android:background">@drawable/baselib_line_horizontal_padding_15dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+    </style>
+
     <style name="line_vertical">
         <item name="android:background">@color/line_bg</item>weiuaan
         <item name="android:layout_width">1dp</item>

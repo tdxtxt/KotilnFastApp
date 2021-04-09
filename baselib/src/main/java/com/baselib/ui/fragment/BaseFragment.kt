@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
 import com.baselib.R
 import com.baselib.helper.DialogHelper
 import com.baselib.helper.HashMapParams
@@ -14,9 +13,10 @@ import com.baselib.ui.dialog.child.ProgressDialog
 import com.baselib.ui.mvp.view.IView
 import com.lxj.statelayout.StateLayout
 import com.trello.rxlifecycle3.components.support.RxFragment
+import androidx.fragment.app.FragmentActivity
 
 abstract class BaseFragment : RxFragment(), IView {
-    public lateinit var activity: Activity
+    public lateinit var fragmentActivity: FragmentActivity
     protected lateinit var mRootView: View
 //    private var unbinder: Unbinder? = null
     private var stateLayout: StateLayout? = null
@@ -32,9 +32,9 @@ abstract class BaseFragment : RxFragment(), IView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        this.activity = getActivity()!!
+        this.fragmentActivity = getActivity()!!
         mRootView = inflater?.inflate(getLayoutId(),container, false)?:
-                View.inflate(activity,getLayoutId(),container)
+                View.inflate(fragmentActivity,getLayoutId(),container)
 //        unbinder = ButterKnife.bind(this, mRootView)
         return initStateView().apply { stateLayout = this }
     }
@@ -65,14 +65,15 @@ abstract class BaseFragment : RxFragment(), IView {
     /**
      * 多状态通用页面
      */
-    open fun initStateView(): StateLayout? = StateLayout(activity).apply {
+    open fun initStateView(): StateLayout? = StateLayout(fragmentActivity).apply {
         configStateView(mRootView, this)
     }.showContent()
 
+    open fun <T : Activity> getActivityNew(): T? = fragmentActivity as T
 
     override fun getProgressBar(): ProgressDialog? {
         if (mProgressDialog == null){
-            mProgressDialog = if(activity is BaseActivity) (activity as BaseActivity).getProgressBar() else DialogHelper.createProgressDialog(activity as FragmentActivity, "请耐心等待，正在处理...", true)
+            mProgressDialog = if(fragmentActivity is BaseActivity) (fragmentActivity as BaseActivity).getProgressBar() else DialogHelper.createProgressDialog(fragmentActivity as FragmentActivity, "请耐心等待，正在处理...", true)
         }
         return mProgressDialog
     }

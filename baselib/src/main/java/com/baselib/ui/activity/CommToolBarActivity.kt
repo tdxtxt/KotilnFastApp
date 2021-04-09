@@ -29,7 +29,8 @@ abstract class CommToolBarActivity : BaseActivity() {
     private fun setTitleBarListener() {
         getTitleBar()?.setOnTitleBarListener(object : OnTitleBarListener {
             override fun onLeftClick(v: View) {
-                if(!interceptBackEvent()) finish()
+                interceptCallBack?.invoke()
+                if (!interceptBackEvent) finish()
                 titleListener?.onLeftClick(v)
             }
             override fun onTitleClick(v: View) {

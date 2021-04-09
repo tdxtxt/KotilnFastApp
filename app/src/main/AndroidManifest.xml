@@ -23,7 +23,7 @@
         tools:replace="android:appComponentFactory">
         <!--  闪屏页 -->
         <activity
-            android:name=".activity.welcome.WelcomeActivity"
+            android:name=".activity.welcome.WellcomeActivity"
             android:theme="@style/App.Theme.Launch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,8 +31,7 @@
             </intent-filter>
         </activity>
 
-        <!--  闪屏页 -->
-        <activity android:name="com.fastdev.ui.activity.test.MainActivity"/>
+        <activity android:name=".activity.MainActivity" android:launchMode="singleTask"/>
 
         <!--适配华为（huawei）刘海屏-->
         <meta-data

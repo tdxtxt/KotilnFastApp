@@ -10,19 +10,20 @@ import com.permissionx.guolindev.PermissionX
  * @since 2020.5.27
  */
 object RequestPermissionHelper{
-    fun requestPermission(activity: FragmentActivity, vararg permissions: String, listener: (PermissionListener.() -> Unit)?){
+    fun requestPermission(activity: FragmentActivity?, permissions: List<String>, listener: (PermissionListener.() -> Unit)?){
+        if(activity == null) return
         var callback: PermissionListener? = null
         if(listener != null){
             callback = object : PermissionListener() {}
             callback.listener()
         }
         PermissionX.init(activity)
-                .permissions(Manifest.permission.CAMERA)
+                .permissions(permissions)
                 .onExplainRequestReason { scope, deniedList ->
-                    scope.showRequestReasonDialog(deniedList, "xxx", "明白", "取消")
+//                    scope.showRequestReasonDialog(deniedList, "xxx", "明白", "取消")
                 }
                 .onForwardToSettings{scope, deniedList ->
-                    scope.showForwardToSettingsDialog(deniedList, "您需要去应用程序设置当中手动开启权限", "明白", "取消")
+//                    scope.showForwardToSettingsDialog(deniedList, "您需要去应用程序设置当中手动开启权限", "明白", "取消")
                 }
                 .request { allGranted, grantedList, deniedList ->
                     if (allGranted) {//允许的权限 grantedList

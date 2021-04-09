@@ -33,6 +33,8 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
     protected lateinit var activity: FragmentActivity
     private var mProgressDialog: ProgressDialog? = null
     private var stateLayout: StateLayout? = null
+    protected var interceptBackEvent = false
+    protected var interceptCallBack: (() -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +82,7 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
      */
     open fun initStatusBar(){
         StatusBarHelper.transparentStatusBar(activity)
+        StatusBarHelper.setDarkMode(activity)
     }
 
     abstract fun getLayoutResId(): Int
@@ -118,11 +121,18 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
     /**
      * 拦截返回事件
      */
-    open fun interceptBackEvent() = false
+    fun setInterceptBackEvent(
+            interceptBackEvent: Boolean,
+            interceptCallBack: (() -> Unit)? = null
+    ) {
+        this.interceptBackEvent = interceptBackEvent
+        this.interceptCallBack = interceptCallBack
+    }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         return if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (interceptBackEvent()) false else super.onKeyDown(keyCode, event)
+            interceptCallBack?.invoke()
+            if (interceptBackEvent) false else super.onKeyDown(keyCode, event)
         } else super.onKeyDown(keyCode, event)
     }
 
