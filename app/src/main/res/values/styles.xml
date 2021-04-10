@@ -11,7 +11,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/black_333333</item>
         <item name="android:textColorHint">@color/black_999999</item>
-        <item name="android:windowBackground">@color/white_f5f5f5</item>0
+        <item name="android:windowBackground">@color/white_ffffff</item>0
     </style>
 
     <!--启动界面主题-->
@@ -24,15 +24,15 @@
     </style>
 
     <style name="CommButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">52dp</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
         <item name="background_colorOrientation">left_right</item>
-        <item name="background_endColor">@color/blue_064fc3</item>
+        <item name="background_endColor">@color/blue_064fc3_dark</item>
         <item name="background_startColor">@color/blue_5c95f0</item>
         <item name="clickable">true</item>
-        <item name="corner">12dp</item>
+        <item name="corner">26dp</item>
         <item name="open_pressed_effect">true</item>
         <item name="textColor">@color/white_ffffff</item>
         <item name="textSize">16dp</item>

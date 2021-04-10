@@ -16,8 +16,6 @@
 
     <top.androidman.SuperButton
         android:id="@+id/btn_next"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/CommButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

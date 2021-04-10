@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity" android:launchMode="singleTask"/>
+        <activity android:name=".activity.main.MainActivity" android:launchMode="singleTask"/>
 
         <!--适配华为（huawei）刘海屏-->
         <meta-data

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="首页"
+        android:id="@+id/menu_home"/>
+
+    <item android:title="菜单1"
+        android:id="@+id/menu_1"/>
+
+    <item android:title="菜单2"
+        android:id="@+id/menu_2"/>
+
+    <item android:title="我的"
+        android:id="@+id/menu_mine"/>
+
+</menu>

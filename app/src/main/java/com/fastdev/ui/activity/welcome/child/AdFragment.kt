@@ -1,13 +1,10 @@
 package com.fastdev.ui.activity.welcome.child
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import com.baselib.helper.ImageLoaderHelper
-import com.baselib.helper.composeBindLifecycle
 import com.baselib.helper.composeUIThread
 import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.ui.R
-import com.fastdev.ui.activity.MainActivity
 import com.fastdev.ui.activity.welcome.WellcomeActivity
 import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.fragment_ad.*

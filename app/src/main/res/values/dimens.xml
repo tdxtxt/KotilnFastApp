@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- BottomNavigationView 高度 -->
+    <dimen name="design_bottom_navigation_height">48dp</dimen>
+    <!-- icon距离上边距的距离 -->
+    <dimen name="design_bottom_navigation_margin">6dp</dimen>
+    <!-- 字体大小 -->
+    <dimen name="design_bottom_navigation_active_text_size">20dp</dimen>
+    <dimen name="design_bottom_navigation_text_size">16dp</dimen>
+</resources>

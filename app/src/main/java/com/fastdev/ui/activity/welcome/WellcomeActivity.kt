@@ -8,7 +8,7 @@ import com.baselib.ui.activity.BaseActivity
 import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.net.ApiClient
 import com.fastdev.ui.R
-import com.fastdev.ui.activity.MainActivity
+import com.fastdev.ui.activity.main.MainActivity
 import com.fastdev.ui.activity.welcome.child.*
 import io.reactivex.Flowable
 import java.util.concurrent.TimeUnit
