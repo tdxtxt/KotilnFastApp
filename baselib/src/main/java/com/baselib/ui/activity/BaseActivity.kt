@@ -53,7 +53,7 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
         if (extraBundle == null) extraBundle = intent.extras
         getParams(extraBundle)
     }
-    fun getParams(bundle: Bundle?){}
+    open fun getParams(bundle: Bundle?){}
 
 
     open fun configStateView(view: View, stateLayout: StateLayout){

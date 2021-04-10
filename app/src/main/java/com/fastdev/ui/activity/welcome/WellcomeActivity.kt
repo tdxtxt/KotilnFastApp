@@ -6,12 +6,15 @@ import android.os.Bundle
 import com.baselib.helper.*
 import com.baselib.ui.activity.BaseActivity
 import com.baselib.ui.fragment.BaseFragment
+import com.fastdev.data.repository.TestRepository
 import com.fastdev.net.ApiClient
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.main.MainActivity
 import com.fastdev.ui.activity.welcome.child.*
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Flowable
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * 功能描述:
@@ -19,7 +22,11 @@ import java.util.concurrent.TimeUnit
  * 流程 https://github.com/zonezoen/ForGitHubProject
  * @since 2020/6/11
  */
+@AndroidEntryPoint
 class WellcomeActivity : BaseActivity() {
+    @Inject
+    lateinit var testApi: TestRepository
+
     private val countDownTime = 1L//显示闪屏页1秒
 
     override fun getLayoutResId() = R.layout.act_wellcome
@@ -39,7 +46,7 @@ class WellcomeActivity : BaseActivity() {
     override fun initUi() {
         if(NetworkHelper.isConnected()){//有网络
             //请求广告接口获取广告图片,是否显示广告
-            ApiClient.getService().testApi2("xxx").composeBindLifecycle(this).subscribe()
+            testApi.queryList1().composeBindLifecycle(this).subscribe()
         }
         //延迟时1秒
         Flowable.timer(countDownTime, TimeUnit.SECONDS)

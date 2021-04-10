@@ -68,7 +68,7 @@ class CustomApp : DevApp() {
         PickerView.sOutColor = Color.parseColor("#919191")
 
         // BasePicker
-        var padding = 0
+        val padding = 0
         BasePicker.sDefaultPaddingRect = Rect(padding, padding, padding, padding)
         BasePicker.sDefaultPickerBackgroundColor = Color.WHITE
         // 自定义弹窗
@@ -80,8 +80,8 @@ class CustomApp : DevApp() {
         DefaultCenterDecoration.sDefaultLineWidth = 0.5F
         DefaultCenterDecoration.sDefaultLineColor = Color.parseColor("#e5e5e5")
         //DefaultCenterDecoration.sDefaultDrawable = new ColorDrawable(Color.WHITE);
-        var leftMargin = 0
-        var topMargin = 0
+        val leftMargin = 0
+        val topMargin = 0
         DefaultCenterDecoration.sDefaultMarginRect = Rect(leftMargin, - topMargin, leftMargin, - topMargin)
     }
 

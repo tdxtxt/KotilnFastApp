@@ -28,14 +28,14 @@ import retrofit2.http.*
     @GET("recipientOrg/findOrg")
     fun load(@Query("id") id:Int):Observable<NetOuter<Orgs>>
  */
-open interface Host1Api {
+open interface TestApi {
     //获取公众号列表
     @GET("wxarticle/chapters/json")
-    fun testApi1(): Flowable<ResponseBody<String>>
+    fun queryList1(): Flowable<ResponseBody<String>>
 
     @FormUrlEncoded
     @POST("api/xxxyyy")
-    fun testApi2(@Field("parmas") parmas: String): Flowable<ResponseBody<Any?>>
+    fun queryList2(@Field("parmas") parmas: String): Flowable<ResponseBody<Any?>>
 
 
 }
