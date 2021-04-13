@@ -56,26 +56,18 @@ class WellcomeActivity : BaseActivity() {
         if(!PrivacyFragment.isPrivacyDisplay){ //显示隐私协议
             BaseFragment.newInstance(PrivacyFragment::class.java)?.apply {
                 FragmentHelper.replace(supportFragmentManager, this, R.id.view_content)
-//                FragmentHelper.add(supportFragmentManager, this, R.id.view_content)
-//                FragmentHelper.show(this)
             }
         }else if(!PermissionApplyFragment.isPermissionDisplay){ //显示获取权限
             BaseFragment.newInstance(PermissionApplyFragment::class.java)?.apply {
                 FragmentHelper.replace(supportFragmentManager, this, R.id.view_content)
-//                FragmentHelper.add(supportFragmentManager, this, R.id.view_content)
-//                FragmentHelper.showHide(this, FragmentHelper.getFragments(supportFragmentManager))
             }
         }else if(GuideFragment.isNewVersion()){ //是否启动过引导页
             BaseFragment.newInstance(GuideFragment::class.java)?.apply {
                 FragmentHelper.replace(supportFragmentManager, this, R.id.view_content)
-//                FragmentHelper.add(supportFragmentManager, this, R.id.view_content)
-//                FragmentHelper.showHide(this, FragmentHelper.getFragments(supportFragmentManager))
             }
         }else if(!AdFragment.isAdDisplay){ // 广告
             BaseFragment.newInstance(AdFragment::class.java)?.apply {
                 FragmentHelper.replace(supportFragmentManager, this, R.id.view_content)
-//                FragmentHelper.add(supportFragmentManager, this, R.id.view_content)
-//                FragmentHelper.showHide(this, FragmentHelper.getFragments(supportFragmentManager))
             }
         }
         else{

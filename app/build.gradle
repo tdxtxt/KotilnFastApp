@@ -107,4 +107,5 @@ dependencies {
     api rootProject.ext.fastDev["indicator"]
 
     implementation project(path: ':baselib')
+    implementation project(path: ':videoplayer')
 }

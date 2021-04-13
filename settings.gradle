@@ -1,1 +1,2 @@
+include ':videoplayer'
 include ':app', ':baselib', ':openlib'
