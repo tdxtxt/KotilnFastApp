@@ -93,4 +93,19 @@
         <attr name="right_bottom_radius" format="dimension"/>
         <attr name="left_bottom_radius" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="StateLayout">
+        <attr format="reference" name="sl_loadingLayoutId"/>
+        <attr format="reference" name="sl_emptyLayoutId"/>
+        <attr format="reference" name="sl_errorLayoutId"/>
+        <attr format="string" name="sl_emptyText"/>
+        <attr format="reference" name="sl_emptyIcon"/>
+        <attr format="boolean" name="sl_useContentBgWhenLoading"/>
+        <attr format="boolean" name="sl_enableLoadingShadow"/>
+        <attr format="boolean" name="sl_enableTouchWhenLoading"/>
+        <attr format="boolean" name="sl_defaultShowLoading"/>
+        <attr format="boolean" name="sl_noEmptyAndError"/>
+        <attr format="boolean" name="sl_showLoadingOnce"/>
+        <attr format="integer" name="sl_animDuration"/>
+    </declare-styleable>
 </resources>

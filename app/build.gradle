@@ -79,7 +79,7 @@ android {
         all*.exclude group: 'com.android.support'
         resolutionStrategy {
             force 'com.google.code.gson:gson:2.8.5'  //强制使用版本
-            force 'androidx.appcompat:appcompat:1.2.0'  //强制使用版本
+            force 'androidx.appcompat:appcompat:1.1.0'  //强制使用版本
 //            failOnVersionConflict() //版本冲突时报错
         }
     }

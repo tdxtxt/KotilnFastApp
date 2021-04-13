@@ -5,10 +5,10 @@ import com.baselib.helper.RequestPermissionHelper
 import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.welcome.WellcomeActivity
-import kotlinx.android.synthetic.main.fragment_permission_apply.*
+import kotlinx.android.synthetic.main.fragment_wellcome_permission_apply.*
 
 class PermissionApplyFragment : BaseFragment() {
-    override fun getLayoutId() = R.layout.fragment_permission_apply
+    override fun getLayoutId() = R.layout.fragment_wellcome_permission_apply
 
     override fun initUi() {
         btn_next.setOnClickListener {

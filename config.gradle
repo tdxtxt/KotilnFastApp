@@ -26,10 +26,10 @@ ext{
 
     supprotLibs = [
             //支持库迁移AndroidX速查表 https://juejin.im/post/5bf203b7f265da6136220f89  https://www.jianshu.com/p/7dc111353328
-            "recyclerview" : 'androidx.recyclerview:recyclerview:1.0.0',
-            "design"          : 'com.google.android.material:material:1.0.0',
+            "recyclerview" : 'androidx.recyclerview:recyclerview:1.1.0',
+            "design"          : 'com.google.android.material:material:1.2.0',
             "appcompat"      : 'androidx.appcompat:appcompat:1.2.0',
-            "constraint"      : 'androidx.constraintlayout:constraintlayout:1.1.2',
+            "constraint"      : 'androidx.constraintlayout:constraintlayout:1.1.3',
             "transition"      : 'androidx.transition:transition:1.3.1',
             "support-v4"     : 'androidx.legacy:legacy-support-v4:1.0.0',
             "liveDataAndViewModel" :  'androidx.lifecycle:lifecycle-extensions:2.2.0', //ViewModel and LiveData
@@ -87,7 +87,7 @@ ext{
 //            titlebar : "com.hjq:titlebar:6.5",
             /**androidx支持 状态页面[加载中&重试&无数据状态页面] https://github.com/li-xiaojun/StateLayout **/
 //            stateview:"com.lxj:statelayout:1.0.5", support v7库
-            stateview:"com.lxj:statelayout:1.0.9",
+            stateview:"com.lxj:statelayout:1.2.2",
             /**事件总线 https://github.com/greenrobot/EventBus**/
             eventbus : 'org.greenrobot:eventbus:3.1.1',
             /**dialog封装 https://github.com/afollestad/material-dialogs **/

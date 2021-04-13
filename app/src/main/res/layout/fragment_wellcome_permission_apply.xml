@@ -6,21 +6,23 @@
     android:background="@color/white_ffffff">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/privacy"
+        android:background="@color/white_ffffff"
+        android:gravity="center"
+        android:text="申请权限"
+        app:layout_constraintBottom_toTopOf="@+id/btn_next"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_next"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <top.androidman.SuperButton
         android:id="@+id/btn_next"
         style="@style/CommButtonStyle"
+        android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="40dp"
-        app:text="同意"/>
+        app:text="知道了" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

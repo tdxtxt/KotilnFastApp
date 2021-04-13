@@ -33,8 +33,9 @@ abstract class BaseFragment : RxFragment(), IView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         this.fragmentActivity = getActivity()!!
-        mRootView = inflater?.inflate(getLayoutId(),container, false)?:
+        mRootView = inflater.inflate(getLayoutId(),container, false)?:
                 View.inflate(fragmentActivity,getLayoutId(),container)
+        mRootView.isClickable = true //截断点击时间段扩散，防止多Fragment出现重叠以及点击穿透
 //        unbinder = ButterKnife.bind(this, mRootView)
         return initStateView().apply { stateLayout = this }
     }
@@ -110,11 +111,11 @@ abstract class BaseFragment : RxFragment(), IView {
     }
 
     companion object {
-        open fun <T : BaseFragment> newInstance(clazz: Class<T>): T? {
+        fun <T : BaseFragment> newInstance(clazz: Class<T>): T? {
             return newInstance(clazz, null)
         }
 
-        open fun <T : BaseFragment> newInstance(clazz: Class<T>?, params: HashMapParams?): T? {
+        fun <T : BaseFragment> newInstance(clazz: Class<T>?, params: HashMapParams?): T? {
             var instance: T? = null
             if (clazz != null) {
                 try {

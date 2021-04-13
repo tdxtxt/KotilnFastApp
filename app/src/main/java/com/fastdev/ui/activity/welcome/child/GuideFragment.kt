@@ -5,13 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.baselib.helper.CacheHelper
+import com.baselib.helper.dp2px
 import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.helper.getGuideVersion
 import com.fastdev.helper.putGuideVersion
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.welcome.WellcomeActivity
 import com.youth.banner.adapter.BannerAdapter
-import kotlinx.android.synthetic.main.fragment_guide.*
+import com.youth.banner.config.IndicatorConfig
+import com.youth.banner.indicator.RectangleIndicator
+import kotlinx.android.synthetic.main.fragment_wellcome_guide.*
 
 /**
  * 功能描述:
@@ -20,16 +23,19 @@ import kotlinx.android.synthetic.main.fragment_guide.*
  */
 class GuideFragment : BaseFragment() {
 
-    override fun getLayoutId() = R.layout.fragment_guide
+    override fun getLayoutId() = R.layout.fragment_wellcome_guide
 
     override fun initUi() {
         CacheHelper.putGuideVersion(GuideFragment.versionCode)
 
-        banner.addBannerLifecycleObserver(fragmentActivity)
-        banner.adapter = GuideAdapter(listOf(
+        banner.addBannerLifecycleObserver(fragmentActivity).apply { indicator = RectangleIndicator(activity) }
+                .setIndicatorMargins(IndicatorConfig.Margins().apply { bottomMargin = 12.dp2px(activity).toInt() })
+                .setIndicatorSpace(4.dp2px(activity).toInt()).setIndicatorRadius(0)
+                .adapter = GuideAdapter(listOf(
                 Pair("第一页", R.layout.view_wellcome_guide_1),
                 Pair("第二页", R.layout.view_wellcome_guide_2),
                 Pair("第三页", R.layout.view_wellcome_guide_3)))
+
         banner.currentItem = 0
     }
 

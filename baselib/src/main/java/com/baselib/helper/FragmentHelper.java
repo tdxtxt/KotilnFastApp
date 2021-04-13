@@ -532,9 +532,9 @@ public final class FragmentHelper {
             putArgs(show, false);
         }
         operateNoAnim(fm,
-            TYPE_SHOW_FRAGMENT,
-            null,
-            fragments.toArray(new Fragment[0])
+                TYPE_SHOW_FRAGMENT,
+                null,
+                fragments.toArray(new Fragment[0])
         );
     }
 
@@ -559,9 +559,9 @@ public final class FragmentHelper {
             putArgs(hide, true);
         }
         operateNoAnim(fm,
-            TYPE_HIDE_FRAGMENT,
-            null,
-            fragments.toArray(new Fragment[0])
+                TYPE_HIDE_FRAGMENT,
+                null,
+                fragments.toArray(new Fragment[0])
         );
     }
 
@@ -586,7 +586,7 @@ public final class FragmentHelper {
             putArgs(fragment, fragment != show);
         }
         operateNoAnim(show.getFragmentManager(), TYPE_SHOW_HIDE_FRAGMENT, show,
-            hide.toArray(new Fragment[0]));
+                hide.toArray(new Fragment[0]));
     }
 
     /**
@@ -708,7 +708,7 @@ public final class FragmentHelper {
                                @AnimatorRes @AnimRes final int popEnterAnim,
                                @AnimatorRes @AnimRes final int popExitAnim) {
         replace(srcFragment, destFragment, null, false,
-            enterAnim, exitAnim, popEnterAnim, popExitAnim);
+                enterAnim, exitAnim, popEnterAnim, popExitAnim);
     }
 
     /**
@@ -736,7 +736,7 @@ public final class FragmentHelper {
                                @AnimatorRes @AnimRes final int popEnterAnim,
                                @AnimatorRes @AnimRes final int popExitAnim) {
         replace(srcFragment, destFragment, null, isAddStack,
-            enterAnim, exitAnim, popEnterAnim, popExitAnim);
+                enterAnim, exitAnim, popEnterAnim, popExitAnim);
     }
 
     /**
@@ -862,7 +862,7 @@ public final class FragmentHelper {
                                @AnimatorRes @AnimRes final int popEnterAnim,
                                @AnimatorRes @AnimRes final int popExitAnim) {
         replace(fm, fragment, containerId, null, false,
-            enterAnim, exitAnim, popEnterAnim, popExitAnim);
+                enterAnim, exitAnim, popEnterAnim, popExitAnim);
     }
 
     /**
@@ -892,7 +892,7 @@ public final class FragmentHelper {
                                @AnimatorRes @AnimRes final int popEnterAnim,
                                @AnimatorRes @AnimRes final int popExitAnim) {
         replace(fm, fragment, containerId, null, isAddStack,
-            enterAnim, exitAnim, popEnterAnim, popExitAnim);
+                enterAnim, exitAnim, popEnterAnim, popExitAnim);
     }
 
     /**
@@ -1025,7 +1025,7 @@ public final class FragmentHelper {
                                @AnimatorRes @AnimRes final int popEnterAnim,
                                @AnimatorRes @AnimRes final int popExitAnim) {
         replace(srcFragment, destFragment, destTag, false,
-            enterAnim, exitAnim, popEnterAnim, popExitAnim);
+                enterAnim, exitAnim, popEnterAnim, popExitAnim);
     }
 
     /**
@@ -1058,7 +1058,7 @@ public final class FragmentHelper {
         if (fm == null) return;
         Args args = getArgs(srcFragment);
         replace(fm, destFragment, args.id, destTag, isAddStack,
-            enterAnim, exitAnim, popEnterAnim, popExitAnim);
+                enterAnim, exitAnim, popEnterAnim, popExitAnim);
     }
 
     /**
@@ -1096,11 +1096,11 @@ public final class FragmentHelper {
         if (fm == null) return;
         Args args = getArgs(srcFragment);
         replace(fm,
-            destFragment,
-            args.id,
-            destTag,
-            isAddStack,
-            sharedElements
+                destFragment,
+                args.id,
+                destTag,
+                isAddStack,
+                sharedElements
         );
     }
 
@@ -1209,7 +1209,7 @@ public final class FragmentHelper {
                                @AnimatorRes @AnimRes final int popEnterAnim,
                                @AnimatorRes @AnimRes final int popExitAnim) {
         replace(fm, fragment, containerId, destTag, false,
-            enterAnim, exitAnim, popEnterAnim, popExitAnim);
+                enterAnim, exitAnim, popEnterAnim, popExitAnim);
     }
 
     /**
@@ -1340,10 +1340,10 @@ public final class FragmentHelper {
                              final boolean isImmediate) {
         if (isImmediate) {
             fm.popBackStackImmediate(popClz.getName(),
-                isIncludeSelf ? FragmentManager.POP_BACK_STACK_INCLUSIVE : 0);
+                    isIncludeSelf ? FragmentManager.POP_BACK_STACK_INCLUSIVE : 0);
         } else {
             fm.popBackStack(popClz.getName(),
-                isIncludeSelf ? FragmentManager.POP_BACK_STACK_INCLUSIVE : 0);
+                    isIncludeSelf ? FragmentManager.POP_BACK_STACK_INCLUSIVE : 0);
         }
     }
 
@@ -1389,7 +1389,7 @@ public final class FragmentHelper {
      */
     public static void removeTo(@NonNull final Fragment removeTo, final boolean isIncludeSelf) {
         operateNoAnim(removeTo.getFragmentManager(), TYPE_REMOVE_TO_FRAGMENT,
-            isIncludeSelf ? removeTo : null, removeTo);
+                isIncludeSelf ? removeTo : null, removeTo);
     }
 
     /**
@@ -1400,9 +1400,9 @@ public final class FragmentHelper {
     public static void removeAll(@NonNull final FragmentManager fm) {
         List<Fragment> fragments = getFragments(fm);
         operateNoAnim(fm,
-            TYPE_REMOVE_FRAGMENT,
-            null,
-            fragments.toArray(new Fragment[0])
+                TYPE_REMOVE_FRAGMENT,
+                null,
+                fragments.toArray(new Fragment[0])
         );
     }
 
@@ -1431,8 +1431,8 @@ public final class FragmentHelper {
         Bundle bundle = fragment.getArguments();
         if (bundle == null) bundle = Bundle.EMPTY;
         return new Args(bundle.getInt(ARGS_ID, fragment.getId()),
-            bundle.getBoolean(ARGS_IS_HIDE),
-            bundle.getBoolean(ARGS_IS_ADD_STACK));
+                bundle.getBoolean(ARGS_IS_HIDE),
+                bundle.getBoolean(ARGS_IS_ADD_STACK));
     }
 
     private static void operateNoAnim(@Nullable final FragmentManager fm,
@@ -1600,9 +1600,9 @@ public final class FragmentHelper {
         for (int i = fragments.size() - 1; i >= 0; --i) {
             Fragment fragment = fragments.get(i);
             if (fragment != null
-                && fragment.isResumed()
-                && fragment.isVisible()
-                && fragment.getUserVisibleHint()) {
+                    && fragment.isResumed()
+                    && fragment.isVisible()
+                    && fragment.getUserVisibleHint()) {
                 if (isInStack) {
                     Bundle args = fragment.getArguments();
                     if (args != null && args.getBoolean(ARGS_IS_ADD_STACK)) {
@@ -1665,8 +1665,8 @@ public final class FragmentHelper {
             Fragment fragment = fragments.get(i);
             if (fragment != null) {
                 result.add(new FragmentNode(fragment,
-                    getAllFragments(fragment.getChildFragmentManager(),
-                        new ArrayList<FragmentNode>())));
+                        getAllFragments(fragment.getChildFragmentManager(),
+                                new ArrayList<FragmentNode>())));
             }
         }
         return result;
@@ -1691,8 +1691,8 @@ public final class FragmentHelper {
                 Bundle args = fragment.getArguments();
                 if (args != null && args.getBoolean(ARGS_IS_ADD_STACK)) {
                     result.add(new FragmentNode(fragment,
-                        getAllFragmentsInStack(fragment.getChildFragmentManager(),
-                            new ArrayList<FragmentNode>())));
+                            getAllFragmentsInStack(fragment.getChildFragmentManager(),
+                                    new ArrayList<FragmentNode>())));
                 }
             }
         }
@@ -1731,10 +1731,10 @@ public final class FragmentHelper {
      */
     public static boolean dispatchBackPress(@NonNull final Fragment fragment) {
         return fragment.isResumed()
-            && fragment.isVisible()
-            && fragment.getUserVisibleHint()
-            && fragment instanceof OnBackClickListener
-            && ((OnBackClickListener) fragment).onBackClick();
+                && fragment.isVisible()
+                && fragment.getUserVisibleHint()
+                && fragment instanceof OnBackClickListener
+                && ((OnBackClickListener) fragment).onBackClick();
     }
 
     /**
@@ -1749,11 +1749,11 @@ public final class FragmentHelper {
         for (int i = fragments.size() - 1; i >= 0; --i) {
             Fragment fragment = fragments.get(i);
             if (fragment != null
-                && fragment.isResumed()
-                && fragment.isVisible()
-                && fragment.getUserVisibleHint()
-                && fragment instanceof OnBackClickListener
-                && ((OnBackClickListener) fragment).onBackClick()) {
+                    && fragment.isResumed()
+                    && fragment.isVisible()
+                    && fragment.getUserVisibleHint()
+                    && fragment instanceof OnBackClickListener
+                    && ((OnBackClickListener) fragment).onBackClick()) {
                 return true;
             }
         }
@@ -1818,7 +1818,7 @@ public final class FragmentHelper {
         final int     id;
         final boolean isHide;
         final boolean isAddStack;
-        final String  tag;
+        final String tag;
 
         Args(final int id, final boolean isHide, final boolean isAddStack) {
             this(id, null, isHide, isAddStack);
@@ -1853,8 +1853,8 @@ public final class FragmentHelper {
         @Override
         public String toString() {
             return fragment.getClass().getSimpleName()
-                + "->"
-                + ((next == null || next.isEmpty()) ? "no child" : next.toString());
+                    + "->"
+                    + ((next == null || next.isEmpty()) ? "no child" : next.toString());
         }
     }
 

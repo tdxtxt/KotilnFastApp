@@ -7,7 +7,6 @@ import com.baselib.helper.*
 import com.baselib.ui.activity.BaseActivity
 import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.data.repository.TestRepository
-import com.fastdev.net.ApiClient
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.main.MainActivity
 import com.fastdev.ui.activity.welcome.child.*
@@ -29,7 +28,7 @@ class WellcomeActivity : BaseActivity() {
 
     private val countDownTime = 1L//显示闪屏页1秒
 
-    override fun getLayoutResId() = R.layout.act_wellcome
+    override fun getLayoutResId() = R.layout.activity_wellcome
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //给Preview Window设置的背景图如果不做处理，图片就会一直存在于内存中，所以，当我们进入到欢迎页的时候要进行清空
@@ -46,7 +45,7 @@ class WellcomeActivity : BaseActivity() {
     override fun initUi() {
         if(NetworkHelper.isConnected()){//有网络
             //请求广告接口获取广告图片,是否显示广告
-            testApi.queryList1().composeBindLifecycle(this).subscribe()
+//            testApi.queryList1().composeBindLifecycle(this).subscribe()
         }
         //延迟时1秒
         Flowable.timer(countDownTime, TimeUnit.SECONDS)
@@ -57,18 +56,26 @@ class WellcomeActivity : BaseActivity() {
         if(!PrivacyFragment.isPrivacyDisplay){ //显示隐私协议
             BaseFragment.newInstance(PrivacyFragment::class.java)?.apply {
                 FragmentHelper.replace(supportFragmentManager, this, R.id.view_content)
+//                FragmentHelper.add(supportFragmentManager, this, R.id.view_content)
+//                FragmentHelper.show(this)
             }
         }else if(!PermissionApplyFragment.isPermissionDisplay){ //显示获取权限
             BaseFragment.newInstance(PermissionApplyFragment::class.java)?.apply {
                 FragmentHelper.replace(supportFragmentManager, this, R.id.view_content)
+//                FragmentHelper.add(supportFragmentManager, this, R.id.view_content)
+//                FragmentHelper.showHide(this, FragmentHelper.getFragments(supportFragmentManager))
             }
         }else if(GuideFragment.isNewVersion()){ //是否启动过引导页
             BaseFragment.newInstance(GuideFragment::class.java)?.apply {
                 FragmentHelper.replace(supportFragmentManager, this, R.id.view_content)
+//                FragmentHelper.add(supportFragmentManager, this, R.id.view_content)
+//                FragmentHelper.showHide(this, FragmentHelper.getFragments(supportFragmentManager))
             }
-        }else if(!AdFragment.isAdDisplay){
+        }else if(!AdFragment.isAdDisplay){ // 广告
             BaseFragment.newInstance(AdFragment::class.java)?.apply {
                 FragmentHelper.replace(supportFragmentManager, this, R.id.view_content)
+//                FragmentHelper.add(supportFragmentManager, this, R.id.view_content)
+//                FragmentHelper.showHide(this, FragmentHelper.getFragments(supportFragmentManager))
             }
         }
         else{

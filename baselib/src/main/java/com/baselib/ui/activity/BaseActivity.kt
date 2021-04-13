@@ -44,7 +44,7 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
         initStatusBar()
         stateLayout = initStateView()
         initUi()
-//        overridePendingTransition(R.anim.baselib_slide_in_form_right, 0)//进入的切换动画
+//        overridePendingTransition(R.anim.baselib_slide_in_foBrm_right, 0)//进入的切换动画
     }
 
     private fun parseParams(intent: Intent?) {

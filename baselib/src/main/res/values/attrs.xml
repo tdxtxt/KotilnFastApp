@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Defined base ratio size custom attrs -->
+    <declare-styleable name="ViewSizeCalculate">
+        <!-- Sets view ratio size of width -->
+        <attr name="widthRatio" format="float"/>
+        <!-- Sets view ratio size of height -->
+        <attr name="heightRatio" format="float"/>
+        <!-- Sets view ratio size of square -->
+        <attr name="layoutSquare" format="boolean"/>
+        <!-- Sets view ratio size of aspect -->
+        <attr name="layoutAspectRatio" format="float"/>
+        <!-- Sets view ratio size of mode -->
+        <attr name="datumRatio">
+            <enum name="datumAuto" value="0"/>
+            <enum name="datumWidth" value="1"/>
+            <enum name="datumHeight" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <!--自定义倒计时按钮-->
+    <declare-styleable name="CountdownButton">
+        <!--倒计时进行中的按钮文字，要传入stringformat格式，如%s秒-->
+        <attr name="tickText" format="string" />
+        <!--倒计时完成后的按钮文字，默认为“重新发送”-->
+        <attr name="finishedText" format="string"/>
+        <!--倒计时总时间，默认为60s-->
+        <attr name="millisInFuture" format="integer"/>
+        <!--倒计时的间隔，默认为1s-->
+        <attr name="countDownInterval" format="integer"/>
+    </declare-styleable>
+
+
+    <attr name="rRadius" format="dimension" />
+    <attr name="rLeftRadius" format="dimension" />
+    <attr name="rRightRadius" format="dimension" />
+    <attr name="rTopRadius" format="dimension" />
+    <attr name="rBottomRadius" format="dimension" />
+    <attr name="rTopLeftRadius" format="dimension" />
+    <attr name="rTopRightRadius" format="dimension" />
+    <attr name="rBottomLeftRadius" format="dimension" />
+    <attr name="rBottomRightRadius" format="dimension" />
+    <attr name="rStrokeWidth" format="dimension" />
+    <attr name="rStrokeColor" format="reference" />
+
+    <declare-styleable name="RoundCorner">
+        <attr name="rRadius" />
+        <attr name="rLeftRadius" />
+        <attr name="rRightRadius" />
+        <attr name="rTopRadius" />
+        <attr name="rBottomRadius" />
+        <attr name="rTopLeftRadius" />
+        <attr name="rTopRightRadius" />
+        <attr name="rBottomLeftRadius" />
+        <attr name="rBottomRightRadius" />
+        <attr name="rStrokeWidth" />
+        <attr name="rStrokeColor" />
+    </declare-styleable>
+</resources>

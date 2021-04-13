@@ -7,7 +7,7 @@ import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.welcome.WellcomeActivity
 import io.reactivex.Flowable
-import kotlinx.android.synthetic.main.fragment_ad.*
+import kotlinx.android.synthetic.main.fragment_wellcome_ad.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
  */
 class AdFragment : BaseFragment() {
     private val countDownTime = 3L//倒计时时间
-    override fun getLayoutId() = R.layout.fragment_ad
+    override fun getLayoutId() = R.layout.fragment_wellcome_ad
 
     @SuppressLint("CheckResult")
     override fun initUi() {
