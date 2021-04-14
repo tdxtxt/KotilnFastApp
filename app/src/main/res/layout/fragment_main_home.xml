@@ -27,6 +27,7 @@
                     app:datumRatio="datumWidth"
                     app:heightRatio="3"
                     app:widthRatio="5">
+
                     <com.youth.banner.Banner
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />

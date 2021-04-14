@@ -1,23 +1,21 @@
-package com.baselib.ui.mvp.view.activity
+package com.baselib.ui.mvp.view.fragment
 
+import android.app.Activity
 import android.os.Bundle
-import android.os.PersistableBundle
-import com.baselib.ui.activity.BaseActivity
-import com.baselib.ui.mvp.view.BaseMvpView
+import com.baselib.ui.fragment.BaseFragment
 import com.baselib.ui.mvp.PresenterDelegate
 import com.baselib.ui.mvp.presenter.BaseMvpPresenter
+import com.baselib.ui.mvp.view.BaseMvpView
 
 /**
- * @作者： ton
- * @时间： 2018\5\11 0011
- * @描述： 创建Presenter有两种方式：1、重写createPresenter方法；2、class类上面添加注释@CreatePresenter(XXXPresenter.class)
- * @传入参数说明：
- * @返回参数说明：
+ * 功能描述:
+ * @author tangdexiang
+ * @since 2021/4/14
  */
-open abstract class BaseMvpActivity : BaseActivity(), BaseMvpView {
+open abstract class BaseMvpFragment : BaseFragment(), BaseMvpView {
     private val mvpDelegate: PresenterDelegate<BaseMvpView> = PresenterDelegate()
     abstract fun <V : BaseMvpView> createPresenter(): BaseMvpPresenter<V>?
-    abstract fun <V : BaseMvpView> createMvpView(): V?
+    abstract fun createMvpView(): BaseMvpView?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +34,8 @@ open abstract class BaseMvpActivity : BaseActivity(), BaseMvpView {
         mvpDelegate.detachOnPause()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         mvpDelegate.saveInstanceState(outState)
     }
 
@@ -46,4 +44,7 @@ open abstract class BaseMvpActivity : BaseActivity(), BaseMvpView {
         mvpDelegate.detach()
     }
 
+    override fun <T : Activity> getActivityNew(): T? {
+        return activity as T?
+    }
 }
