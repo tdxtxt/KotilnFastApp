@@ -12,6 +12,7 @@ import com.fastdev.ui.activity.main.child.HomeFragment
 import com.fastdev.ui.activity.main.child.MineFragment
 import com.fastdev.ui.activity.main.child.OneMenuFragment
 import com.fastdev.ui.activity.main.child.TwoMenuFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_main.*
  * @author tangdexiang
  * @since 2020/6/17
  */
+@AndroidEntryPoint
 class MainActivity : BaseActivity(){
     override fun getLayoutResId() = R.layout.activity_main
     private lateinit var currentTab: String

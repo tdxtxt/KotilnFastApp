@@ -1,0 +1,9 @@
+<resources>
+    <dimen name="Keyboard_indicator_size">8dp</dimen>
+    <dimen name="keyboard_indicator_margin">5dp</dimen>
+    <dimen name="keyboard_emoticons_bar_height">35dp</dimen>
+    <dimen name="keyboard_split_line">0.6dp</dimen>
+    <dimen name="keyboard_media_item_size">50dp</dimen>
+    <dimen name="keyboard_bar_height">50dp</dimen>
+    <dimen name="keyboard_emoticons_bar_item_width">60dp</dimen>
+</resources>

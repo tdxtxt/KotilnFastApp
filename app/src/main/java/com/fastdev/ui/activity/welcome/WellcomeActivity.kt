@@ -37,15 +37,15 @@ class WellcomeActivity : BaseActivity() {
     }
 
     override fun initStatusBar() {
-        StatusBarHelper.transparentStatusBar(activity)
-        StatusBarHelper.setDarkMode(activity)
+        StatusBarHelper.transparentStatusBar(fragmentActivity)
+        StatusBarHelper.setDarkMode(fragmentActivity)
     }
 
     @SuppressLint("CheckResult")
     override fun initUi() {
         if(NetworkHelper.isConnected()){//有网络
             //请求广告接口获取广告图片,是否显示广告
-//            testApi.queryList1().composeBindLifecycle(this).subscribe()
+            testApi.queryList1().composeBindLifecycle(this).subscribe()
         }
         //延迟时1秒
         Flowable.timer(countDownTime, TimeUnit.SECONDS)
@@ -77,7 +77,7 @@ class WellcomeActivity : BaseActivity() {
 
     fun startMain(){
         val intent = intent.apply {
-            setClass(activity, MainActivity::class.java)
+            setClass(fragmentActivity, MainActivity::class.java)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 

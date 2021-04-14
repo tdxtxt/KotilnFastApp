@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="keyboard_white">#FFFFFF</color>
+    <color name="skin_input_view_bg_color">#2B3557</color>
+    <color name="skin_edit_input_bg_color">#FF1A2138</color>
+
+    <color name="keyboard_split_line">#EE04060C</color>
+    <color name="keyboard_edit_text_hint">#8C8C8C</color>
+    <color name="keyboard_edit_text">#FAFAFA</color>
+
+</resources>

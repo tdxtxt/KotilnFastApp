@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- 黑色的圆角边框，内容透明 -->
+    <!--<solid android:color="@android:color/transparent" />-->
+    <solid android:color="@color/skin_edit_input_bg_color" />
+    <stroke
+        android:width="1px"
+        android:color="@color/skin_edit_input_bg_color" />
+    <corners android:radius="5dp" />
+</shape>
