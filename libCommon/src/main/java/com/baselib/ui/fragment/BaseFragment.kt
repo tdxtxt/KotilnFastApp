@@ -1,6 +1,7 @@
 package com.baselib.ui.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,7 @@ import com.trello.rxlifecycle3.components.support.RxFragment
 import androidx.fragment.app.FragmentActivity
 
 abstract class BaseFragment : RxFragment(), IView {
-    public lateinit var fragmentActivity: FragmentActivity
+    var fragmentActivity: FragmentActivity? = null
     protected lateinit var mRootView: View
 //    private var unbinder: Unbinder? = null
     private var stateLayout: StateLayout? = null
@@ -31,8 +32,12 @@ abstract class BaseFragment : RxFragment(), IView {
         getParams(arguments)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        fragmentActivity = activity
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        this.fragmentActivity = getActivity()!!
         mRootView = inflater.inflate(getLayoutId(),container, false)?:
                 View.inflate(fragmentActivity,getLayoutId(),container)
         mRootView.isClickable = true //截断点击时间段扩散，防止多Fragment出现重叠以及点击穿透
@@ -66,11 +71,13 @@ abstract class BaseFragment : RxFragment(), IView {
     /**
      * 多状态通用页面
      */
-    open fun initStateView(): StateLayout? = StateLayout(fragmentActivity).apply {
-        configStateView(mRootView, this)
-    }.showContent()
+    open fun initStateView(): StateLayout? = fragmentActivity?.run {
+        StateLayout(this).apply {
+            configStateView(mRootView, this)
+        }.showContent()
+    }
 
-    open fun <T : Activity> getActivityNew(): T? = fragmentActivity as T
+    open fun <T : Activity> getActivityNew(): T? = fragmentActivity as T?
 
     override fun getProgressBar(): ProgressDialog? {
         if (mProgressDialog == null){
