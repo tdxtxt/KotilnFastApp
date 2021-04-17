@@ -40,6 +40,7 @@
         <item name="open_pressed_effect">true</item>
         <item name="textColor">@color/white_ffffff</item>
         <item name="textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

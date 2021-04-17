@@ -5,19 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <TextView
+        android:id="@+id/tv_menu1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabGravity="center"
-        app:tabIndicatorColor="@color/blue_064fc3_dark"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/blue_064fc3_dark"
-        app:tabTextColor="@color/black_5a5a5a"/>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:text="Tab menu1"/>
 
 </LinearLayout>

@@ -23,7 +23,7 @@ class TwoMenuFragment : BaseFragment() {
     override fun getLayoutId() = R.layout.fragment_main_menu2
 
     override fun initUi() {
-        tabLayout.setupWithViewPager(viewpager, false)
+        tabLayout.setupWithViewPager(viewpager)
         viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         viewpager.adapter = object : FragmentPagerAdapter(fragmentActivity!!.supportFragmentManager){
             override fun getItem(position: Int) = fragments[position].second!!

@@ -26,4 +26,10 @@ dependencies {
 
     implementation rootProject.ext.supprotLibs
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //环信EaseIMKit集成 http://docs-im.easemob.com/im/android/other/easeimkit
+    implementation 'io.hyphenate:ease-im-kit:3.8.1'
+    implementation 'io.hyphenate:hyphenate-chat:3.8.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 }
