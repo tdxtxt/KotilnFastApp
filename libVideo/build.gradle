@@ -33,4 +33,15 @@ dependencies {
     implementation rootProject.ext.supprotLibs
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly (rootProject.ext.image.glide){exclude group: "com.android.support"}
+
+    /**************************视频播放 https://github.com/yangchong211/YCVideoPlayer ******************************/
+    //视频UI层，必须要有
+    api 'cn.yc:VideoPlayer:3.1.0'
+    //视频内核层，必须有
+    api 'cn.yc:VideoKernel:3.0.6'
+
+    //视频缓存，如果不需要则可以不依赖
+    api 'cn.yc:VideoCache:3.0.5'
+    //视频播放器播放位置记录，选择性添加
+    api 'cn.yc:VideoSqlLite:1.0.2'
 }

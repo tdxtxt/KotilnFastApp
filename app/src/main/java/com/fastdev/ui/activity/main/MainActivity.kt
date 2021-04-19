@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import cn.jzvd.Jzvd
 import com.baselib.helper.FragmentHelper
 import com.baselib.ui.activity.BaseActivity
 import com.baselib.ui.fragment.BaseFragment
@@ -63,18 +62,6 @@ class MainActivity : BaseActivity(){
             FragmentHelper.showHide(displayFragment, FragmentHelper.getFragments(supportFragmentManager))
         }
         currentTab = tab
-    }
-
-    override fun onBackPressed() {
-        if (Jzvd.backPress()) {
-            return
-        }
-        super.onBackPressed()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Jzvd.releaseAllVideos()
     }
 
     companion object{

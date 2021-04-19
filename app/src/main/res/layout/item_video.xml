@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <cn.jzvd.JzvdStd
-        android:id="@+id/video"
+    <com.baselib.ui.view.container.RatioRoundFrameLayout
+        android:id="@+id/player_container"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="0dp"
+        app:datumRatio="datumWidth"
+        tools:background="@color/black_5a5a5a"
+        app:heightRatio="9"
+        app:widthRatio="16">
+
+        <com.yc.video.ui.view.CustomPrepareView
+            android:id="@+id/video_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.baselib.ui.view.container.RatioRoundFrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="12dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="观看数量:3434"
-            android:textColor="@color/black_5a5a5a"
+            android:textColor="@color/black_999999"
             android:textSize="14dp" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,5 +46,4 @@
             android:textColor="@color/black_5a5a5a"
             android:textSize="14dp" />
     </LinearLayout>
-
 </LinearLayout>
