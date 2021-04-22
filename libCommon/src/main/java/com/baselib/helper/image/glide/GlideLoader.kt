@@ -34,8 +34,8 @@ object GlideLoader: ILoader {
   @SuppressLint("ResourceType")
   override fun loadImage(view: ImageView?, url: String,  placeholderResId: Int, isCache: Boolean) {
       if(view == null) return
-      var requests = GlideApp.with(view.context)
-      var request = requests.load(url)
+      val requests = GlideApp.with(view.context)
+      val request = requests.load(url)
       request.transition(DrawableTransitionOptions().crossFade())
       when{
           placeholderResId > 0 -> {
