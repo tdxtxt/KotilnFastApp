@@ -19,6 +19,6 @@
         android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/main_bottomnav_menu"
-        app:itemTextColor="@color/selector_main_navtext_color" />
+        app:itemTextColor="@color/mian_bootom_navtext_color" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,15 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="首页"
-        android:id="@+id/menu_home"/>
+        android:id="@+id/menu_home"
+        android:icon="@drawable/main_bottom_menu_home"/>
 
-    <item android:title="菜单1"
-        android:id="@+id/menu_1"/>
+    <item android:title="动态"
+        android:id="@+id/menu_dynamic"
+        android:icon="@drawable/main_bottom_menu_dynamic"/>
 
-    <item android:title="菜单2"
-        android:id="@+id/menu_2"/>
+    <item android:title="学院"
+        android:id="@+id/menu_college"
+        android:icon="@drawable/main_bottom_menu_college"/>
 
     <item android:title="我的"
-        android:id="@+id/menu_mine"/>
+        android:id="@+id/menu_mine"
+        android:icon="@drawable/main_bottom_menu_mine"/>
 
 </menu>

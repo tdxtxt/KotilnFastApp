@@ -41,12 +41,13 @@ class MainActivity : BaseActivity(){
         nav_bottom.setOnNavigationItemSelectedListener {
             return@setOnNavigationItemSelectedListener when (it.itemId) {
                 R.id.menu_home -> navFragment(TAB_HOME).run { true }
-                R.id.menu_1 -> navFragment(TAB_MENU1).run { true }
-                R.id.menu_2 -> navFragment(TAB_MENU2).run { true }
+                R.id.menu_dynamic -> navFragment(TAB_MENU1).run { true }
+                R.id.menu_college -> navFragment(TAB_MENU2).run { true }
                 R.id.menu_mine -> navFragment(TAB_MINE).run { true }
                 else -> false
             }
         }
+        nav_bottom.itemIconTintList = null
         nav_bottom.selectedItemId = R.id.menu_home
     }
 

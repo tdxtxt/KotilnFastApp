@@ -9,10 +9,16 @@ class PrivacyFragment : BaseFragment(){
     override fun getLayoutId() = R.layout.fragment_wellcome_privacy
 
     override fun initUi() {
-        btn_next.setOnClickListener {
-            isPrivacyDisplay = true
-            getActivityNew<WellcomeActivity>()?.handleResult()
-        }
+        listOf(tv_privacy_user, tv_privacy_ys, tv_next).forEach {
+                    it.setOnClickListener {
+                        when(it){
+                            tv_next -> {
+                                isPrivacyDisplay = true
+                                getActivityNew<WellcomeActivity>()?.handleResult()
+                            }
+                        }
+                    }
+                }
     }
 
     companion object{
