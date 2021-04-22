@@ -105,6 +105,10 @@ dependencies {
     implementation 'top.androidman:superfamily:2.2.0'
     //banner https://github.com/youth5201314/banner
     implementation 'com.youth.banner:banner:2.1.0'
+    //小红点 https://github.com/liyanxi/BadgeView
+    implementation 'com.itingchunyu.badgeview:badgeview:1.0.5'
+    //圆形imageview https://github.com/SheHuan/NiceImageView
+    implementation 'com.github.SheHuan:NiceImageView:1.0.5'
 
     api rootProject.ext.fastDev["indicator"]
 
