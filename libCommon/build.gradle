@@ -27,6 +27,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     api project(path: ':libOpensource')
+    api project(path: ':libDeveloper')
 
     //google官方lib
     implementation rootProject.ext.supprotLibs
@@ -44,6 +45,7 @@ dependencies {
     api rootProject.ext.fastDev.refresh
     implementation rootProject.ext.fastDev["refresh-header"]
     implementation (rootProject.ext.fastDev.logger){exclude group: "com.android.support"}
+    implementation rootProject.ext.fastDev.timber
     implementation rootProject.ext.fastDev.hawk
 //    implementation rootProject.ext.fastDev.statusBar
 //    implementation rootProject.ext.fastDev.stateview

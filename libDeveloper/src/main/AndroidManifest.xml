@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fast.libdeveloper">
+
+    <application>
+        <activity
+            android:name=".ProcessPhoenix"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:process=":phoenix"
+            />
+    </application>
+</manifest>

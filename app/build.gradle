@@ -91,15 +91,13 @@ dependencies {
     implementation rootProject.ext.supprotLibs
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'//放在activity变红
 
+    //hilt
+    implementation rootProject.ext.hiltLibs.hilt
+    kapt rootProject.ext.hiltLibs.hiltCompiler
+
     implementation(name: 'socialgo-core-1.0.2', ext: 'aar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.3.1'
     implementation(name: 'socialgo-wechat-1.0.2', ext: 'aar')
-
-    //Hilt
-    implementation "com.google.dagger:hilt-android:2.28-alpha"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
 
     //按钮 https://github.com/ansnail/SuperFamily
     implementation 'top.androidman:superfamily:2.2.0'

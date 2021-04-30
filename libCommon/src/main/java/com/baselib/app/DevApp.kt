@@ -9,6 +9,7 @@ import androidx.multidex.MultiDex
 import com.baselib.R
 import com.baselib.helper.CacheHelper
 import com.baselib.helper.LogA
+import com.fast.libdeveloper.AppContainer
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
@@ -113,8 +114,10 @@ open abstract class DevApp : Application(){
 
     abstract fun isLoggable(): Boolean
 
+    abstract fun getAppContainer(): AppContainer
+
     companion object {
-        var mContext: Context ? = null
+        var mContext: Context? = null
         fun getContext(): Context? {
             return mContext
         }

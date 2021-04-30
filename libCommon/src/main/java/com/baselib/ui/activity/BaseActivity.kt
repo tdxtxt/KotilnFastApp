@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import com.baselib.R
+import com.baselib.app.DevApp
 import com.baselib.callback.StartForResultListener
 import com.baselib.helper.DialogHelper
 import com.baselib.helper.HashMapParams
@@ -18,6 +19,7 @@ import com.baselib.ui.dialog.child.ProgressDialog
 import com.baselib.ui.fragment.impl.StartForResultFragment1
 import com.baselib.ui.fragment.impl.StartForResultFragment2
 import com.baselib.ui.mvp.view.IView
+import com.fast.libdeveloper.AppContainer
 import com.lxj.statelayout.StateLayout
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
 
@@ -30,6 +32,7 @@ import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
  * @返回参数说明： 无
  */
 abstract class BaseActivity : RxAppCompatActivity(),IView {
+    private var appcontainer : AppContainer? = (DevApp.getContext() as DevApp?)?.getAppContainer()
     protected lateinit var fragmentActivity: FragmentActivity
     private var mProgressDialog: ProgressDialog? = null
     private var stateLayout: StateLayout? = null
@@ -40,9 +43,10 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
         super.onCreate(savedInstanceState)
         fragmentActivity = this
         parseParams(intent) //解析参数
-        if(getLayoutResId() > 0) setContentView(getLayoutResId())
+        val rootView = appcontainer?.bind(this)?: findViewById(android.R.id.content)
+        if(getLayoutResId() > 0) layoutInflater.inflate(getLayoutResId(), rootView)
         initStatusBar()
-        stateLayout = initStateView()
+        stateLayout = createStateView()
         initUi()
 //        overridePendingTransition(R.anim.baselib_slide_in_foBrm_right, 0)//进入的切换动画
     }
@@ -55,7 +59,15 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
     }
     open fun getParams(bundle: Bundle?){}
 
-
+    /**
+     * 多状态通用页面
+     */
+    open fun createStateView(): StateLayout? = StateLayout(this).apply {
+        configStateView((fragmentActivity.findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0), this)
+    }.showContent()
+    /**
+     * 多状态通用页面配置
+     */
     open fun configStateView(view: View, stateLayout: StateLayout){
         stateLayout.apply {
             config(loadingLayoutId = R.layout._loading_layout_loading, //自定义加载中布局
@@ -69,13 +81,6 @@ abstract class BaseActivity : RxAppCompatActivity(),IView {
                     })
         }.wrap(view)
     }
-
-    /**
-     * 多状态通用页面
-     */
-    open fun initStateView(): StateLayout? = StateLayout(this).apply {
-        configStateView((fragmentActivity.findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0), this)
-    }.showContent()
 
     /**
      * 状态栏

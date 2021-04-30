@@ -4,6 +4,8 @@ import android.content.res.Configuration
 import com.baselib.app.DevApp
 import com.baselib.helper.ActStackHelper
 import com.baselib.net.NetMgr
+import com.fast.libdeveloper.AppContainer
+import com.fastdev.Flavor
 import com.fastdev.helper.ShareSdk
 import com.fastdev.net.config.TonNetProvider
 import dagger.hilt.android.HiltAndroidApp
@@ -18,6 +20,7 @@ import io.reactivex.plugins.RxJavaPlugins
 @HiltAndroidApp
 class CustomApp : DevApp() {
     override fun isLoggable() = true
+    override fun getAppContainer() = Flavor.createAppContainer(this)
 
     override fun onCreate() {
         super.onCreate()

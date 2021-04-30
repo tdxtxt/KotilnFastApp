@@ -63,7 +63,7 @@ abstract class CommToolBarActivity : BaseActivity() {
          StatusBarHelper.setStatusBarHeight(fragmentActivity, fragmentActivity.findViewById(android.R.id.content))
     }
 
-    override fun initStateView() = if(getContentView() != null) StateLayout(this).apply {
+    override fun createStateView() = if(getContentView() != null) StateLayout(this).apply {
             configStateView(getContentView(), this)
         }.showContent() else null
 
