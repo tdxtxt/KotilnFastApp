@@ -1,7 +1,9 @@
 package com.fastdev.app
 
+import android.app.Application
+import android.content.Context
 import android.content.res.Configuration
-import com.baselib.app.DevApp
+import com.baselib.app.ApplicationDelegate
 import com.baselib.helper.ActStackHelper
 import com.baselib.net.NetMgr
 import com.fast.libdeveloper.AppContainer
@@ -18,13 +20,22 @@ import io.reactivex.plugins.RxJavaPlugins
  * https://guolin.blog.csdn.net/article/details/109787732
  */
 @HiltAndroidApp
-class CustomApp : DevApp() {
-    override fun isLoggable() = true
-    override fun getAppContainer() = Flavor.createAppContainer(this)
+class CustomApp : Application() {
+    lateinit var mApplicationDelegate: ApplicationDelegate
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        mApplicationDelegate = object : ApplicationDelegate(this@CustomApp){
+            override fun isLoggable() = true
+            override fun getAppContainer() = Flavor.createAppContainer(base)
+        }
+        mApplicationDelegate.attachBaseContext(base)
+    }
 
     override fun onCreate() {
         super.onCreate()
         if (ActStackHelper.isMainProcess(this)) {
+            mApplicationDelegate.onCreate()
             //设置Host
             settingHost()
             //设置网络框架

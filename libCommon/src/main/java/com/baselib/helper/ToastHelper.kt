@@ -4,9 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
-import android.widget.Toast
 import androidx.annotation.StringRes
-import com.baselib.app.DevApp
+import com.baselib.app.ApplicationDelegate
 import com.baselib.ui.dialog.child.XToast
 
 
@@ -27,18 +26,16 @@ object ToastHelper {
     }
 
     fun showToast(@StringRes res: Int) {
-        if (DevApp.mContext == null) return
-        var msg = DevApp.mContext?.getResources()?.getString(res)
+        var msg = ApplicationDelegate.context.getResources()?.getString(res)
         msg = if (TextUtils.isEmpty(msg)) res.toString() + "" else msg
 
         showToast(msg)
     }
 
     private fun show(msg: String?) {
-        if (DevApp.mContext == null) return
         if (TextUtils.isEmpty(msg)) return
 
-        XToast.normal(DevApp.mContext!!, msg!!).show()
+        XToast.normal(ApplicationDelegate.context, msg!!).show()
 //            val toast = Toast.makeText(DevApp.mContext, null, Toast.LENGTH_SHORT)
 //            toast.setText(msg)
 //            toast.show()

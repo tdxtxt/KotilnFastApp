@@ -1,10 +1,8 @@
 package com.fastdev
 
 import android.content.Context
-import com.fast.libdeveloper.AppContainer
-import com.fast.libdeveloper.DebugAppContainer
-import com.fast.libdeveloper.Endpoint
-import com.fast.libdeveloper.ExtraUrl
+import com.baselib.app.ApplicationDelegate
+import com.fast.libdeveloper.*
 
 /**
  * 功能描述:
@@ -16,15 +14,15 @@ object Flavor {
         override fun isMock(index: Int) = false
 
         override fun count(): Int {
-            return 0
+            return ENV.values.size
         }
 
         override fun url(index: Int): String {
-            return "xxxx"
+            return ENV.from(index).host
         }
 
         override fun isCustom(index: Int): Boolean {
-            return false
+            return ENV.isCustom(ENV.from(index).host)
         }
 
         override fun extraUrls(index: Int): MutableList<ExtraUrl> {
@@ -32,12 +30,14 @@ object Flavor {
         }
 
         override fun name(index: Int): String {
-            return "xx"
+            return ENV.from(index).name
         }
     }
 
     fun createAppContainer(context: Context): AppContainer {
         return DebugAppContainer.getInstance(context, ENDPOINT)
     }
+
+    fun createBaseUrl() = DebugAppContainer.getInstance(ApplicationDelegate.context, ENDPOINT).debugEnvironment().url
 
 }

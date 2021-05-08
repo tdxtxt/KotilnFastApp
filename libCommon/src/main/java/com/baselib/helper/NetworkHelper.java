@@ -10,7 +10,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import com.baselib.app.DevApp;
+import com.baselib.app.ApplicationDelegate;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -56,7 +56,7 @@ public class NetworkHelper {
     public static String getInNetIp() {
         if(TextUtils.isEmpty(NetworkHelper.InNetIp)){
             //获取wifi服务
-            WifiManager wifiManager = (WifiManager) DevApp.Companion.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifiManager = (WifiManager) ApplicationDelegate.Companion.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             //判断wifi是否开启
             if (!wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(true);
@@ -175,7 +175,7 @@ public class NetworkHelper {
      * Open the settings of wireless.
      */
     public static void openWirelessSettings() {
-        DevApp.Companion.getContext().startActivity(
+        ApplicationDelegate.Companion.getContext().startActivity(
                 new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         );
@@ -202,7 +202,7 @@ public class NetworkHelper {
     public static boolean getMobileDataEnabled() {
         try {
             TelephonyManager tm =
-                    (TelephonyManager) DevApp.Companion.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+                    (TelephonyManager) ApplicationDelegate.Companion.getContext().getSystemService(Context.TELEPHONY_SERVICE);
             if (tm == null) return false;
             @SuppressLint("PrivateApi")
             Method getMobileDataEnabledMethod = tm.getClass().getDeclaredMethod("getDataEnabled");
@@ -226,7 +226,7 @@ public class NetworkHelper {
     public static void setMobileDataEnabled(final boolean enabled) {
         try {
             TelephonyManager tm =
-                    (TelephonyManager) DevApp.Companion.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+                    (TelephonyManager) ApplicationDelegate.Companion.getContext().getSystemService(Context.TELEPHONY_SERVICE);
             if (tm == null) return;
             Method setMobileDataEnabledMethod =
                     tm.getClass().getDeclaredMethod("setDataEnabled", boolean.class);
@@ -278,7 +278,7 @@ public class NetworkHelper {
     @RequiresPermission(Manifest.permission.ACCESS_WIFI_STATE)
     public static boolean getWifiEnabled() {
         @SuppressLint("WifiManagerLeak")
-        WifiManager manager = (WifiManager) DevApp.Companion.getContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager manager = (WifiManager) ApplicationDelegate.Companion.getContext().getSystemService(Context.WIFI_SERVICE);
         return manager != null && manager.isWifiEnabled();
     }
 
@@ -292,7 +292,7 @@ public class NetworkHelper {
     @RequiresPermission(Manifest.permission.CHANGE_WIFI_STATE)
     public static void setWifiEnabled(final boolean enabled) {
         @SuppressLint("WifiManagerLeak")
-        WifiManager manager = (WifiManager) DevApp.Companion.getContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager manager = (WifiManager) ApplicationDelegate.Companion.getContext().getSystemService(Context.WIFI_SERVICE);
         if (manager == null) return;
         if (enabled) {
             if (!manager.isWifiEnabled()) {
@@ -315,7 +315,7 @@ public class NetworkHelper {
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     public static boolean isWifiConnected() {
         ConnectivityManager cm =
-                (ConnectivityManager) DevApp.Companion.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) ApplicationDelegate.Companion.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm != null
                 && cm.getActiveNetworkInfo() != null
                 && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
@@ -341,7 +341,7 @@ public class NetworkHelper {
      */
     public static String getNetworkOperatorName() {
         TelephonyManager tm =
-                (TelephonyManager) DevApp.Companion.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+                (TelephonyManager) ApplicationDelegate.Companion.getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getNetworkOperatorName() : "";
     }
 
@@ -423,7 +423,7 @@ public class NetworkHelper {
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     private static NetworkInfo getActiveNetworkInfo() {
         ConnectivityManager manager =
-                (ConnectivityManager) DevApp.Companion.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) ApplicationDelegate.Companion.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (manager == null) return null;
         return manager.getActiveNetworkInfo();
     }

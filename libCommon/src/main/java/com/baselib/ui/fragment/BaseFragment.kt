@@ -11,7 +11,7 @@ import com.baselib.helper.DialogHelper
 import com.baselib.helper.HashMapParams
 import com.baselib.ui.activity.BaseActivity
 import com.baselib.ui.dialog.child.ProgressDialog
-import com.baselib.ui.mvp.view.IView
+import com.baselib.ui.activity.IView
 import com.lxj.statelayout.StateLayout
 import com.trello.rxlifecycle3.components.support.RxFragment
 import androidx.fragment.app.FragmentActivity
