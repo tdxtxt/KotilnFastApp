@@ -1,5 +1,6 @@
 package com.baselib.app
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.graphics.Color
@@ -9,10 +10,10 @@ import androidx.multidex.MultiDex
 import com.baselib.R
 import com.baselib.helper.CacheHelper
 import com.baselib.helper.LogA
+import com.fast.libdeveloper.AppContainer
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
-import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import org.jaaksi.pickerview.dialog.DefaultPickerDialog
 import org.jaaksi.pickerview.dialog.IGlobalDialogCreator
 import org.jaaksi.pickerview.picker.BasePicker
@@ -27,20 +28,19 @@ import org.jaaksi.pickerview.widget.PickerView
  * @传入参数说明： 无
  * @返回参数说明： 无
  */
-open abstract class DevApp : Application(){
+abstract class ApplicationDelegate constructor(val application: Application) : ApplicationLifecycle{
 
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
+    override fun attachBaseContext(base: Context) {
+        MultiDex.install(base)
     }
 
     override fun onCreate() {
-        super.onCreate()
-        mContext = this
+        context = application
+        delegate = this
         closeAndroidPDialog()
         LogA.init(isLoggable())
         CacheHelper.init()
-        ForegroundCallbacks.init(this)
+        ForegroundCallbacks.init(application)
                 .addListener(object : ForegroundListener{
                     override fun onBecameForeground() {
                     }
@@ -49,6 +49,15 @@ open abstract class DevApp : Application(){
                 })
 
         initDefaultPicker()
+    }
+
+    override fun onTerminate() {
+    }
+
+    override fun onLowMemory() {
+    }
+
+    override fun onTrimMemory(level: Int) {
     }
 
     private fun initDefaultPicker(){
@@ -113,11 +122,13 @@ open abstract class DevApp : Application(){
 
     abstract fun isLoggable(): Boolean
 
+    abstract fun getAppContainer(): AppContainer
+
     companion object {
-        var mContext: Context ? = null
-        fun getContext(): Context? {
-            return mContext
-        }
+        @SuppressLint("StaticFieldLeak")
+        lateinit var context: Context
+        @SuppressLint("StaticFieldLeak")
+        lateinit var delegate: ApplicationDelegate
 
         init {
             //设置全局的Header构建器
@@ -133,4 +144,33 @@ open abstract class DevApp : Application(){
             }
         }
     }
+}
+
+interface ApplicationLifecycle{
+    /**
+     * 在[attachBaseContext(Context)]Application. 中执行
+     *
+     * @param base
+     */
+    fun attachBaseContext(base: Context)
+
+    /**
+     * 在Application.onCreate 中执行
+     */
+    fun onCreate()
+
+    /**
+     * 在Application.onTerminate 中执行
+     */
+    fun onTerminate()
+
+    /**
+     * 在Application.onLowMemory 中执行
+     */
+    fun onLowMemory()
+
+    /**
+     * 在Application.onTrimMemory 中执行
+     */
+    fun onTrimMemory(level: Int)
 }

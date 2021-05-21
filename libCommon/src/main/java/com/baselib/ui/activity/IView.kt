@@ -1,4 +1,4 @@
-package com.baselib.ui.mvp.view
+package com.baselib.ui.activity
 
 import com.baselib.ui.dialog.child.ProgressDialog
 

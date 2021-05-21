@@ -19,8 +19,6 @@ abstract class CommToolBarActivity : BaseActivity() {
      */
     open fun getToolBarResId() = R.id.titlebar
 
-    open fun getContentView() = findViewById<View>(R.id.view_content)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTitleBarListener()
@@ -63,8 +61,20 @@ abstract class CommToolBarActivity : BaseActivity() {
          StatusBarHelper.setStatusBarHeight(fragmentActivity, fragmentActivity.findViewById(android.R.id.content))
     }
 
-    override fun initStateView() = if(getContentView() != null) StateLayout(this).apply {
-            configStateView(getContentView(), this)
-        }.showContent() else null
+    override fun showLoadingView() {
+        getStateView(R.id.view_content)?.showLoading()
+    }
+
+    override fun showContentView() {
+        getStateView(R.id.view_content)?.showContent()
+    }
+
+    override fun showEmptyView() {
+        getStateView(R.id.view_content)?.showEmpty()
+    }
+
+    override fun showErrorView(e: Throwable) {
+        getStateView(R.id.view_content)?.showEmpty()
+    }
 
 }

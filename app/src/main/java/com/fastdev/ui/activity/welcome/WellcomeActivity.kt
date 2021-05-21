@@ -12,6 +12,7 @@ import com.fastdev.ui.activity.main.MainActivity
 import com.fastdev.ui.activity.welcome.child.*
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -49,6 +50,7 @@ class WellcomeActivity : BaseActivity() {
         }
         //延迟时1秒
         Flowable.timer(countDownTime, TimeUnit.SECONDS)
+                .composeUIThread()
                 .subscribe { handleResult() }
     }
 

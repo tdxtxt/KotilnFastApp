@@ -1,9 +1,7 @@
 package com.baselib.helper.cache
 
-import com.baselib.app.DevApp
+import com.baselib.app.ApplicationDelegate
 import com.orhanobut.hawk.Hawk
-import com.orhanobut.hawk.NoEncryption
-import com.orhanobut.hawk.Storage
 
 /**
  * 创建时间： 2020/5/22
@@ -11,7 +9,7 @@ import com.orhanobut.hawk.Storage
  * 功能描述:
  */
 object HawkEngine : CEngine{
-  override fun init() = Hawk.init(DevApp.mContext).build()
+  override fun init() = Hawk.init(ApplicationDelegate.context).build()
 
   override fun putString(key: String, value: String?) = Hawk.put(key, value)
 

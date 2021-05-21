@@ -106,11 +106,18 @@
     public static <fields>;
 }
 
-   #不混内部类
+#不混内部类
 -keepclassmembers class **.$* {
  public <fields>;
  public <methods>;
 }
+
+#viewbinding
+-keepclassmembers class * implements androidx.viewbinding.ViewBinding {
+  public static * inflate(android.view.LayoutInflater);
+  public static * inflate(android.view.LayoutInflater, android.view.ViewGroup, boolean);
+}
+
 #3.webview
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;

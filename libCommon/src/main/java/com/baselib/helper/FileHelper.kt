@@ -3,7 +3,7 @@ package com.baselib.helper;
 import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
-import com.baselib.app.DevApp;
+import com.baselib.app.ApplicationDelegate;
 import java.io.File;
 
 object FileHelper {
@@ -12,7 +12,7 @@ object FileHelper {
      */
     private fun getCacheDir(context: Context?, dirName: String): File {
         var context = context
-        if (context == null) context = DevApp.getContext()
+        if (context == null) context = ApplicationDelegate.context
 
         var cacheDir: File?
         if (isSdcardExist()) {
