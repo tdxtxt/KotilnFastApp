@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import cn.jzvd.Jzvd
 import com.baselib.helper.FragmentHelper
 import com.baselib.ui.activity.BaseActivity
 import com.baselib.ui.fragment.BaseFragment
@@ -12,7 +11,6 @@ import com.fastdev.ui.R
 import com.fastdev.ui.activity.main.child.HomeFragment
 import com.fastdev.ui.activity.main.child.MineFragment
 import com.fastdev.ui.activity.main.child.OneMenuFragment
-import com.fastdev.ui.activity.main.child.TwoMenuFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,14 +34,12 @@ class MainActivity : BaseActivity(){
     override fun initUi() {
         mFragmentPages[TAB_HOME] = BaseFragment.newInstance(HomeFragment::class.java)
         mFragmentPages[TAB_MENU1] = BaseFragment.newInstance(OneMenuFragment::class.java)
-        mFragmentPages[TAB_MENU2] = BaseFragment.newInstance(TwoMenuFragment::class.java)
         mFragmentPages[TAB_MINE] = BaseFragment.newInstance(MineFragment::class.java)
 
         nav_bottom.setOnNavigationItemSelectedListener {
             return@setOnNavigationItemSelectedListener when (it.itemId) {
                 R.id.menu_home -> navFragment(TAB_HOME).run { true }
                 R.id.menu_1 -> navFragment(TAB_MENU1).run { true }
-                R.id.menu_2 -> navFragment(TAB_MENU2).run { true }
                 R.id.menu_mine -> navFragment(TAB_MINE).run { true }
                 else -> false
             }
@@ -65,22 +61,9 @@ class MainActivity : BaseActivity(){
         currentTab = tab
     }
 
-    override fun onBackPressed() {
-        if (Jzvd.backPress()) {
-            return
-        }
-        super.onBackPressed()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Jzvd.releaseAllVideos()
-    }
-
     companion object{
         private const val TAB_HOME = "tab_home"
         private const val TAB_MENU1 = "tab_1"
-        private const val TAB_MENU2 = "tab_2"
         private const val TAB_MINE = "tab_mine"
 
         fun showHomePage(activity: Activity?){
