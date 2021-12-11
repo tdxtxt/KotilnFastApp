@@ -127,7 +127,6 @@ dependencies {
     api rootProject.ext.fastDev["indicator"]
 
     implementation project(path: ':libCommon')
-    implementation project(path: ':libVideo')
     implementation project(path: ':libChatUI')
 }
 
