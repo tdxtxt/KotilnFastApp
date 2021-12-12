@@ -6,6 +6,7 @@ import com.baselib.ui.mvp.view.BaseMvpView
 import com.baselib.ui.mvp.view.fragment.BaseMvpFragment
 import com.fastdev.mvp.HomePresenter
 import com.fastdev.ui.R
+import com.fastdev.ui.activity.qrcode.ScanQrcodeActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main_home.*
 import kotlinx.android.synthetic.main.include_top_search.*
@@ -40,6 +41,8 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
     }
 
     override fun showXX() {
-        ToastHelper.showToast("xxxxxx")
+        ScanQrcodeActivity.open(activity){
+            ToastHelper.showToast(it)
+        }
     }
 }

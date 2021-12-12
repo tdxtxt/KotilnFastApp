@@ -51,7 +51,7 @@ dependencies {
     implementation rootProject.ext.fastDev["refresh-header"]
     implementation (rootProject.ext.fastDev.logger){exclude group: "com.android.support"}
     implementation rootProject.ext.fastDev.timber
-    implementation rootProject.ext.fastDev.hawk
+    implementation rootProject.ext.fastDev.mmkv
 //    implementation rootProject.ext.fastDev.statusBar
 //    implementation rootProject.ext.fastDev.stateview
     implementation rootProject.ext.fastDev.permission

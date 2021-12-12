@@ -1,6 +1,7 @@
 package com.baselib.ui.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -174,44 +175,43 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     }
 
     fun startActivityForResult(clazz: Class<*>, listener: (StartForResultListener.() -> Unit)?){
-        startActivityForResult(this, clazz, null, listener)
+        startActivityForResult(clazz, null, listener)
     }
 
     fun startActivityForResult(clazz: Class<*>, params: HashMapParams?, listener: (StartForResultListener.() -> Unit)?){
-        startActivityForResult(this, clazz, params, listener)
+        startActivityForResult(clazz, params, listener)
     }
 
     companion object{
-        fun startActivityForResult(activity: Activity?, clazz: Class<*>, params: HashMapParams?, listener: (StartForResultListener.() -> Unit)?){
-            if(activity == null) return
-            if (!isActivityValid(activity)) {
+        fun Activity.startActivityForResult(clazz: Class<*>, params: HashMapParams?, listener: (StartForResultListener.() -> Unit)?){
+            if (!isActivityValid(this)) {
                 LogA.i("startActivityForResult ------>  Activity is null or has finished")
                 return
             }
-            if(activity is FragmentActivity){
-                val fragment: StartForResultFragment1 = (activity.supportFragmentManager.findFragmentByTag("__start_for_result")?:
+            if(this is FragmentActivity){
+                val fragment: StartForResultFragment1 = (supportFragmentManager.findFragmentByTag("__start_for_result")?:
                 StartForResultFragment1().apply {
-                    activity.supportFragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
-                    activity.supportFragmentManager.executePendingTransactions()
+                    supportFragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
+                    supportFragmentManager.executePendingTransactions()
                 }) as StartForResultFragment1
 
                 fragment.setListener(listener)
                 val intent = Intent()
                 if(params != null) intent.putExtra("Bundle", params?.toBundle())
-                intent.setClass(activity, clazz)
+                intent.setClass(this, clazz)
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)//单例
                 fragment.startActivityForResult(intent, 0x001122)
             }else{
-                val fragment: StartForResultFragment2 = (activity.fragmentManager.findFragmentByTag("__start_for_result")?:
+                val fragment: StartForResultFragment2 = (fragmentManager.findFragmentByTag("__start_for_result")?:
                 StartForResultFragment2().apply {
-                    activity.fragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
-                    activity.fragmentManager.executePendingTransactions()
+                    fragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
+                    fragmentManager.executePendingTransactions()
                 }) as StartForResultFragment2
 
                 fragment.setListener(listener)
                 val intent = Intent()
                 if(params != null) intent.putExtra("Bundle", params?.toBundle())
-                intent.setClass(activity, clazz)
+                intent.setClass(this, clazz)
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)//单例
                 fragment.startActivityForResult(intent, 0x001122)
             }

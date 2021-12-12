@@ -39,7 +39,7 @@ abstract class ApplicationDelegate constructor(val application: Application) : A
         delegate = this
         closeAndroidPDialog()
         LogA.init(isLoggable())
-        CacheHelper.init()
+        CacheHelper.init(context)
         ForegroundCallbacks.init(application)
                 .addListener(object : ForegroundListener{
                     override fun onBecameForeground() {

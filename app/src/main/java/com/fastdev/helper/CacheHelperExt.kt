@@ -8,5 +8,5 @@ import com.baselib.helper.CacheHelper
  * @since 2020/7/7
  */
 
-fun CacheHelper.getGuideVersion(): String = CacheHelper.getString("guideVersion", "")
+fun CacheHelper.getGuideVersion(): String? = CacheHelper.getString("guideVersion", "")
 fun CacheHelper.putGuideVersion(versionCode: String) = CacheHelper.putString("guideVersion", versionCode)

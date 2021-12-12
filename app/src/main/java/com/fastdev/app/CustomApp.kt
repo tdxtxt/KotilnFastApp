@@ -12,6 +12,7 @@ import com.fastdev.helper.ShareSdk
 import com.fastdev.net.config.TonNetProvider
 import dagger.hilt.android.HiltAndroidApp
 import io.reactivex.plugins.RxJavaPlugins
+import org.litepal.LitePal
 
 /**
  * 创建时间： 2020/5/27
@@ -46,6 +47,8 @@ class CustomApp : Application() {
             ShareSdk.init(this)
             //rxjava全局异常处理 https://juejin.im/post/5ecc10626fb9a047e25d5aac
             RxJavaPlugins.setErrorHandler { it.printStackTrace() }
+            //数据库
+            LitePal.initialize(this)
         }
     }
 

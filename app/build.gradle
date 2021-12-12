@@ -9,7 +9,7 @@ android {
     compileSdkVersion versions.compileSdk
     buildToolsVersion versions.buildTools
     defaultConfig {
-        applicationId "com.fastdev.ton"
+        applicationId "com.scanner.ton"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode versions.versionCode
@@ -18,7 +18,7 @@ android {
         multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi","armeabi-v7a", "x86"/*, "arm64-v8a", "x86_64", */
+            abiFilters /*"armeabi",*/"armeabi-v7a"/*, "x86", "arm64-v8a", "x86_64", */
         }
     }
 
@@ -115,6 +115,12 @@ dependencies {
     implementation rootProject.ext.hiltLibs.hilt
     kapt rootProject.ext.hiltLibs.hiltCompiler
 
+    implementation files('libs\\uhf.jar')
+    implementation files('libs\\scankey.jar')
+
+    implementation(name: 'qrcodecore', ext: 'aar')
+    implementation 'com.google.zxing:core:3.3.3'
+
     implementation(name: 'socialgo-core-1.0.2', ext: 'aar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.3.1'
     implementation(name: 'socialgo-wechat-1.0.2', ext: 'aar')
@@ -128,6 +134,11 @@ dependencies {
 
     implementation project(path: ':libCommon')
     implementation project(path: ':libChatUI')
+
+    //查看数据库
+    debugImplementation 'com.guolindev.glance:glance:1.1.0'
+    //数据库
+    implementation 'org.litepal.guolindev:core:3.2.3'
 }
 
 kapt {

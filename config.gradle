@@ -81,6 +81,8 @@ ext{
     fastDev = [
             /*数据存储 https://github.com/orhanobut/hawk*/
             hawk : 'com.orhanobut:hawk:2.0.1',
+            /**数据存储 https://github.com/tencent/mmkv**/
+            mmkv : 'com.tencent:mmkv:1.2.11',
             /* 滑动黏性工具类 使用教程 https://github.com/EverythingMe/overscroll-decor */
             overscroll : 'me.everything:overscroll-decor-android:1.0.4',
             /*图片缩放控件https://github.com/bm-x/PhotoView*/
