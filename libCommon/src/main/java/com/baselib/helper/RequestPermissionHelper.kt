@@ -36,7 +36,7 @@ object RequestPermissionHelper{
     /**
      * 请求相机权限
      */
-    fun requestCameraPermission(activity: FragmentActivity, listener: (PermissionListener.() -> Unit)?){
+    fun requestCameraPermission(activity: FragmentActivity?, listener: (PermissionListener.() -> Unit)?){
         var callback: PermissionListener? = null
         if(listener != null){
             callback = object : PermissionListener() {}

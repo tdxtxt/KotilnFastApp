@@ -136,7 +136,7 @@ dependencies {
     implementation project(path: ':libChatUI')
 
     //查看数据库
-    debugImplementation 'com.guolindev.glance:glance:1.1.0'
+//    debugImplementation 'com.guolindev.glance:glance:1.1.0'
     //数据库
     implementation 'org.litepal.guolindev:core:3.2.3'
 }
