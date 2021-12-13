@@ -15,6 +15,12 @@ class ENV constructor(val name: String, val host: String) {
 
         fun isCustom(host: String) = host != BuildConfig.HOST1_DEVE && host != BuildConfig.HOST1_TEST && host != BuildConfig.HOST1_RELEASE
 
+        fun isDevEnv(host: String) = host == BuildConfig.HOST1_DEVE
+
+        fun isReleaseEnv(host: String) = host == BuildConfig.HOST1_RELEASE
+
+        fun isRelEnv(host: String) = host == BuildConfig.HOST1_RELEASE_PRE
+
         fun from(index: Int) = values[index]
     }
 }

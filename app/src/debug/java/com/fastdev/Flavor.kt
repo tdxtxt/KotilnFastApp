@@ -3,6 +3,7 @@ package com.fastdev
 import android.content.Context
 import com.baselib.app.ApplicationDelegate
 import com.fast.libdeveloper.*
+import com.fastdev.net.ApiClient
 
 /**
  * 功能描述:
@@ -27,6 +28,20 @@ object Flavor {
 
         override fun extraUrls(index: Int): MutableList<ExtraUrl> {
             return mutableListOf()
+        }
+
+        override fun changeIndex(index: Int) {
+            if(ENV.isDevEnv(url(index))){
+
+            }else if(ENV.isRelEnv(url(index))){
+
+            }else if(ENV.isReleaseEnv(url(index))){
+
+            }else if(ENV.isCustom(url(index))){
+
+            }
+
+            ApiClient.changeHost(url(index))
         }
 
         override fun name(index: Int): String {
