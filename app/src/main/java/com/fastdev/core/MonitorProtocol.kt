@@ -17,6 +17,8 @@ abstract class MonitorProtocol constructor(val looper: Looper) {
         private val readMonitor = ReadTagMonitor(monitorThread.looper)
 
         fun startReadMonitor(){
+            //开始寻卡是否清空之前EPC
+            mDevice?.setParameters(UHFService.PARAMETER_CLEAR_EPCLIST_WHEN_START_INVENTORY, 1)
             readMonitor.start()
         }
         fun stopAllMonitor(){
@@ -34,13 +36,13 @@ abstract class MonitorProtocol constructor(val looper: Looper) {
 
     abstract fun task()
 
-    fun start(){
+    open fun start(){
         if(refreshHandler == null) refreshHandler = Handler(looper)
         close()
         next()
     }
 
-    fun close(){
+    open fun close(){
         refreshHandler?.removeCallbacks(runnable)
     }
 

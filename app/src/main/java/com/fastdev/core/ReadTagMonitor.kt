@@ -1,7 +1,9 @@
 package com.fastdev.core
 
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
+import android.os.Build
 import android.os.Looper
 import com.baselib.app.ApplicationDelegate
 import com.fastdev.app.CustomApp
@@ -15,7 +17,6 @@ import com.seuic.uhf.EPC
  */
 class ReadTagMonitor(looper: Looper) : MonitorProtocol(looper) {
     var soundPool: SoundPool? = null
-    var soundID: Int = 0
     var localData: MutableList<EPC>? = null
 
     override fun task() {
@@ -24,13 +25,37 @@ class ReadTagMonitor(looper: Looper) : MonitorProtocol(looper) {
         if(localData?.size != data?.size) playSound()
         localData = data
 
+        //将数据传递到主线程之中
+    }
+
+    override fun start() {
+        super.start()
+        mDevice?.inventoryStart()
+    }
+
+    override fun close() {
+        super.close()
+        mDevice?.inventoryStop()
     }
 
     private fun playSound(){
         if(soundPool == null){
-            soundPool = SoundPool(3, AudioManager.STREAM_MUSIC, 20)
+            if(Build.VERSION.SDK_INT > 21){
+                val builder = SoundPool.Builder()
+                builder.setMaxStreams(3)
+                val attrBuilder = AudioAttributes.Builder()
+                attrBuilder.setLegacyStreamType(AudioManager.STREAM_SYSTEM)
+                builder.setAudioAttributes(attrBuilder.build())
+                soundPool = builder.build()
+            }else{
+                soundPool = SoundPool(3, AudioManager.STREAM_MUSIC, 20)
+            }
             soundPool?.load(ApplicationDelegate.context, R.raw.scan, 1)
         }
-        soundPool?.play(soundID, 1f, 1f, 0, 0, 1f)
+        soundPool?.setOnLoadCompleteListener(object : SoundPool.OnLoadCompleteListener {
+            override fun onLoadComplete(soundPool: SoundPool?, sampleId: Int, status: Int) {
+                soundPool?.play(sampleId, 1f, 1f, 0, 0, 1f)
+            }
+        })
     }
 }
