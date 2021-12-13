@@ -8,7 +8,7 @@ import android.graphics.Rect
 import android.os.Build
 import androidx.multidex.MultiDex
 import com.baselib.R
-import com.baselib.helper.CacheHelper
+import com.baselib.helper.CommonCacheHelper
 import com.baselib.helper.LogA
 import com.fast.libdeveloper.AppContainer
 import com.scwang.smartrefresh.header.MaterialHeader
@@ -39,7 +39,7 @@ abstract class ApplicationDelegate constructor(val application: Application) : A
         delegate = this
         closeAndroidPDialog()
         LogA.init(isLoggable())
-        CacheHelper.init(context)
+        CommonCacheHelper.init(context)
         ForegroundCallbacks.init(application)
                 .addListener(object : ForegroundListener{
                     override fun onBecameForeground() {

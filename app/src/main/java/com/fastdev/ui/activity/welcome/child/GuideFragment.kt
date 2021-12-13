@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.baselib.helper.CacheHelper
+import com.baselib.helper.CommonCacheHelper
 import com.baselib.helper.dp2px
 import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.helper.getGuideVersion
@@ -26,7 +26,7 @@ class GuideFragment : BaseFragment() {
     override fun getLayoutId() = R.layout.fragment_wellcome_guide
 
     override fun initUi() {
-        CacheHelper.putGuideVersion(GuideFragment.versionCode)
+        CommonCacheHelper.putGuideVersion(GuideFragment.versionCode)
 
         banner.addBannerLifecycleObserver(fragmentActivity).apply { indicator = RectangleIndicator(activity) }
                 .setIndicatorMargins(IndicatorConfig.Margins().apply { bottomMargin = 12.dp2px(activity).toInt() })
@@ -61,6 +61,6 @@ class GuideFragment : BaseFragment() {
     companion object {
         const val versionCode = "1.0.0"
 
-        fun isNewVersion() = GuideFragment.versionCode != CacheHelper.getGuideVersion()
+        fun isNewVersion() = GuideFragment.versionCode != CommonCacheHelper.getGuideVersion()
     }
 }

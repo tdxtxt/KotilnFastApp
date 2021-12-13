@@ -46,10 +46,10 @@ import io.reactivex.schedulers.Schedulers
      */
     @SuppressLint("CheckResult")
     fun <T> Flowable<T>.composeRxcache(key: String): Flowable<T> = this.compose(FlowableTransformer<T, T> {
-        it.map { result -> result.apply { CacheHelper.put(key, result) } }
-                .onErrorResumeNext(Function { throwable -> Flowable.just(CacheHelper.get(key)) })
+        it.map { result -> result.apply { CommonCacheHelper.put(key, result) } }
+                .onErrorResumeNext(Function { throwable -> Flowable.just(CommonCacheHelper.get(key)) })
                 .onExceptionResumeNext {
-                    var result: T? = CacheHelper.get(key)
+                    var result: T? = CommonCacheHelper.get(key)
                     it.onNext(result)
                     it.onComplete()
                 }

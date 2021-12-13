@@ -8,4 +8,6 @@ import com.baselib.helper.cache.MMKVEngine
  * 编码： tangdex
  * 功能描述:
  */
-object CacheHelper: CEngine by MMKVEngine
+object CommonCacheHelper: CEngine by object : MMKVEngine(){
+    override fun createMMKVFileKey() = "comm_cache_file"
+}
