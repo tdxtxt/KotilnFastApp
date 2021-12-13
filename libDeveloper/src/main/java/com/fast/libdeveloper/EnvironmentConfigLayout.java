@@ -77,9 +77,9 @@ public class EnvironmentConfigLayout extends LinearLayout implements View.OnClic
   private void initData() {
     currentEndPointIndex = getEndpointIndex(getContext(), 0);
     currentBaseUrl =
-        getEndpointUrl(getContext(), endpoint == null ? null : endpoint.url(currentEndPointIndex));
+            getEndpointUrl(getContext(), endpoint == null ? null : endpoint.url(currentEndPointIndex));
     List<ExtraUrl> extraUrlList = getEndpointExtraUrl(getContext(),
-        endpoint == null ? null : endpoint.extraUrls(currentEndPointIndex));
+            endpoint == null ? null : endpoint.extraUrls(currentEndPointIndex));
     if (extraUrlList != null) {
       currentExtraUrlList.clear();
       currentExtraUrlList.addAll(extraUrlList);
@@ -142,7 +142,8 @@ public class EnvironmentConfigLayout extends LinearLayout implements View.OnClic
             currentEndPointIndex = position;
             if (endpoint != null) {
               setEndpoint(getContext(), currentEndPointIndex, endpoint.name(position),
-                  endpoint.url(position), endpoint.extraUrls(position));
+                      endpoint.url(position), endpoint.extraUrls(position));
+              endpoint.changeIndex(currentEndPointIndex);
               Utils.restart(getContext());
             }
           }
@@ -213,9 +214,9 @@ public class EnvironmentConfigLayout extends LinearLayout implements View.OnClic
     initData();
 
     btnEdit.setVisibility(
-        endpoint != null && endpoint.isCustom(currentEndPointIndex) ? VISIBLE : GONE);
+            endpoint != null && endpoint.isCustom(currentEndPointIndex) ? VISIBLE : GONE);
     layoutMockDelay.setVisibility(
-        endpoint != null && endpoint.isMock(currentEndPointIndex) ? VISIBLE : GONE);
+            endpoint != null && endpoint.isMock(currentEndPointIndex) ? VISIBLE : GONE);
     spinnerEndpoint.setSelection(currentEndPointIndex);
     adapterEndpoint.notifyDataSetChanged();
     spinnerMockDelay.setSelection(currentMockDelayIndex);
@@ -224,23 +225,24 @@ public class EnvironmentConfigLayout extends LinearLayout implements View.OnClic
 
   private void showCustomEndpointDialog(final int newSelection) {
     final String baseUrl =
-        currentBaseUrl == null ? endpoint.url(currentEndPointIndex) : currentBaseUrl;
+            currentBaseUrl == null ? endpoint.url(currentEndPointIndex) : currentBaseUrl;
     final List<ExtraUrl> extraUrlList = endpoint.extraUrls(newSelection);
     dialogCustomEndpoint = new CustomEndpointDialog(getContext(), baseUrl, extraUrlList,
-        new CustomEndpointDialog.SetCustomEndpointListener() {
-          @Override
-          public void onSetCustomEndpoint(String name, String baseUrl,
-                                          List<ExtraUrl> extraUrlList) {
-            currentEndPointIndex = newSelection;
-            setEndpoint(getContext(), currentEndPointIndex, name, baseUrl, extraUrlList);
-            Utils.restart(getContext());
-          }
+            new CustomEndpointDialog.SetCustomEndpointListener() {
+              @Override
+              public void onSetCustomEndpoint(String name, String baseUrl,
+                                              List<ExtraUrl> extraUrlList) {
+                currentEndPointIndex = newSelection;
+                setEndpoint(getContext(), currentEndPointIndex, name, baseUrl, extraUrlList);
+                if(endpoint != null) endpoint.changeIndex(currentEndPointIndex);
+                Utils.restart(getContext());
+              }
 
-          @Override
-          public void onCancel() {
-            spinnerEndpoint.setSelection(currentEndPointIndex);
-          }
-        });
+              @Override
+              public void onCancel() {
+                spinnerEndpoint.setSelection(currentEndPointIndex);
+              }
+            });
     dialogCustomEndpoint.show();
   }
 
@@ -252,39 +254,39 @@ public class EnvironmentConfigLayout extends LinearLayout implements View.OnClic
   static void setEndpoint(Context context, int index, String name, String baseUrl,
                           List<ExtraUrl> extraUrlList) {
     SharedPreferences.Editor editor = Prefers.with(context).load().editor();
-    editor.putInt(KEY_ENDPOINT_CURRENT_INDEX, index);
-    editor.putString(KEY_ENDPOINT_NAME, name);
-    editor.putString(KEY_ENDPOINT_BASE_URL, baseUrl);
+    editor.putInt(Constants.KEY_ENDPOINT_CURRENT_INDEX, index);
+    editor.putString(Constants.KEY_ENDPOINT_NAME, name);
+    editor.putString(Constants.KEY_ENDPOINT_BASE_URL, baseUrl);
     for (int i = 0; i < extraUrlList.size(); i++) {
       editor.putString(Constants.KEY_ENDPOINT_EXTRA_URL_LIST_URL + i, extraUrlList.get(i).url());
       editor.putString(Constants.KEY_ENDPOINT_EXTRA_URL_LIST_DESCRIPTION + i,
-          extraUrlList.get(i).description());
+              extraUrlList.get(i).description());
     }
     editor.commit();
   }
 
   static void setMockDelayIndex(Context context, int index) {
-    Prefers.with(context).load().save(KEY_MOCK_DELAY_INDEX, index);
+    Prefers.with(context).load().save(Constants.KEY_MOCK_DELAY_INDEX, index);
   }
 
   static void setRemoteDebuggerAddr(Context context, String addr) {
-    Prefers.with(context).load().save(KEY_REMOTE_DEBUGGER_ADDR, addr);
+    Prefers.with(context).load().save(Constants.KEY_REMOTE_DEBUGGER_ADDR, addr);
   }
 
   static String getRemoteDebuggerAddr(Context context) {
-    return Prefers.with(context).load().getString(KEY_REMOTE_DEBUGGER_ADDR, "10.16.74.230:8765");
+    return Prefers.with(context).load().getString(Constants.KEY_REMOTE_DEBUGGER_ADDR, "10.16.74.230:8765");
   }
 
   static int getEndpointIndex(Context context, int defaultValue) {
-    return Prefers.with(context).load().getInt(KEY_ENDPOINT_CURRENT_INDEX, defaultValue);
+    return Prefers.with(context).load().getInt(Constants.KEY_ENDPOINT_CURRENT_INDEX, defaultValue);
   }
 
   static String getEndpointUrl(Context context, String defaultValue) {
-    return Prefers.with(context).load().getString(KEY_ENDPOINT_BASE_URL, defaultValue);
+    return Prefers.with(context).load().getString(Constants.KEY_ENDPOINT_BASE_URL, defaultValue);
   }
 
   static String getEndpointName(Context context, String defaultValue) {
-    return Prefers.with(context).load().getString(KEY_ENDPOINT_NAME, defaultValue);
+    return Prefers.with(context).load().getString(Constants.KEY_ENDPOINT_NAME, defaultValue);
   }
 
   static List<ExtraUrl> getEndpointExtraUrl(Context context, List<ExtraUrl> defValue) {
@@ -292,16 +294,16 @@ public class EnvironmentConfigLayout extends LinearLayout implements View.OnClic
       for (int i = 0; i < defValue.size(); i++) {
         ExtraUrl extraUrl = defValue.get(i);
         extraUrl.url =
-                Prefers.with(context).load().getString(KEY_ENDPOINT_EXTRA_URL_LIST_URL + i, extraUrl.url());
+                Prefers.with(context).load().getString(Constants.KEY_ENDPOINT_EXTRA_URL_LIST_URL + i, extraUrl.url());
         extraUrl.description = Prefers.with(context).load()
-            .getString(KEY_ENDPOINT_EXTRA_URL_LIST_DESCRIPTION + i, extraUrl.description());
+                .getString(Constants.KEY_ENDPOINT_EXTRA_URL_LIST_DESCRIPTION + i, extraUrl.description());
       }
     }
     return defValue;
   }
 
   static int getMockDelayIndex(Context context) {
-    return Prefers.with(context).load().getInt(KEY_MOCK_DELAY_INDEX, 0);
+    return Prefers.with(context).load().getInt(Constants.KEY_MOCK_DELAY_INDEX, 0);
   }
 
   static int getMockDelayMilliseconds(Context context) {

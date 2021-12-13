@@ -94,7 +94,7 @@ class ForegroundCallbacks : Application.ActivityLifecycleCallbacks {
 
     private fun checkAppStatus(activity: Activity?){
         var packageManager = activity?.application?.packageManager
-        var intent = packageManager?.getLaunchIntentForPackage(activity?.packageName)
+        var intent = packageManager?.getLaunchIntentForPackage(activity?.packageName?: "")
         var launchComponentName = intent?.component
         var componentName = activity?.componentName
         if(componentName.toString() == launchComponentName.toString()){//是第一个启动的activity
