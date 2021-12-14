@@ -1,7 +1,10 @@
 package com.fastdev.mvp
 
+import com.baselib.helper.LogA
+import com.baselib.helper.ToastHelper
 import com.baselib.ui.mvp.presenter.AbsPresenter
 import com.baselib.ui.mvp.view.BaseMvpView
+import com.fastdev.data.db.Source
 import com.fastdev.data.repository.TestRepository
 import com.seuic.uhf.UHFService
 import javax.inject.Inject
@@ -11,7 +14,7 @@ import javax.inject.Inject
  * @author tangdexiang
  * @since 2021/4/14
  */
-class HomePresenter @Inject constructor(val api: TestRepository) : AbsPresenter<HomePresenter.IViewHome>() {
+class HomePresenter @Inject constructor(val repository: TestRepository) : AbsPresenter<HomePresenter.IViewHome>() {
 
     interface IViewHome : BaseMvpView{
         fun showXX()
@@ -21,6 +24,8 @@ class HomePresenter @Inject constructor(val api: TestRepository) : AbsPresenter<
     }
 
     fun getData(){
-        baseView?.showXX()
+        repository.saveAssets(Source().apply { name = "1111" })
+        LogA.i(repository.query()?.name)
+        ToastHelper.showToast(repository.query()?.name)
     }
 }

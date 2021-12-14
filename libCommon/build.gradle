@@ -16,13 +16,13 @@ android {
 
     //    TODO AS4.0
     //Android Studio 4.0
-//    buildFeatures{
-//        viewBinding=true
-//    }
-    //Android Studio 低于4.0
-    viewBinding {
-        enabled = true
+    buildFeatures{
+        viewBinding=true
     }
+    //Android Studio 低于4.0
+//    viewBinding {
+//        enabled = true
+//    }
 
     buildTypes {
         release {

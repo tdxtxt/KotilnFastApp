@@ -28,10 +28,9 @@ import retrofit2.http.*
     @GET("recipientOrg/findOrg")
     fun load(@Query("id") id:Int):Observable<NetOuter<Orgs>>
  */
-open interface TestApi {
-    //获取公众号列表
+open interface NetApi {
     @GET("wxarticle/chapters/json")
-    fun queryList1(): Flowable<ResponseBody<String>>
+    fun login(): Flowable<ResponseBody<String>>
 
     @FormUrlEncoded
     @POST("api/xxxyyy")
