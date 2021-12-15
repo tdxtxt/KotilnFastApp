@@ -126,8 +126,10 @@ abstract class ApplicationDelegate constructor(val application: Application) : A
 
     companion object {
         @SuppressLint("StaticFieldLeak")
+        @JvmStatic
         lateinit var context: Context
         @SuppressLint("StaticFieldLeak")
+        @JvmStatic
         lateinit var delegate: ApplicationDelegate
 
         init {
