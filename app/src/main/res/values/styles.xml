@@ -30,7 +30,7 @@
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
         <item name="background_colorOrientation">left_right</item>
-        <item name="background_endColor">@color/blue_064fc3_dark</item>
+        <item name="background_endColor">@color/blue_2981ff</item>
         <item name="background_startColor">@color/blue_5c95f0</item>
         <item name="shadow_startColor">@color/gray_dddddd</item>
         <item name="shadow_endColor">@color/gray_e1e1e1</item>

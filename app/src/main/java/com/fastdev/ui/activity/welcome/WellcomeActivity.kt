@@ -5,8 +5,11 @@ import android.os.Bundle
 import com.baselib.helper.*
 import com.baselib.ui.activity.BaseActivity
 import com.baselib.ui.fragment.BaseFragment
+import com.fastdev.helper.isLogin
 import com.fastdev.ui.R
+import com.fastdev.ui.activity.login.LoginMainActivity
 import com.fastdev.ui.activity.main.MainActivity
+import com.fastdev.ui.activity.task.TaskListActivity
 import com.fastdev.ui.activity.welcome.child.AdFragment
 import com.fastdev.ui.activity.welcome.child.GuideFragment
 import com.fastdev.ui.activity.welcome.child.PermissionApplyFragment
@@ -62,12 +65,15 @@ class WellcomeActivity : BaseActivity() {
     }
 
     fun startMain(){
-        val intent = intent.apply {
-            setClass(fragmentActivity, MainActivity::class.java)
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        if(CommonCacheHelper.isLogin()){
+            TaskListActivity.open(fragmentActivity)
+        }else{
+            LoginMainActivity.open(fragmentActivity, {
+                TaskListActivity.open(fragmentActivity)
+                finish()
+            }){
+                finish()
+            }
         }
-
-        startActivity(intent)
-        finish()
     }
 }
