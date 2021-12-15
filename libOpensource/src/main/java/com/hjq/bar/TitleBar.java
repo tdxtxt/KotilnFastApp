@@ -134,10 +134,10 @@ public class TitleBar extends FrameLayout
         if (array.hasValue(R.styleable.TitleBar_leftIcon)) {
             setLeftIcon(ViewCore.getDrawable(getContext(), array.getResourceId(R.styleable.TitleBar_leftIcon, 0)));
         } else {
-            if (array.getBoolean(R.styleable.TitleBar_backButton, mCurrentStyle.getBackIcon() != null)) {
-                // 显示默认的返回图标
-                setLeftIcon(mCurrentStyle.getBackIcon());
-            }
+//            if (array.getBoolean(R.styleable.TitleBar_backButton, mCurrentStyle.getBackIcon() != null)) {
+//                // 显示默认的返回图标
+//                setLeftIcon(mCurrentStyle.getBackIcon());
+//            }
         }
 
         if (array.hasValue(R.styleable.TitleBar_rightIcon)) {

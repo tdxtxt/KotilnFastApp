@@ -7,4 +7,15 @@
     <!-- 字体大小 -->
     <dimen name="design_bottom_navigation_active_text_size">20dp</dimen>
     <dimen name="design_bottom_navigation_text_size">16dp</dimen>
+
+
+    <dimen name="_18sp">18sp</dimen>
+    <dimen name="_17sp">17sp</dimen>
+    <dimen name="_16sp">16sp</dimen>
+    <dimen name="_15sp">15sp</dimen>
+    <dimen name="_14sp">14sp</dimen>
+    <dimen name="_13sp">13sp</dimen>
+    <dimen name="_12sp">12sp</dimen>
+    <dimen name="_11sp">11sp</dimen>
+    <dimen name="_10sp">8sp</dimen>
 </resources>
