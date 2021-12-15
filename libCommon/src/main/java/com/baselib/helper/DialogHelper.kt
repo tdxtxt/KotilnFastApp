@@ -7,7 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import com.baselib.callback.MenuDialogCallback
+import com.baselib.callback.MenuCallBack
 import com.baselib.ui.dialog.child.CommDialog
 import com.baselib.ui.dialog.child.ProgressDialog
 import com.lxj.xpopup.XPopup
@@ -20,15 +20,15 @@ import com.lxj.xpopup.impl.FullScreenPopupView
  */
 object DialogHelper {
     fun showCommDialog(activity: FragmentActivity?, title: String?, content: String?,
-                       leftMenu: (MenuDialogCallback.() -> Unit)? = null,
-                       rightMenu: (MenuDialogCallback.() -> Unit)? = null): CommDialog? {
+                       leftMenu: (MenuCallBack.() -> Unit)? = null,
+                       rightMenu: (MenuCallBack.() -> Unit)? = null): CommDialog? {
         if (activity == null) return null
         return createCommDialog(activity, title, content, leftMenu, rightMenu)?.apply { show() }
     }
 
     fun createCommDialog(activity: FragmentActivity?, title: String?, content: String?,
-                         leftMenu: (MenuDialogCallback.() -> Unit)? = null,
-                         rightMenu: (MenuDialogCallback.() -> Unit)? = null): CommDialog? {
+                         leftMenu: (MenuCallBack.() -> Unit)? = null,
+                         rightMenu: (MenuCallBack.() -> Unit)? = null): CommDialog? {
         if (activity == null) return null
         return CommDialog(activity).setTitle(title)
                 .setContent(content)
@@ -42,7 +42,9 @@ object DialogHelper {
     }
 
     fun showTips(context: FragmentActivity, content: String?){
-        showCommDialog(context, "温馨提示", content)
+        showCommDialog(context, "温馨提示", content, leftMenu = {
+
+        })
     }
 
     /**

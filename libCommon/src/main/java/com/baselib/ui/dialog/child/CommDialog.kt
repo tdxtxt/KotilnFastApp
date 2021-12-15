@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import com.baselib.R
 import com.baselib.ui.dialog.CenterBaseDialog
 import com.baselib.ui.dialog.impl.IBDialog
-import com.baselib.callback.MenuDialogCallback
+import com.baselib.callback.MenuCallBack
 
 /**
  * @作者： tangdx
@@ -57,11 +57,11 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         return this
     }
 
-    var leftMenu: (MenuDialogCallback.() -> Unit)? = null
-    fun setLeftMenu(listener: (MenuDialogCallback.() -> Unit)?): CommDialog{
+    var leftMenu: (MenuCallBack.() -> Unit)? = null
+    fun setLeftMenu(listener: (MenuCallBack.() -> Unit)?): CommDialog{
         this.leftMenu = listener
         if (listener != null) {
-            val callback = object : MenuDialogCallback() {}
+            val callback = object : MenuCallBack() {}
             callback.listener()
 
             tvBtnLeft?.visibility = View.VISIBLE
@@ -77,11 +77,11 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         return this
     }
 
-    var centerMenu: (MenuDialogCallback.() -> Unit)? = null
-    fun setCenterMenu(listener: (MenuDialogCallback.() -> Unit)?): CommDialog {
+    var centerMenu: (MenuCallBack.() -> Unit)? = null
+    fun setCenterMenu(listener: (MenuCallBack.() -> Unit)?): CommDialog {
         this.centerMenu = listener
         if (listener != null) {
-            val callback = object : MenuDialogCallback() {}
+            val callback = object : MenuCallBack() {}
             callback.listener()
 
             tvBtnCenter?.visibility = View.VISIBLE
@@ -97,11 +97,11 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         return this
     }
 
-    var rightMenu: (MenuDialogCallback.() -> Unit)? = null
-    fun setRightMenu(listener: (MenuDialogCallback.() -> Unit)?): CommDialog {
+    var rightMenu: (MenuCallBack.() -> Unit)? = null
+    fun setRightMenu(listener: (MenuCallBack.() -> Unit)?): CommDialog {
         this.rightMenu = listener
         if (listener != null) {
-            val callback = object : MenuDialogCallback() {}
+            val callback = object : MenuCallBack() {}
             callback.listener()
 
             tvBtnRight?.visibility = View.VISIBLE
