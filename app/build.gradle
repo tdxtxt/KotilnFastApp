@@ -144,14 +144,18 @@ dependencies {
     api rootProject.ext.fastDev["indicator"]
 
     implementation project(path: ':libCommon')
-    implementation project(path: ':libChatUI')
+//    implementation project(path: ':libChatUI')
 
     //查看数据库
 //    debugImplementation 'com.guolindev.glance:glance:1.1.0'
     //数据库
     implementation 'org.litepal.guolindev:core:3.2.3'
     //https://github.com/H07000223/FlycoTabLayout/blob/master/README_CN.md
-    implementation 'io.github.h07000223:flycoTabLayout:3.0.0'
+    implementation ('io.github.h07000223:flycoTabLayout:3.0.0'){
+        exclude group: 'androidx.appcompat'
+        exclude group: 'com.google.android.material'
+        exclude group: 'androidx.recyclerview'
+    }
 }
 
 kapt {
