@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@color/white_ffffff"
+    android:layout_marginTop="12dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="5dp"
+    app:contentPadding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:text="桌子"
+                android:textColor="@color/black_333333"
+                android:textSize="@dimen/_15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="20210926002"
+                android:textColor="@color/black_999999"
+                android:textSize="@dimen/_12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已盘"
+                android:textColor="@color/green_09bb07"
+                android:textSize="@dimen/_13sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="资产类型"
+                android:textColor="@color/black_999999"
+                android:textSize="@dimen/_12sp" />
+
+            <TextView
+                android:id="@+id/tv_source_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="家居"
+                android:textColor="@color/black_333333"
+                android:textSize="@dimen/_12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="规格型号"
+                android:textColor="@color/black_999999"
+                android:textSize="@dimen/_12sp" />
+
+            <TextView
+                android:id="@+id/tv_source_model"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="大号"
+                android:textColor="@color/black_333333"
+                android:textSize="@dimen/_12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="存放地址"
+                android:textColor="@color/black_999999"
+                android:textSize="@dimen/_12sp" />
+
+            <TextView
+                android:id="@+id/tv_source_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="万科城三期 1栋2楼101房间"
+                android:textColor="@color/black_333333"
+                android:textSize="@dimen/_12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="备&#12288;&#12288;注"
+                android:textColor="@color/black_999999"
+                android:textSize="@dimen/_12sp" />
+
+            <TextView
+                android:id="@+id/tv_source_remark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="备注内容水水水水水水水水"
+                android:textColor="@color/black_333333"
+                android:textSize="@dimen/_12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <top.androidman.SuperButton
+        android:layout_gravity="right"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:border_width="1dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        app:border_color="@color/blue_2981ff"
+        app:corner="40dp"
+        app:textColor="@color/blue_2981ff"
+        app:background_normalColor="@color/white_ffffff"
+        app:textSize="@dimen/_12sp"
+        app:text="+备注"/>
+
+</androidx.cardview.widget.CardView>

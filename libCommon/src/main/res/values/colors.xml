@@ -16,8 +16,8 @@
     <color name="black_000000">#000000</color>
     <color name="black_333333">#333333</color>
     <color name="black_666666">#666666</color>
-    <color name="black_999999">#999999</color>
 
+    <color name="black_999999">#999999</color>
 
     <color name="yellow_ffff00">#ffff00</color>
     
@@ -26,6 +26,7 @@
     <color name="blue_064fc3_dark">#064fc3</color>
     <color name="blue_5c95f0">#5c95f0</color>
 
+    <color name="green_09bb07">#09bb07</color>
     <color name="green_008000">#008000</color>
 
     <color name="line_bg">#f0f0f0</color>

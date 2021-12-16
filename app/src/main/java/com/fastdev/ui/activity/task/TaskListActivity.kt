@@ -14,7 +14,7 @@ import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
 import kotlinx.android.synthetic.main.activity_task_list.*
 
 class TaskListActivity : CommToolBarActivity() {
-    var fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
+    val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
 
     override fun getLayoutResId() = R.layout.activity_task_list
 

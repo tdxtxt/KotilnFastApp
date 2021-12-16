@@ -156,6 +156,8 @@ dependencies {
         exclude group: 'com.google.android.material'
         exclude group: 'androidx.recyclerview'
     }
+    //https://github.com/donkingliang/ConsecutiveScroller
+    implementation 'com.github.donkingliang:ConsecutiveScroller:4.6.0'
 }
 
 kapt {

@@ -26,7 +26,7 @@
 
     <style name="CommButtonStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
         <item name="background_colorOrientation">left_right</item>
