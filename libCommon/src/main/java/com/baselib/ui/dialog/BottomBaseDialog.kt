@@ -20,23 +20,19 @@ import com.lxj.xpopup.interfaces.XPopupCallback
  * @since 2020/7/28
  */
 abstract class BottomBaseDialog(val context: FragmentActivity) : IBDialog {
-    val dialog: BottomPopupView = generateDialog()
-
-    open fun generateDialog() : BottomPopupView{
-        return object : BottomPopupView(context){
-            override fun getImplLayoutId() = getLayoutId()
-            override fun getMaxWidth(): Int {
-                return super.getMaxWidth()
-            }
-            override fun getMaxHeight(): Int {
-                return super.getMaxHeight()
-            }
-            override fun getPopupWidth(): Int {
-                return getDialogWidth()
-            }
-            override fun getPopupHeight(): Int {
-                return getDialogHeight()
-            }
+    val dialog: BottomPopupView = object : BottomPopupView(context){
+        override fun getImplLayoutId() = getLayoutId()
+        override fun getMaxWidth(): Int {
+            return super.getMaxWidth()
+        }
+        override fun getMaxHeight(): Int {
+            return super.getMaxHeight()
+        }
+        override fun getPopupWidth(): Int {
+            return getDialogWidth()
+        }
+        override fun getPopupHeight(): Int {
+            return getDialogHeight()
         }
     }
 

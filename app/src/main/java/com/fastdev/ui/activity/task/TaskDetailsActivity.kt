@@ -7,6 +7,7 @@ import com.baselib.ui.activity.CommToolBarActivity
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.fragment.SourceListFragment
 import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
+import com.fastdev.ui.dialog.SourceFilterDialog
 import kotlinx.android.synthetic.main.activity_task_details.*
 
 class TaskDetailsActivity : CommToolBarActivity() {
@@ -16,6 +17,10 @@ class TaskDetailsActivity : CommToolBarActivity() {
 
     override fun initUi() {
         setTitleBar("盘点任务详情")
+
+        tv_filter.setOnClickListener {
+            SourceFilterDialog(fragmentActivity).show()
+        }
 
         fragments.add(Pair("全部", SourceListFragment.getAllInstance()))
         fragments.add(Pair("待盘", SourceListFragment.getUnInstance()))

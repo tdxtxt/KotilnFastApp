@@ -17,9 +17,10 @@ class SourceListFragment : BaseFragment() {
             }
 
         }
+        recyclerView.isNestedScrollingEnabled = false
         recyclerView.setAdapter(adapter)
 
-        adapter.setNewInstance(mutableListOf("", "", "", "", ""))
+        adapter.setNewInstance(mutableListOf("", "", "", "", "", "", "", "", "", ""))
     }
 
     companion object{

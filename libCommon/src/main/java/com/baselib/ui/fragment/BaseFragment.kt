@@ -42,7 +42,7 @@ abstract class BaseFragment : RxFragment(), IView {
                 View.inflate(fragmentActivity,getLayoutId(),container)
         mRootView.isClickable = true //截断点击时间段扩散，防止多Fragment出现重叠以及点击穿透
 //        unbinder = ButterKnife.bind(this, mRootView)
-        return initStateView().apply { stateLayout = this }
+        return mRootView//initStateView().apply { stateLayout = this }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

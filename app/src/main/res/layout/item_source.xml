@@ -150,6 +150,7 @@
         android:paddingEnd="5dp"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
+        app:open_pressed_effect="true"
         app:border_color="@color/blue_2981ff"
         app:corner="40dp"
         app:textColor="@color/blue_2981ff"

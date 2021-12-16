@@ -11,7 +11,8 @@
     <com.donkingliang.consecutivescroller.ConsecutiveScrollerLayout
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         app:autoAdjustHeightAtBottomView="true"
         app:isPermanent="true"
         app:stickyOffset="0dp">
@@ -102,6 +103,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white_ffffff"
@@ -134,4 +136,47 @@
 
     </com.donkingliang.consecutivescroller.ConsecutiveScrollerLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
+        android:paddingStart="27dp"
+        android:paddingEnd="27dp"
+        android:orientation="horizontal">
+        <top.androidman.SuperButton
+            android:layout_gravity="right"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="44dp"
+            app:border_width="1dp"
+            app:open_pressed_effect="true"
+            app:border_color="@color/blue_2981ff"
+            app:corner="40dp"
+            app:textColor="@color/blue_2981ff"
+            app:background_normalColor="@color/white_ffffff"
+            app:textSize="@dimen/_16sp"
+            app:text="批量盘点"/>
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content"/>
+
+        <top.androidman.SuperButton
+            android:layout_gravity="right"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="44dp"
+            app:border_width="1dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            app:open_pressed_effect="true"
+            app:corner="40dp"
+            app:textColor="@color/white_ffffff"
+            app:background_normalColor="@color/blue_2981ff"
+            app:textSize="@dimen/_16sp"
+            app:text="结束盘点任务"/>
+    </LinearLayout>
 </LinearLayout>
