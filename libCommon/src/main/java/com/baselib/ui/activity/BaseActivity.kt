@@ -133,7 +133,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     }
 
     override fun hideProgressBar() {
-        TODO("Not yet implemented")
+        getProgressBar()?.hide()
     }
 
     override fun showProgressBar() {
