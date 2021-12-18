@@ -1,5 +1,10 @@
 package com.fastdev.ui.dialog
 
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.baselib.ui.dialog.BottomBaseDialog
@@ -20,14 +25,26 @@ class SourceFilterDialog constructor(activity: FragmentActivity) : BottomBaseDia
     var recyclerFoor: RecyclerView? = null
     var recyclerRoom: RecyclerView? = null
 
+    var includeFoorAll: View? = null
+    var includeRoomAll: View? = null
+
     var adapterDong: BaseQuickAdapter<Place, BaseViewHolder>? = null
     var adapterFoor: BaseQuickAdapter<Place, BaseViewHolder>? = null
     var adapterRoom: BaseQuickAdapter<Place, BaseViewHolder>? = null
+
+    var currentPostionDong = 0
+    var currentPostionFoor = 0
+    var currentPostionRoom = 0
 
 
     override fun getLayoutId() = R.layout.dialog_source_filter
 
     override fun onCreate(dialog: IBDialog) {
+        includeFoorAll = findViewById(R.id.include_foor_all)
+        includeRoomAll = findViewById(R.id.include_room_all)
+        listOf(includeFoorAll, includeRoomAll).forEach {
+            clickView(it)
+        }
         recyclerDong = findViewById(R.id.recyclerDong)
         recyclerFoor = findViewById(R.id.recyclerFoor)
         recyclerRoom = findViewById(R.id.recyclerRoom)
@@ -54,16 +71,18 @@ class SourceFilterDialog constructor(activity: FragmentActivity) : BottomBaseDia
         adapterDong = object : BaseQuickAdapter<Place, BaseViewHolder>(R.layout.item_dong){
             override fun convert(holder: BaseViewHolder, item: Place) {
                 holder.setText(R.id.tv_name, item.name)
-                holder.itemView.isSelected = item.checked
+                holder.itemView.isSelected = item.selected
             }
         }.apply {
             setOnItemClickListener { adapter, view, position ->
+                currentPostionDong = position
                 data.forEachIndexed { index, place ->
-                    data[index].checked = index == position
+                    data[index].selected = index == position
                 }
                 notifyDataSetChanged()
                 adapterFoor?.setNewInstance(getItem(position).childs)
-                adapterRoom?.setNewInstance(null)
+                val selectFoor = getItem(position).childs?.firstOrNull { it.selected }
+                adapterRoom?.setNewInstance(selectFoor?.childs)
             }
 
             recyclerDong?.adapter = this
@@ -71,10 +90,31 @@ class SourceFilterDialog constructor(activity: FragmentActivity) : BottomBaseDia
         adapterFoor = object : BaseQuickAdapter<Place, BaseViewHolder>(R.layout.item_foor) {
             override fun convert(holder: BaseViewHolder, item: Place) {
                 holder.setText(R.id.tv_name, item.name)
+                holder.getView<TextView>(R.id.tv_name).isSelected = item.selected
+                holder.getView<CheckBox>(R.id.checkbox).isChecked = item.checked
             }
         }.apply {
+            registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
+                override fun onChanged() {
+                    includeFoorAll?.visibility = if(data.isEmpty()) View.GONE else View.VISIBLE
+                    updateCheckAllFoor()
+                }
+            })
             setOnItemClickListener { adapter, view, position ->
+                currentPostionFoor = position
+                data.forEachIndexed { index, place ->
+                    data[index].selected = index == position
+                }
+                notifyDataSetChanged()
                 adapterRoom?.setNewInstance(getItem(position).childs)
+            }
+            addChildClickViewIds(R.id.imagecheckbox)
+            setOnItemChildClickListener { adapter, view, position ->
+                getItem(position).checked = !getItem(position).checked
+                notifyItemChanged(position)
+
+                getItem(position).childs?.forEach { it.checked = getItem(position).checked }
+                adapterRoom?.notifyDataSetChanged()
             }
             recyclerFoor?.adapter = this
         }
@@ -82,11 +122,81 @@ class SourceFilterDialog constructor(activity: FragmentActivity) : BottomBaseDia
         adapterRoom = object : BaseQuickAdapter<Place, BaseViewHolder>(R.layout.item_room) {
             override fun convert(holder: BaseViewHolder, item: Place) {
                 holder.setText(R.id.tv_name, item.name)
+                holder.getView<TextView>(R.id.tv_name).isSelected = item.checked
+                holder.getView<CheckBox>(R.id.checkbox).isChecked = item.checked
             }
         }.apply {
+            registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
+                override fun onChanged() {
+                    includeRoomAll?.visibility = if(data.isEmpty()) View.GONE else View.VISIBLE
+                    updateCheckAllRoom()
+                }
+            })
+            setOnItemClickListener { adapter, view, position ->
+                currentPostionRoom = position
+                getItem(position).checked = !getItem(position).checked
+                notifyItemChanged(position)
+
+                var isAllChecked = true
+                data.forEach { isAllChecked = isAllChecked && it.checked }
+                adapterFoor?.getItem(currentPostionFoor)?.checked = isAllChecked
+                adapterFoor?.notifyItemChanged(currentPostionFoor)
+
+                updateCheckAllFoor()
+            }
             recyclerRoom?.adapter = this
         }
 
         adapterDong?.setNewInstance(dongList)
     }
+
+    private fun setCheckBoxState(view: View?, check: Boolean){
+        view?.findViewById<CheckBox>(R.id.checkbox)?.isChecked = check
+    }
+
+    private fun updateCheckAllFoor(){
+        var isCheckAllFoor = true
+        adapterDong?.getItem(currentPostionDong)?.childs?.forEach { isCheckAllFoor = isCheckAllFoor and it.checked }
+        setCheckBoxState(includeFoorAll, isCheckAllFoor)
+    }
+
+    private fun updateCheckAllRoom(){
+        var isCheckAllRomm = true
+        adapterFoor?.getItem(currentPostionFoor)?.childs?.forEach { isCheckAllRomm = isCheckAllRomm and it.checked }
+        setCheckBoxState(includeRoomAll, isCheckAllRomm)
+    }
+
+    private fun clickView(view: View?){
+        view?.setOnClickListener {
+            when(it){
+                includeFoorAll ->{//foor全选
+                    it.findViewById<CheckBox>(R.id.checkbox).apply {
+                        isChecked = !isChecked
+                        adapterDong?.getItem(currentPostionDong)?.childs?.forEach {
+                            it.checked = isChecked
+                            it.childs?.forEach {
+                                it.checked = isChecked
+                            }
+                        }
+                        adapterFoor?.notifyDataSetChanged()
+                        adapterRoom?.notifyDataSetChanged()
+                    }
+                }
+                includeRoomAll ->{
+                    it.findViewById<CheckBox>(R.id.checkbox).apply {
+                        isChecked = !isChecked
+                        adapterFoor?.getItem(currentPostionFoor)?.apply {
+                            checked = isChecked
+                            childs?.forEach {
+                                it.checked = isChecked
+                            }
+                        }
+                        adapterFoor?.notifyDataSetChanged()
+                        adapterRoom?.notifyDataSetChanged()
+                    }
+                }
+            }
+        }
+    }
+
 }

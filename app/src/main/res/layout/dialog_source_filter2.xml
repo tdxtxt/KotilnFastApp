@@ -47,62 +47,14 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerDong"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.6"
-            android:background="@color/white_f3f5f7"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="4"
-            tools:listitem="@layout/item_dong" />
+        <cn.wzbos.android.widget.linked.LinkedView
+            android:id="@+id/linked"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <include
-                android:id="@+id/include_foor_all"
-                layout="@layout/layout_checked_all"
-                android:visibility="gone"
-                tools:visibility="visible"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerFoor"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white_ffffff"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="12"
-                tools:listitem="@layout/item_foor" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <include
-                android:id="@+id/include_room_all"
-                layout="@layout/layout_checked_all"
-                android:visibility="gone"
-                tools:visibility="visible"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerRoom"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white_ffffff"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="8"
-                tools:listitem="@layout/item_room" />
-        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+ <!--   <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white_ffffff"
@@ -146,6 +98,6 @@
             app:text="确定"
             app:textColor="@color/white_ffffff"
             app:textSize="@dimen/_16sp" />
-    </LinearLayout>
+    </LinearLayout>-->
 
 </com.baselib.ui.view.container.RatioRoundLinearLayout>

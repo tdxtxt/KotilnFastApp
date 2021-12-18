@@ -7,4 +7,4 @@
     android:textSize="@dimen/_14sp"
     android:textColor="@drawable/selector_filter_textcolor"
     android:padding="12dp"
-    android:background="@drawable/selector_dong_text_background"/>
+    android:background="@drawable/selector_place_item_background"/>

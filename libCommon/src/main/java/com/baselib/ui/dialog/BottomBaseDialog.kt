@@ -85,7 +85,7 @@ abstract class BottomBaseDialog(val context: FragmentActivity) : IBDialog {
         return bindAct!!
     }
 
-    override fun getRootView() = dialog.rootView
+    override fun getRootView() = dialog
 
     var mCancelListener: (() -> Unit)? = null
     override fun setCancelListener(cancelListener: () -> Unit): BottomBaseDialog {

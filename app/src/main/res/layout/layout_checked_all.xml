@@ -11,19 +11,27 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="101房间"
+        android:text="全选"
         android:paddingStart="16dp"
         android:textColor="@drawable/selector_filter_textcolor"
         android:textSize="@dimen/_14sp" />
 
-    <CheckBox
-        android:id="@+id/checkbox"
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:clickable="false"
-        android:button="@drawable/checkbox"/>
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:button="@drawable/checkbox"
+            android:enabled="false" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:background="@color/transparent"/>
+    </FrameLayout>
 
 </LinearLayout>

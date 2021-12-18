@@ -18,6 +18,7 @@ class Place {
 
     constructor(id: Int, name: String?, childs: MutableList<Place>) : this(false, id, null,  name, childs.apply { forEach { it.parentId = id } })
 
+    var selected: Boolean = false
     var checked: Boolean = false
     var id: Int = 0
     var parentId: Int? = null
