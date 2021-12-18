@@ -154,9 +154,27 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
     public List<List<IPickerData>> getSelectValues() {
         List<List<IPickerData>> result = new ArrayList<>();
         for (int i = 0; i < getPickerViewCount(); i++) {
-            PickerView pickerView = getPickerView(i);
-            if (pickerView.getVisibility() == VISIBLE) {
-                result.add(pickerView.getSelectedValues());
+//            PickerView pickerView = getPickerView(i);
+//            if (pickerView.getVisibility() == VISIBLE) {
+//                result.add(pickerView.getSelectedValues());
+//            }
+            List<IPickerData> levelResult = querySelectDataByLevelIndex(data, i + 1);
+            if(levelResult != null && levelResult.size() > 0) result.add(levelResult);
+        }
+        return result;
+    }
+
+    private List<IPickerData> querySelectDataByLevelIndex(List<? extends IPickerData> data, int level){
+        if(data == null) return null;
+        if(level < 0) return null;
+        List<IPickerData> result = new ArrayList<>();
+        for(IPickerData item : data){
+            if(level == 1){
+                if(item.isCheckedItem())
+                    result.add(item);
+            }else{
+                List<IPickerData> childSelects = querySelectDataByLevelIndex(item.nodes(), level -1);
+                if(childSelects != null && childSelects.size() > 0) result.addAll(childSelects);
             }
         }
         return result;
