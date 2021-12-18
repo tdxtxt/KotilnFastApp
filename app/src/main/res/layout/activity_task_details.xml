@@ -141,9 +141,11 @@
         android:layout_height="wrap_content"
         android:paddingTop="7dp"
         android:paddingBottom="7dp"
-        android:paddingStart="27dp"
-        android:paddingEnd="27dp"
         android:orientation="horizontal">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
         <top.androidman.SuperButton
             android:layout_gravity="right"
             android:layout_width="0dp"
@@ -159,8 +161,9 @@
             app:text="批量盘点"/>
 
         <Space
-            android:layout_width="16dp"
-            android:layout_height="wrap_content"/>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
 
         <top.androidman.SuperButton
             android:layout_gravity="right"
@@ -178,5 +181,10 @@
             app:background_normalColor="@color/blue_2981ff"
             app:textSize="@dimen/_16sp"
             app:text="结束盘点任务"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
     </LinearLayout>
 </LinearLayout>

@@ -387,7 +387,6 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
             }
         }
         return -1;
-
     }
 
     @Override
@@ -402,6 +401,66 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
                 //auto create next level PickerView
                 int nextPosition = level + 1;
                 if (getPickerViewCount() > nextPosition) {
+                    for(int i = nextPosition ; i < getPickerViewCount(); i++){
+                        if(i == nextPosition){
+                            getPickerView(i).setVisibility(VISIBLE);
+                            getPickerView(i).setData(data.nodes());
+                        }
+                    }
+
+                } else {
+                    createNextPickerView(pickerView, level, nextPosition, data.nodes());
+                }
+            }
+
+            //Log.d(TAG, "MaxVisibleCount:" + maxVisibleCount);
+            for (int i = level + 1; i < getPickerViewCount(); i++) {
+                boolean val = (i < maxVisibleCount);
+                //Log.d(TAG, "level:" + i + " = " + val);
+                getPickerView(i).setVisibility(val ? VISIBLE : GONE);
+            }
+        }
+
+
+        if (getPickerView(level).isMultiSelect) {
+            //如果当前列表是多选并且上一级列表需要显示数量则需要刷新上级列表数据
+            if (level - 1 > 0 && getPickerView(level - 1).isShowPickCount)
+                getPickerView(level - 1).refreshPickCount();
+        } else {
+            //如果当前列表是单选并且下一级列表是多选则需要刷新列表计数
+            if (level + 1 < getPickerViewCount() && getPickerView(level + 1).isMultiSelect) {
+                pickerView.refreshPickCount();
+            }
+        }
+
+//        if (onPickerViewItemClickedListener != null)
+//            onPickerViewItemClickedListener.onPickerViewItemClicked(pickerView, level, data);
+
+        //如果确认按钮不可见并且所有选择已经选中则触发选择完成事件
+        if (btnConfirm.getVisibility() != VISIBLE && isAllCheckedOver()) {
+            onPicked();
+        }
+    }
+
+    @Override
+    public void onItemCheckBoxChicked(PickerView pickerView, int position, IPickerData data) {
+        int level = getPickerViewPosition(pickerView);
+
+        if (isLinkedMode) {
+            //每次选择操作后计算后续的列表数量
+            int maxVisibleCount = level + 1;
+            if (data.nodes() != null) {
+                maxVisibleCount += getNextLevelCount(data.nodes());
+                //auto create next level PickerView
+                int nextPosition = level + 1;
+                if (getPickerViewCount() > nextPosition) {
+                    for(int i = nextPosition ; i < getPickerViewCount(); i++){
+                        if(i == nextPosition){
+                            getPickerView(i).setVisibility(VISIBLE);
+                            getPickerView(i).setData(data.nodes());
+                        }
+                    }
+
                     getPickerView(nextPosition).setVisibility(VISIBLE);
                     getPickerView(nextPosition).setData(data.nodes());
                 } else {
@@ -437,4 +496,6 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
             onPicked();
         }
     }
+
+
 }

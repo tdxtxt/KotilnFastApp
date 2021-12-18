@@ -8,7 +8,6 @@ import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.fragment.SourceListFragment
 import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
 import com.fastdev.ui.dialog.NewSourceFilterDialog
-import com.fastdev.ui.dialog.SourceFilterDialog
 import kotlinx.android.synthetic.main.activity_task_details.*
 
 class TaskDetailsActivity : CommToolBarActivity() {

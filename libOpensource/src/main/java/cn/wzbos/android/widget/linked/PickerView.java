@@ -74,6 +74,7 @@ public class PickerView extends RecyclerView {
 
     public interface OnItemClickedListener {
         void onItemClicked(PickerView pickerView, int position, IPickerData data);
+        void onItemCheckBoxChicked(PickerView pickerView, int position, IPickerData data);
     }
 
     public void setOnItemClickedListener(OnItemClickedListener onItemClickedListener) {
@@ -375,20 +376,6 @@ public class PickerView extends RecyclerView {
         }
         return false;
     }
-    /**
-     * 是否选中
-     */
-    /*@Override
-    public boolean isSelected() {
-        if (data != null) {
-            for (IPickerData d : data) {
-                if (d.isCheckedItem()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }*/
 
     public boolean isAllChecked(){
         if (data != null) {
@@ -398,7 +385,7 @@ public class PickerView extends RecyclerView {
                 }
             }
         }
-        return false;
+        return true;
     }
 
     public void setAllChecked(boolean checked){
@@ -408,6 +395,13 @@ public class PickerView extends RecyclerView {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    public void setCurrentPostionChecked(boolean checked){
+        if(data != null && mLastClickPosition > -1){
+            data.get(mLastClickPosition).setCheckedItem(checked);
+            adapter.notifyItemChanged(mLastClickPosition);
+        }
     }
 
 
@@ -469,12 +463,15 @@ public class PickerView extends RecyclerView {
      */
     class PickerViewHolder extends ViewHolder implements OnClickListener {
         private CheckedTextView tvName;
+        private View checkBox;
         private IPickerData bean;
 
         PickerViewHolder(View itemView) {
             super(itemView);
             this.tvName = itemView.findViewById(R.id.tvName);
+            this.checkBox = itemView.findViewById(R.id.checkbox);
             itemView.setOnClickListener(this);
+            checkBox.setOnClickListener(this);
 
         }
 
@@ -551,24 +548,29 @@ public class PickerView extends RecyclerView {
             data.get(position).setSelectItem(true);
             adapter.notifyItemChanged(position);
 
-            if (isMultiSelect) {
-                boolean val = !bean.isCheckedItem();
-                this.bean.setCheckedItem(val);
-                this.tvName.setChecked(val);
-            } else {
-                if (mLastPosition > -1) {
-                    //Log.d(TAG, "Picker:" + mLastPosition + " = false");
-                    data.get(mLastPosition).setCheckedItem(false);
-                    adapter.notifyItemChanged(mLastPosition);
+            if(v.getId() == R.id.itemview_root){
+                if (onItemClickedListener != null)
+                    onItemClickedListener.onItemClicked(PickerView.this, position, bean);
+            }else if(v.getId() == R.id.checkbox){
+                if (isMultiSelect) {
+                    boolean val = !bean.isCheckedItem();
+                    this.bean.setCheckedItem(val);
+                    this.tvName.setChecked(val);
+                } else {
+                    if (mLastPosition > -1) {
+                        //Log.d(TAG, "Picker:" + mLastPosition + " = false");
+                        data.get(mLastPosition).setCheckedItem(false);
+                        adapter.notifyItemChanged(mLastPosition);
+                    }
+                    //Log.d(TAG, "Picker:" + getAdapterPosition() + " = true");
+                    this.bean.setCheckedItem(true);
+                    this.tvName.setChecked(true);
+                    mLastPosition = position;
                 }
-                //Log.d(TAG, "Picker:" + getAdapterPosition() + " = true");
-                this.bean.setCheckedItem(true);
-                this.tvName.setChecked(true);
-                mLastPosition = position;
-            }
 
-            if (onItemClickedListener != null)
-                onItemClickedListener.onItemClicked(PickerView.this, position, bean);
+                if (onItemClickedListener != null)
+                    onItemClickedListener.onItemCheckBoxChicked(PickerView.this, position, bean);
+            }
         }
 
         private int getNextCount() {

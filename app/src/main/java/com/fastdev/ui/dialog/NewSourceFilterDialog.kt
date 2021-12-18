@@ -42,7 +42,7 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity) : BottomBase
 
         val dongList = mutableListOf(PlaceBean(1, "1栋", foorList1), PlaceBean(2, "2栋", foorList2), PlaceBean(1, "3栋", foorList3))
 
-        linkedView?.setLinkedMode(true)
+        linkedView?.setLinkedMode(false)
         linkedView?.setDivider(true)
         linkedView?.setOnCreatePickerViewListener { prevView, prevPosition, nextView, nextPosition ->
             nextView.setShowDivider(true)
@@ -58,8 +58,7 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity) : BottomBase
                     nextView.setWeight(1f)
                     nextView.setMultiSelect(true)
                     nextView.setShowIcon(true)
-                    nextView.setShowPickCount(true)
-                    nextView.setBackgroundResource(R.color.white_f3f5f7)
+                    nextView.setBackgroundResource(R.color.white_ffffff)
                 }
                 2 -> {
                     nextView.setWidth(0)
@@ -74,14 +73,20 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity) : BottomBase
             ToastHelper.showToast("position = $position; data = ${data.displayName}")
             when(position){
                 0 -> {
+                    val optionRoom = linkedView?.getPickerView(2)
+                    val optionFoor = linkedView?.getPickerView(1)
 
+                    optionFoor?.refreshPickCount()
+                    optionRoom?.refreshPickCount()
                 }
                 1 -> {//二级列表（楼层）
                     val optionRoom = linkedView?.getPickerView(2)
                     optionRoom?.setAllChecked(data.isCheckedItem)
                 }
                 2 -> {//三级列表（房间）
-
+                    val optionRoom = linkedView?.getPickerView(2)
+                    val optionFoor = linkedView?.getPickerView(1)
+                    optionFoor?.setCurrentPostionChecked(optionRoom?.isAllChecked?: true)
                 }
             }
         }

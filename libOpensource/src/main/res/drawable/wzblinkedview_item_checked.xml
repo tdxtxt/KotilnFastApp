@@ -3,5 +3,7 @@
     <item android:state_checked="true">
             <bitmap android:src="@drawable/wzblinkedview_filter_checked" android:tint="@color/wzblinkedview_colorAccent" />
     </item>
-    <item android:drawable="@drawable/wzblinkedview_filter_unchecked" android:state_checked="false" />
+    <item android:state_checked="false" >
+        <bitmap android:src="@drawable/wzblinkedview_filter_unchecked" android:tint="@color/wzblinkedview_colorAccent" />
+    </item>
 </selector>
