@@ -280,10 +280,13 @@ public class PickerView extends RecyclerView {
     public PickerView setData(List<? extends IPickerData> data) {
         this.data = data;
         this.mLastPosition = -1;
+        this.mLastClickPosition = -1;
         if (data != null) {
             for (int i = 0; i < this.data.size(); i++) {
                 IPickerData d = this.data.get(i);
-
+                if(d.isSelectedItem()){
+                    mLastClickPosition = i;
+                }
                 if (d.isCheckedItem()) {
                     mLastPosition = i;
                 }
@@ -507,6 +510,7 @@ public class PickerView extends RecyclerView {
             this.itemView.setSelected(bean.isSelectedItem());
 
             if (isShowIcon) {
+                checkBox.setVisibility(View.VISIBLE);
                 if (stateIconResId != null) {
                     tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, stateIconResId, 0);
                 } else if (checkedIconResId != null && unCheckedIconResId != null) {
@@ -518,6 +522,7 @@ public class PickerView extends RecyclerView {
                     tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 }
             } else {
+                checkBox.setVisibility(View.GONE);
                 tvName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
 

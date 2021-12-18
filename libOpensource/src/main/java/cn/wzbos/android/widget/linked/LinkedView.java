@@ -2,6 +2,7 @@ package cn.wzbos.android.widget.linked;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -356,7 +357,7 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
         if (nodes == null)
             return level;
         for (IPickerData pickerData : nodes) {
-            if (pickerData.isCheckedItem()) {
+            if (pickerData.isSelectedItem()) {
                 if (pickerData.nodes() != null) {
                     return getCount(pickerData.nodes(), level + 1);
                 } else {
@@ -365,6 +366,24 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
             }
         }
         return level;
+    }
+
+    private List<? extends  IPickerData> queryDataByLevelIndex(IPickerData data, int index){
+        if(data == null) return null;
+        if(index <= 1){
+            return data.nodes();
+        }
+        List<? extends IPickerData> childNodes = data.nodes();
+        if(childNodes == null || childNodes.size() == 0){
+            return null;
+        }
+
+        for(int i = 0; i < childNodes.size(); i ++){
+            if(childNodes.get(i).isSelectedItem()){
+                return queryDataByLevelIndex(childNodes.get(i), index - 1);
+            }
+        }
+        return null;
     }
 
     /**
@@ -401,23 +420,19 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
                 //auto create next level PickerView
                 int nextPosition = level + 1;
                 if (getPickerViewCount() > nextPosition) {
-                    for(int i = nextPosition ; i < getPickerViewCount(); i++){
-                        if(i == nextPosition){
-                            getPickerView(i).setVisibility(VISIBLE);
-                            getPickerView(i).setData(data.nodes());
-                        }
-                    }
-
+                    getPickerView(nextPosition).setVisibility(VISIBLE);
+                    getPickerView(nextPosition).setData(data.nodes());
                 } else {
                     createNextPickerView(pickerView, level, nextPosition, data.nodes());
                 }
             }
 
-            //Log.d(TAG, "MaxVisibleCount:" + maxVisibleCount);
+            Log.d(TAG, "MaxVisibleCount:" + maxVisibleCount);
             for (int i = level + 1; i < getPickerViewCount(); i++) {
                 boolean val = (i < maxVisibleCount);
-                //Log.d(TAG, "level:" + i + " = " + val);
+                Log.d(TAG, "level:" + i + " = " + val);
                 getPickerView(i).setVisibility(val ? VISIBLE : GONE);
+                if(i > level + 1) getPickerView(i).setData(queryDataByLevelIndex(data, i));
             }
         }
 
@@ -437,9 +452,9 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
 //            onPickerViewItemClickedListener.onPickerViewItemClicked(pickerView, level, data);
 
         //如果确认按钮不可见并且所有选择已经选中则触发选择完成事件
-        if (btnConfirm.getVisibility() != VISIBLE && isAllCheckedOver()) {
-            onPicked();
-        }
+//        if (btnConfirm.getVisibility() != VISIBLE && isAllCheckedOver()) {
+//            onPicked();
+//        }
     }
 
     @Override
@@ -454,13 +469,6 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
                 //auto create next level PickerView
                 int nextPosition = level + 1;
                 if (getPickerViewCount() > nextPosition) {
-                    for(int i = nextPosition ; i < getPickerViewCount(); i++){
-                        if(i == nextPosition){
-                            getPickerView(i).setVisibility(VISIBLE);
-                            getPickerView(i).setData(data.nodes());
-                        }
-                    }
-
                     getPickerView(nextPosition).setVisibility(VISIBLE);
                     getPickerView(nextPosition).setData(data.nodes());
                 } else {
@@ -473,6 +481,7 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
                 boolean val = (i < maxVisibleCount);
                 //Log.d(TAG, "level:" + i + " = " + val);
                 getPickerView(i).setVisibility(val ? VISIBLE : GONE);
+                if(i > level + 1) getPickerView(i).setData(queryDataByLevelIndex(data, i));
             }
         }
 
@@ -496,6 +505,4 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
             onPicked();
         }
     }
-
-
 }

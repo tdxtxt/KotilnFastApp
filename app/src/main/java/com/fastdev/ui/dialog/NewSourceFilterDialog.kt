@@ -42,7 +42,7 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity) : BottomBase
 
         val dongList = mutableListOf(PlaceBean(1, "1栋", foorList1), PlaceBean(2, "2栋", foorList2), PlaceBean(1, "3栋", foorList3))
 
-        linkedView?.setLinkedMode(false)
+        linkedView?.setLinkedMode(true)
         linkedView?.setDivider(true)
         linkedView?.setOnCreatePickerViewListener { prevView, prevPosition, nextView, nextPosition ->
             nextView.setShowDivider(true)
@@ -50,7 +50,7 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity) : BottomBase
                 0 -> {
                     nextView.setWidth(0)
                     nextView.setWeight(0.6f)
-                    nextView.setMultiSelect(false)
+                    nextView.setMultiSelect(true)
                     nextView.setBackgroundResource(R.color.white_f3f5f7)
                 }
                 1 -> {
