@@ -59,7 +59,7 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity) : BottomBase
                     nextView.setMultiSelect(true)
                     nextView.setShowIcon(true)
                     nextView.setShowPickCount(true)
-                    nextView.setBackgroundResource(R.color.white_ffffff)
+                    nextView.setBackgroundResource(R.color.white_f3f5f7)
                 }
                 2 -> {
                     nextView.setWidth(0)

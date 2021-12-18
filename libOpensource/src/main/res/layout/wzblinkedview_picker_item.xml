@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/wzblinkedview_item_background">
 
     <CheckedTextView
         android:id="@+id/tvName"
@@ -11,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:background="@drawable/wzblinkedview_item_background"
         android:checked="true"
         android:drawableEnd="@drawable/wzblinkedview_item_checked"
         android:padding="10dp"

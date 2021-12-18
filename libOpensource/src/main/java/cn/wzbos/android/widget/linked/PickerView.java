@@ -461,6 +461,7 @@ public class PickerView extends RecyclerView {
     }
 
     int mLastPosition = -1;
+    int mLastClickPosition = -1;//上一次点击的位置
 
     /**
      * Picker Item ViewHolder
@@ -506,6 +507,7 @@ public class PickerView extends RecyclerView {
             }
 
             this.tvName.setChecked(bean.isCheckedItem());
+            this.itemView.setSelected(bean.isSelectedItem());
 
             if (isShowIcon) {
                 if (stateIconResId != null) {
@@ -541,6 +543,14 @@ public class PickerView extends RecyclerView {
 
         public void onClick(View v) {
             int position = getAdapterPosition();
+            if(mLastClickPosition > -1){
+                data.get(mLastClickPosition).setSelectItem(false);
+                adapter.notifyItemChanged(mLastClickPosition);
+            }
+            mLastClickPosition = position;
+            data.get(position).setSelectItem(true);
+            adapter.notifyItemChanged(position);
+
             if (isMultiSelect) {
                 boolean val = !bean.isCheckedItem();
                 this.bean.setCheckedItem(val);
@@ -556,7 +566,6 @@ public class PickerView extends RecyclerView {
                 this.tvName.setChecked(true);
                 mLastPosition = position;
             }
-
 
             if (onItemClickedListener != null)
                 onItemClickedListener.onItemClicked(PickerView.this, position, bean);
