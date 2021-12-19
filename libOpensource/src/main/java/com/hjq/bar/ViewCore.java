@@ -1,5 +1,6 @@
 package com.hjq.bar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -32,8 +33,10 @@ final class ViewCore {
         return lineView;
     }
 
+    @SuppressLint("ResourceType")
     static TextView newLeftView(Context context) {
         TextView leftView = new TextView(context);
+        leftView.setId(0x10101);
         leftView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         leftView.setGravity(Gravity.CENTER_VERTICAL);
         leftView.setFocusable(true);
@@ -43,8 +46,10 @@ final class ViewCore {
         return leftView;
     }
 
+    @SuppressLint("ResourceType")
     static TextView newTitleView(Context context) {
         TextView titleView = new TextView(context);
+        titleView.setId(0x10102);
         titleView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1));
         titleView.setGravity(Gravity.CENTER);
         titleView.setFocusable(true);
@@ -62,8 +67,10 @@ final class ViewCore {
         return titleView;
     }
 
+    @SuppressLint("ResourceType")
     static TextView newRightView(Context context) {
         TextView rightView = new TextView(context);
+        rightView.setId(0x10103);
         rightView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         rightView.setGravity(Gravity.CENTER_VERTICAL);
         rightView.setFocusable(true);

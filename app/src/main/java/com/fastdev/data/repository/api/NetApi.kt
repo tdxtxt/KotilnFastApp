@@ -29,8 +29,8 @@ import retrofit2.http.*
     fun load(@Query("id") id:Int):Observable<NetOuter<Orgs>>
  */
 open interface NetApi {
-    @GET("wxarticle/chapters/json")
-    fun login(): Flowable<ResponseBody<String>>
+    @POST("api/public/login.do")
+    fun login(@Body params: Map<String, Any>): Flowable<ResponseBody<String>>
 
     @FormUrlEncoded
     @POST("api/xxxyyy")

@@ -3,6 +3,7 @@ package com.fastdev.core
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
+import com.baselib.helper.ToastHelper
 import com.seuic.uhf.UHFService
 
 /**
@@ -10,19 +11,21 @@ import com.seuic.uhf.UHFService
  * @author tangdexiang
  * @since 2021/12/12
  */
-abstract class MonitorProtocol constructor(val looper: Looper) {
+abstract class MonitorProtocol constructor(val looper: Looper?) {
     companion object{
-        val mDevice: UHFService? = null//UHFService.getInstance()
-        private val monitorThread = HandlerThread("monitor_thread")
-        private val readMonitor = ReadTagMonitor(monitorThread.looper)
+        private var monitorThread: HandlerThread? = null
+        private var readMonitor: MonitorProtocol? = null
 
         fun startReadMonitor(){
-            //开始寻卡是否清空之前EPC
-            mDevice?.setParameters(UHFService.PARAMETER_CLEAR_EPCLIST_WHEN_START_INVENTORY, 1)
-            readMonitor.start()
+            if(monitorThread != null) stopReadMonitor()
+            monitorThread = HandlerThread("monitor_thread")
+            monitorThread?.start()
+            readMonitor = ReadTagMonitor(monitorThread?.looper)
+            readMonitor?.start()
         }
-        fun stopAllMonitor(){
-            monitorThread.quitSafely()
+        fun stopReadMonitor(){
+            readMonitor?.close()
+            monitorThread?.quitSafely()
         }
 
     }
@@ -38,7 +41,6 @@ abstract class MonitorProtocol constructor(val looper: Looper) {
 
     open fun start(){
         if(refreshHandler == null) refreshHandler = Handler(looper)
-        close()
         next()
     }
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="config_params">
+        <item>10W</item>
+        <item>20W</item>
+        <item>30W</item>
+    </string-array>
+</resources>

@@ -14,11 +14,15 @@ import javax.inject.Inject
  * @author tangdexiang
  * @since 2021/4/7
  */
-class TestRepository @Inject constructor() : BaseRepository() {
+class NetApiRepository @Inject constructor() : BaseRepository() {
     private val netApi: NetApi = ApiClient.getNetApi()
 
-    fun login(): Flowable<ResponseBody<String>>{
-        return netApi.login()
+    fun login(accout: String, pwd: String): Flowable<ResponseBody<String>>{
+        return netApi.login(HashMap<String, Any>().apply {
+            put("app_id", "pd")
+            put("passport", accout)
+            put("pwd", pwd)
+        })
     }
 
     fun saveAssets(bean: Source){

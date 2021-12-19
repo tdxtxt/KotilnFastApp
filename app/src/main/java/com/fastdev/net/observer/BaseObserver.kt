@@ -1,15 +1,16 @@
-package com.fastdev.net.config
+package com.fastdev.net.observer
 
 import com.baselib.net.NetMgr
 import com.fastdev.data.ResponseBody
 import io.reactivex.observers.DisposableObserver
+import io.reactivex.subscribers.DisposableSubscriber
 
 /**
  * 功能描述: 统一解析数据报文
  * @author tangdexiang
  * @since 2021/4/7
  */
-abstract class BaseObserver<T>: DisposableObserver<ResponseBody<T>>() {
+abstract class BaseObserver<T>: DisposableSubscriber<ResponseBody<T>>() {
     abstract fun onSuccess(response: ResponseBody<T>?)
 
     abstract fun onFailure(response: ResponseBody<T>?, errorMsg: String?, e: Throwable?)

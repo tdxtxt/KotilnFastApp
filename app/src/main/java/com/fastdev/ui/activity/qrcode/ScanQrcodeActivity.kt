@@ -12,6 +12,7 @@ import android.os.Vibrator
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.baselib.app.ApplicationDelegate
@@ -20,6 +21,7 @@ import com.baselib.helper.ScreenHelper
 import com.baselib.helper.StatusBarHelper
 import com.baselib.ui.activity.BaseActivity
 import com.fastdev.ui.R
+import com.fastdev.ui.dialog.QrcodeInputDialog
 import kotlinx.android.synthetic.main.activity_scan_qrcode.*
 
 /**
@@ -60,19 +62,24 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
                 }, 200)
             }
         }
-        listOf(view_flashlight).forEach {
+        listOf(view_flashlight, view_input_qrcode).forEach {
             it.setOnClickListener {
                 when(it){
                     view_flashlight -> if (zxingview.isFlashlight) {
                         zxingview.closeFlashlight()
-                        tv_flashlight.text = "轻触点亮"
-                        iv_flashlight.setImageResource(R.mipmap.icon_flashlight_off)
-                        view_flashlight.visibility = View.GONE
+                        tv_flashlight.text = "打开照明"
+                        tv_flashlight.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.white_ffffff))
+                        iv_flashlight.setImageResource(R.mipmap.icon_flashlight_on)
+                        view_flashlight.setBackgroundResource(R.drawable.shape_circle_scanqrcode_black)
                     } else {
                         zxingview.openFlashlight()
-                        tv_flashlight.text = "轻触关闭"
-                        iv_flashlight.setImageResource(R.mipmap.icon_flashlight_on)
-                        view_flashlight.visibility = View.VISIBLE
+                        tv_flashlight.text = "关闭照明"
+                        tv_flashlight.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.black_333333))
+                        iv_flashlight.setImageResource(R.mipmap.icon_flashlight_off)
+                        view_flashlight.setBackgroundResource(R.drawable.shape_circle_scanqrcode_white)
+                    }
+                    view_input_qrcode -> {
+                        QrcodeInputDialog(fragmentActivity).show()
                     }
                 }
             }
@@ -132,21 +139,21 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
     }
 
     override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {
-        if(isDark){
-            if(view_flashlight.visibility == View.VISIBLE) return
-            view_flashlight.visibility = View.VISIBLE
-            flashingAnimation(iv_flashlight)
-        }else{
-            iv_flashlight.clearAnimation()
-            if(zxingview.isFlashlight){
-                view_flashlight.visibility = View.VISIBLE
-            }else{
-                view_flashlight.visibility = View.GONE
-            }
-        }
+//        if(isDark){
+//            if(view_flashlight.visibility == View.VISIBLE) return
+//            view_flashlight.visibility = View.VISIBLE
+//            flashingAnimation(iv_flashlight)
+//        }else{
+//            iv_flashlight.clearAnimation()
+//            if(zxingview.isFlashlight){
+//                view_flashlight.visibility = View.VISIBLE
+//            }else{
+//                view_flashlight.visibility = View.GONE
+//            }
+//        }
     }
 
-    private fun flashingAnimation(view: View) {
+   /* private fun flashingAnimation(view: View) {
         view.apply {
             startAnimation(AlphaAnimation(0.1f, 1.0f).apply {
                 duration = 1000
@@ -159,7 +166,7 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
                 })
             })
         }
-    }
+    }*/
 
     override fun onScanQRCodeOpenCameraError() {
          RequestPermissionHelper.requestCameraPermission(this){

@@ -109,6 +109,11 @@
                 android:textSize="@dimen/_12sp" />
         </LinearLayout>
 
+        <View
+            style="@style/line_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -230,11 +235,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-        <View
-            style="@style/line_horizontal"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp" />
 
         <View
             style="@style/line_horizontal"

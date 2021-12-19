@@ -6,6 +6,7 @@ import android.media.SoundPool
 import android.os.Build
 import android.os.Looper
 import com.baselib.app.ApplicationDelegate
+import com.baselib.helper.LogA
 import com.fastdev.app.CustomApp
 import com.fastdev.ui.R
 import com.seuic.uhf.EPC
@@ -15,27 +16,28 @@ import com.seuic.uhf.EPC
  * @author tangdexiang
  * @since 2021/12/12
  */
-class ReadTagMonitor(looper: Looper) : MonitorProtocol(looper) {
+class ReadTagMonitor(looper: Looper?) : MonitorProtocol(looper) {
     var soundPool: SoundPool? = null
     var localData: MutableList<EPC>? = null
 
     override fun task() {
         //读取任务
-        val data = mDevice?.getTagIDs()
+        val data = UHFSdk.read()
         if(localData?.size != data?.size) playSound()
         localData = data
+        LogA.i("readTag： $data")
 
         //将数据传递到主线程之中
     }
 
     override fun start() {
         super.start()
-        mDevice?.inventoryStart()
+        UHFSdk.start()
     }
 
     override fun close() {
+        UHFSdk.stop()
         super.close()
-        mDevice?.inventoryStop()
     }
 
     private fun playSound(){
