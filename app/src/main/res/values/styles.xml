@@ -24,6 +24,22 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!--<style name="CommButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/white_ffffff</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:padding">11dp</item>
+        <item name="android:enabled">true</item>
+        <item name="btnSolidColor">@color/blue_064fc3_dark</item>
+        <item name="btnPressedRatio">1.5</item>
+        <item name="btnRadius">50dp</item>
+    </style>-->
+
     <style name="CommButtonStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dp</item>
