@@ -1,7 +1,7 @@
 package com.fastdev.helper
 
-import android.text.TextUtils
 import com.baselib.helper.CommonCacheHelper
+import com.fastdev.data.response.LoginEntity
 
 /**
  * 功能描述:
@@ -12,6 +12,10 @@ import com.baselib.helper.CommonCacheHelper
 fun CommonCacheHelper.getGuideVersion(): String? = CommonCacheHelper.getString("guideVersion", "")
 fun CommonCacheHelper.putGuideVersion(versionCode: String) = CommonCacheHelper.putString("guideVersion", versionCode)
 
-fun CommonCacheHelper.isLogin(): Boolean = !TextUtils.isEmpty(getUserId())
-fun CommonCacheHelper.putUserId(userId: String) = CommonCacheHelper.putString("userId", userId)
-fun CommonCacheHelper.getUserId() = CommonCacheHelper.getString("userId", "")
+fun CommonCacheHelper.isLogin(): Boolean = getLogin() != null
+fun CommonCacheHelper.getAccountNo() = getLogin()?.passport
+fun CommonCacheHelper.getToken() = getLogin()?.token?: ""
+
+fun CommonCacheHelper.saveLogin(data: LoginEntity) = CommonCacheHelper.put<LoginEntity>("loginResult", data)
+fun CommonCacheHelper.getLogin(): LoginEntity? = CommonCacheHelper.getParcelable("loginResult", LoginEntity::class.java)
+fun CommonCacheHelper.clearLogin() = CommonCacheHelper.remove("loginResult")

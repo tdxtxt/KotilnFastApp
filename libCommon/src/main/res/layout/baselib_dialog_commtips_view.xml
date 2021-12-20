@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.baselib.ui.view.container.RatioRoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_ffffff"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:rRadius="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -91,4 +93,4 @@
             tools:visibility="visible" />
     </LinearLayout>
 
-</LinearLayout>
+</com.baselib.ui.view.container.RatioRoundLinearLayout>

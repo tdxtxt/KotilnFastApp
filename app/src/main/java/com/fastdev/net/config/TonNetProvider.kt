@@ -1,11 +1,13 @@
 package com.fastdev.net.config
 
+import com.baselib.helper.CommonCacheHelper
 import com.baselib.net.okhttpconfig.BaseNetProvider
+import com.fastdev.helper.getToken
 import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
-import java.util.HashMap
+import kotlin.jvm.Throws
 
 /**
  * 创建时间： 2020/5/27
@@ -18,20 +20,18 @@ class TonNetProvider : BaseNetProvider() {
     }
 
     internal class ParamsInterceptor : Interceptor {
-        var params: Map<String, String>? = HashMap()
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response {
             val oldRequest = chain.request()
-            if (!(params != null && params!!.isNotEmpty())) return chain.proceed(oldRequest)
             val newRequestBuilder = oldRequest.newBuilder()
             if ("GET".equals(oldRequest.method(), ignoreCase = true)) {
                 val httpUrlBuilder = oldRequest.url().newBuilder()
-                httpUrlBuilder.addQueryParameter("key", "value")
+//                httpUrlBuilder.addQueryParameter("token", CommonCacheHelper.getToken())
 
                 newRequestBuilder.url(httpUrlBuilder.build())
             } else {
                 val formBodyBuilder = FormBody.Builder()
-                formBodyBuilder.add("key", "value")
+//                formBodyBuilder.add("token", CommonCacheHelper.getToken())
                 val oldFormBody = oldRequest.body() as FormBody?
                 if (oldFormBody != null && oldFormBody.size() > 0) {
                     for (i in 0 until oldFormBody.size()) {
@@ -52,7 +52,7 @@ class TonNetProvider : BaseNetProvider() {
         override fun intercept(chain: Interceptor.Chain): Response {
             val oldRequest = chain.request()
             val newRequestBuilder = oldRequest.newBuilder()
-            newRequestBuilder.addHeader("key", "value")
+            newRequestBuilder.addHeader("token", CommonCacheHelper.getToken())
             return chain.proceed(newRequestBuilder.build())
         }
     }

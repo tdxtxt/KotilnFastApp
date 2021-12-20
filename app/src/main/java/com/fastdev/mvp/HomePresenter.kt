@@ -23,8 +23,5 @@ class HomePresenter @Inject constructor(val repository: NetApiRepository) : AbsP
     }
 
     fun getData(){
-        repository.saveAssets(Source().apply { name = "1111" })
-        LogA.i(repository.query()?.name)
-        ToastHelper.showToast(repository.query()?.name)
     }
 }

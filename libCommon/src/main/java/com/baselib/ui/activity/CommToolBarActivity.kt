@@ -27,9 +27,10 @@ abstract class CommToolBarActivity : BaseActivity() {
     private fun initTitleBar() {
         getTitleBar()?.setOnTitleBarListener(object : OnTitleBarListener {
             override fun onLeftClick(v: View) {
-                interceptCallBack?.invoke()
-                if (!interceptBackEvent) finish()
-
+                if(clickTitleBarBack()){
+                    interceptCallBack?.invoke()
+                    if (!interceptBackEvent) finish()
+                }
             }
             override fun onTitleClick(v: View) {
             }
@@ -37,8 +38,9 @@ abstract class CommToolBarActivity : BaseActivity() {
                 realMenuCallBack?.click?.invoke(v, null)
             }
         })
-
     }
+
+    open fun clickTitleBarBack(): Boolean = true
 
     /**
      * 获取TitleBar控件

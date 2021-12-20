@@ -1,6 +1,8 @@
 package com.fastdev.data.repository.api
 
 import com.fastdev.data.ResponseBody
+import com.fastdev.data.response.LoginEntity
+import com.fastdev.data.response.TaskEntity
 import io.reactivex.Flowable
 import retrofit2.http.*
 
@@ -28,13 +30,13 @@ import retrofit2.http.*
     @GET("recipientOrg/findOrg")
     fun load(@Query("id") id:Int):Observable<NetOuter<Orgs>>
  */
-open interface NetApi {
+interface NetApi {
     @POST("api/public/login.do")
-    fun login(@Body params: Map<String, Any>): Flowable<ResponseBody<String>>
+    fun login(@Body params: Map<String, Any>): Flowable<ResponseBody<LoginEntity>>
 
-    @FormUrlEncoded
-    @POST("api/xxxyyy")
-    fun queryList2(@Field("parmas") parmas: String): Flowable<ResponseBody<Any?>>
+    @GET("api/pd/getTaskList.do")
+    fun queryTaskList(@Query("type") type: String, @Query("page") pageNum: Int, @Query("rows") pageSize: Int): Flowable<ResponseBody<TaskEntity>>
+
 
 
 }

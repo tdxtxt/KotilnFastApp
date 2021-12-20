@@ -11,9 +11,13 @@ data class ResponseBody<T> (
         @SerializedName("message")
         val msg: String? = null
 ) : IModel/*, Parcelable*/ {
-    val data: T? = null
+    val data: ResultData<T>? = null
 
-    override fun isSuccess() = "0".equals(status)
+    override fun isSuccess() = "1".equals(status)
 
     override fun getMessage() = msg
+}
+data class ResultData<T>(val rows: List<T>?){
+    fun getData() = rows?.firstOrNull()
+    fun getListData() = rows
 }
