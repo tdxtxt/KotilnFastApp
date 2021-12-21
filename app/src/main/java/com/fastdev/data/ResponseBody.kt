@@ -20,4 +20,5 @@ data class ResponseBody<T> (
 data class ResultData<T>(val rows: List<T>?){
     fun getData() = rows?.firstOrNull()
     fun getListData() = rows
+    fun isEmpty() = rows?.firstOrNull() == null
 }

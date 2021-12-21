@@ -19,4 +19,10 @@ class DbApiRepository : BaseRepository() {
     }
 
     fun querySource() = LitePal.findFirst(Source::class.java)
+
+    fun queryTaskPyNumByTask(taskId: String?) = 0
+    fun queryTaskPkNumByTask(taskId: String?) = 0
+    fun queryTaskWaitNumByTask(taskId: String?) = 0
+    fun queryCompletePkNumByTask(taskId: String?) = 0
+    fun isStartTask() = false
 }

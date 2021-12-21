@@ -1,1 +1,1 @@
-include ':app', ':libCommon', ':libOpensource', ':libChatUI', ':libDeveloper'
+include ':app', ':libCommon', ':libOpensource', ':libDeveloper'
