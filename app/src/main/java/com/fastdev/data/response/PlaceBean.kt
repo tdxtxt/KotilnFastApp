@@ -23,6 +23,7 @@ class PlaceBean : IPickerData {
     var selected: Boolean = false
     var checked: Boolean = false
     var id: Int = 0
+    var grandparentId: Int? = null
     var parentId: Int? = null
     var name: String? = ""
     var childs: MutableList<PlaceBean>? = null
