@@ -16,14 +16,10 @@
         android:paddingBottom="12dp"
         android:orientation="horizontal">
 
-        <TextView
+        <Space
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="参数设置"
-            android:textStyle="bold"
-            android:textColor="@color/black_333333"
-            android:textSize="@dimen/_16sp" />
+            android:layout_weight="1"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,7 +31,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="功率设置"
+        android:text="资产状态"
         android:textColor="@color/black_333333"
         android:textSize="@dimen/_14sp"/>
 
@@ -44,7 +40,30 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@drawable/shape_stroke_d9d9d9"
-        android:entries="@array/array_config_params" />
+        android:entries="@array/array_source_status" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="添加备注"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black_333333"
+        android:textSize="@dimen/_14sp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:paddingStart="12dp"
+        android:layout_marginTop="20dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:gravity="top"
+        android:paddingBottom="6dp"
+        android:maxLength="500"
+        android:textColor="@color/black_666666"
+        android:textSize="@dimen/_15sp"
+        android:hint="请输入备注内容"
+        android:background="@drawable/shape_stroke_d9d9d9"/>
 
     <top.androidman.SuperButton
         android:id="@+id/btn_next"

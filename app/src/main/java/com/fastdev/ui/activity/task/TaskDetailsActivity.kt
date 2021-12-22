@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.baselib.helper.LogA
 import com.baselib.ui.activity.CommToolBarActivity
 import com.fastdev.core.MonitorProtocol
@@ -11,6 +12,7 @@ import com.fastdev.core.UHFSdk
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.qrcode.ScanQrcodeActivity
 import com.fastdev.ui.activity.task.fragment.SourceListFragment
+import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
 import com.fastdev.ui.dialog.NewSourceFilterDialog
 import com.fastdev.ui.dialog.ScannerDialog
@@ -18,10 +20,13 @@ import kotlinx.android.synthetic.main.activity_task_details.*
 
 class TaskDetailsActivity : CommToolBarActivity() {
     val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
+    lateinit var viewModel: TaskDetailsViewModel
 
     override fun getLayoutResId() = R.layout.activity_task_details
 
     override fun initUi() {
+        viewModel = ViewModelProvider(this).get(TaskDetailsViewModel::class.java)
+
         setTitleBar("盘点任务详情"){
             menuText = "扫一扫"
             onClick { rootView, any ->
@@ -40,7 +45,7 @@ class TaskDetailsActivity : CommToolBarActivity() {
                 when(it){
                     btn_start -> {
 //                        ScannerDialog(fragmentActivity).show()
-                        MonitorProtocol.startReadMonitor()
+                        MonitorProtocol.startReadMonitor(viewModel)
                     }
 
                     btn_end -> {

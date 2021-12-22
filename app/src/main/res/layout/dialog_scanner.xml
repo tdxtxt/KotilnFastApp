@@ -11,8 +11,10 @@
     app:rRadius="10dp">
 
     <ImageView
+        android:id="@+id/iv_animation"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/gif_scan"/>
 
     <TextView
         android:layout_width="wrap_content"
