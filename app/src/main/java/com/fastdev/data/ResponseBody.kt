@@ -1,9 +1,7 @@
 package com.fastdev.data
 
-import android.os.Parcelable
 import com.baselib.net.model.IModel
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 
 //@Parcelize
 data class ResponseBody<T> (
@@ -22,3 +20,5 @@ data class ResultData<T>(val rows: List<T>?){
     fun getListData() = rows
     fun isEmpty() = rows?.firstOrNull() == null
 }
+
+data class BaseListBody<T>(val list: MutableList<T>?, val isNextPage: Boolean)
