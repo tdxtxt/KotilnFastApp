@@ -26,8 +26,6 @@ import org.litepal.LitePalDB
 
 @AndroidEntryPoint
 class TaskListActivity : CommToolBarActivity() {
-    val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
-
     override fun getLayoutResId() = R.layout.activity_task_list
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,9 +58,9 @@ class TaskListActivity : CommToolBarActivity() {
                 ToastHelper.showToast("参数设置")
             }
         }
+        val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
 
         fragments.add(Pair("进行中", TaskListFragment.getIngInstance()))
-
         fragments.add(Pair("已结束", TaskListFragment.getEndInstance()))
 
         viewPager.setAdapter(BaseFragmentPagerAdapter(fragments, supportFragmentManager))

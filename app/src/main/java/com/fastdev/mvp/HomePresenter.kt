@@ -1,10 +1,7 @@
 package com.fastdev.mvp
 
-import com.baselib.helper.LogA
-import com.baselib.helper.ToastHelper
 import com.baselib.ui.mvp.presenter.AbsPresenter
 import com.baselib.ui.mvp.view.BaseMvpView
-import com.fastdev.data.db.Source
 import com.fastdev.data.repository.NetApiRepository
 import javax.inject.Inject
 

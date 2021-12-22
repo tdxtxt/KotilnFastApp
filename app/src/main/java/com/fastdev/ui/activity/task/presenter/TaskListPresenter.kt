@@ -49,7 +49,20 @@ class TaskListPresenter @Inject constructor(val netRepository: NetApiRepository,
         netRepository.queryTaskList("his", pageNum, 20)
     }
 
-    interface BaseMvpImpl : BaseMvpView{
+    fun loadAllSourceByTask(task: TaskEntity){
+        if(dbRepository.isStartTask()){
+            baseView?.gotoTaskDetailsActivity()
+        }else{
+            netRepository.queryAllSourceByTask(task.task_id)
+                    .doAfterNext {
+                        //存数据库
 
+                    }
+                    .compose(baseView?.bindProgress())
+        }
+    }
+
+    interface BaseMvpImpl : BaseMvpView{
+        fun gotoTaskDetailsActivity()
     }
 }

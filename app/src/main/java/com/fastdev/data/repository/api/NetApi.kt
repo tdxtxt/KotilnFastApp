@@ -2,6 +2,7 @@ package com.fastdev.data.repository.api
 
 import com.fastdev.data.ResponseBody
 import com.fastdev.data.response.LoginEntity
+import com.fastdev.data.response.SourceResp
 import com.fastdev.data.response.TaskEntity
 import io.reactivex.Flowable
 import retrofit2.http.*
@@ -37,6 +38,7 @@ interface NetApi {
     @GET("api/pd/getTaskList.do")
     fun queryTaskList(@Query("type") type: String, @Query("page") pageNum: Int, @Query("rows") pageSize: Int): Flowable<ResponseBody<TaskEntity>>
 
-
+    @GET("api/pd/getTaskData.do")
+    fun queryAllSourceByTask(@Query("task_id") taskId: String?): Flowable<ResponseBody<SourceResp>>
 
 }

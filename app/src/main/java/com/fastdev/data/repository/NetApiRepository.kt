@@ -5,6 +5,7 @@ import com.fastdev.data.repository.api.NetApi
 import com.fastdev.net.ApiClient
 import com.fastdev.data.repository.base.BaseRepository
 import com.fastdev.data.response.LoginEntity
+import com.fastdev.data.response.SourceResp
 import com.fastdev.data.response.TaskEntity
 import io.reactivex.Flowable
 import javax.inject.Inject
@@ -27,5 +28,9 @@ class NetApiRepository @Inject constructor() : BaseRepository() {
 
     fun queryTaskList(type: String, pageNum: Int, pageSize: Int): Flowable<ResponseBody<TaskEntity>>{
         return netApi.queryTaskList(type, pageNum, pageSize)
+    }
+
+    fun queryAllSourceByTask(taskId: String?): Flowable<ResponseBody<SourceResp>>{
+        return netApi.queryAllSourceByTask(taskId)
     }
 }

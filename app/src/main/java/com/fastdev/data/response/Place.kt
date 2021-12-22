@@ -20,8 +20,10 @@ class Place {
 
     var selected: Boolean = false
     var checked: Boolean = false
-    var id: Int = 0
+
+    var grandparentId: Int? = 0
     var parentId: Int? = null
+    var id: Int = 0
     var name: String? = ""
     var childs: MutableList<Place>? = null
 }

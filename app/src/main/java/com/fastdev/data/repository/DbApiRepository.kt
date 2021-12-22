@@ -1,6 +1,6 @@
 package com.fastdev.data.repository
 
-import com.fastdev.data.db.Source
+import com.fastdev.data.response.SourceBean
 import com.fastdev.data.repository.base.BaseRepository
 import org.litepal.LitePal
 
@@ -10,15 +10,15 @@ import org.litepal.LitePal
  * @since 2021/12/20
  */
 class DbApiRepository : BaseRepository() {
-    fun saveSource(bean: Source){
+    fun saveSource(bean: SourceBean){
         bean.save()
     }
 
-    fun saveSources(beans: List<Source>){
+    fun saveSources(beans: List<SourceBean>){
         LitePal.saveAll(beans)
     }
 
-    fun querySource() = LitePal.findFirst(Source::class.java)
+    fun querySource() = LitePal.findFirst(SourceBean::class.java)
 
     fun queryTaskPyNumByTask(taskId: String?) = 0
     fun queryTaskPkNumByTask(taskId: String?) = 0
