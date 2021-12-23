@@ -16,7 +16,7 @@ import com.baselib.ui.dialog.impl.IBDialog
 class ProgressDialog(context : FragmentActivity) : CenterBaseDialog(context) {
     private var tvDesc: TextView? = null
 
-    fun setDesc(desc: String?) = tvDesc?.run { text = desc?: ""; this@ProgressDialog }
+    fun setDesc(desc: String?): ProgressDialog = tvDesc?.run { text = desc?: ""; this@ProgressDialog }?: this
     override fun getLayoutId() = R.layout.baselib_dialog_commprogress_view
 
     override fun onCreate(dialog: IBDialog) {

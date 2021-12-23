@@ -16,6 +16,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
@@ -35,7 +36,7 @@ public class ProgressTransformer<T> implements ObservableTransformer<T, T>, Flow
 
     @Override
     public ObservableSource<T> apply(Observable<T> upstream) {
-        return upstream.observeOn(AndroidSchedulers.mainThread())
+        return upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(final Disposable disposable) throws Exception {
@@ -69,7 +70,7 @@ public class ProgressTransformer<T> implements ObservableTransformer<T, T>, Flow
     @NonNull
     @Override
     public Publisher<T> apply(@NonNull Flowable<T> upstream) {
-        return upstream.observeOn(AndroidSchedulers.mainThread())
+        return upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Subscription>() {
                     @Override
                     public void accept(final Subscription subscription) throws Exception {
