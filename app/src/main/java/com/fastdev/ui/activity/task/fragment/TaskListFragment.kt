@@ -3,17 +3,21 @@ package com.fastdev.ui.activity.task.fragment
 import android.os.Bundle
 import android.view.View
 import com.baselib.ui.fragment.BaseFragment
+import com.baselib.ui.mvp.presenter.BaseMvpPresenter
+import com.baselib.ui.mvp.view.BaseMvpView
+import com.baselib.ui.mvp.view.fragment.BaseMvpFragment
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
+import com.fastdev.ui.activity.task.TaskDetailsActivity
 import com.fastdev.ui.activity.task.presenter.TaskListPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_list.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TaskListFragment : BaseFragment() {
+class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
     @Inject
     lateinit var presenter: TaskListPresenter
 
@@ -24,6 +28,10 @@ class TaskListFragment : BaseFragment() {
     override fun getParams(bundle: Bundle?) {
         type = bundle?.getInt("type")?: 0
     }
+
+    override fun createPresenter() = presenter
+
+    override fun createMvpView() = this
 
     override fun getLayoutId() = R.layout.fragment_task_list
 
@@ -60,6 +68,10 @@ class TaskListFragment : BaseFragment() {
     }
 
     fun isHistoryList() = _END == type
+
+    override fun gotoTaskDetailsActivity() {
+        TaskDetailsActivity.open(fragmentActivity)
+    }
 
     companion object{
         val _ING = 1

@@ -5,13 +5,14 @@ import com.fastdev.data.repository.base.BaseRepository
 import org.litepal.LitePal
 import org.litepal.extension.deleteAll
 import org.litepal.extension.findFirstAsync
+import javax.inject.Inject
 
 /**
  * 功能描述: 数据库操作仓库
  * @author tangdexiang
  * @since 2021/12/20
  */
-class DbApiRepository : BaseRepository() {
+class DbApiRepository @Inject constructor() : BaseRepository() {
     fun saveSource(bean: SourceBean){
         bean.saveOrUpdate()
         bean.save()

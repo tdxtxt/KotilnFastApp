@@ -1,14 +1,18 @@
 package com.fastdev.ui.activity.task.presenter
 
 import android.annotation.SuppressLint
+import com.baselib.helper.ToastHelper
 import com.baselib.ui.mvp.presenter.AbsPresenter
 import com.baselib.ui.mvp.view.BaseMvpView
 import com.fastdev.data.ResponseBody
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.repository.NetApiRepository
+import com.fastdev.data.response.SourceBean
+import com.fastdev.data.response.SourceResp
 import com.fastdev.data.response.TaskEntity
 import com.fastdev.net.observer.BaseObserver
 import io.reactivex.Flowable
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -54,11 +58,20 @@ class TaskListPresenter @Inject constructor(val netRepository: NetApiRepository,
             baseView?.gotoTaskDetailsActivity()
         }else{
             netRepository.queryAllSourceByTask(task.task_id)
-                    .doAfterNext {
-                        //存数据库
-
-                    }
+                    .delay(3, TimeUnit.SECONDS)
+//                    .doAfterNext {
+//                        //存数据库
+//
+//                    }
                     .compose(baseView?.bindProgress())
+                    .subscribeWith(object : BaseObserver<SourceResp>(){
+                        override fun onSuccess(response: ResponseBody<SourceResp>?) {
+                            ToastHelper.showToast("成功")
+                        }
+                        override fun onFailure(response: ResponseBody<SourceResp>?, errorMsg: String?, e: Throwable?) {
+                            ToastHelper.showToast("失败$errorMsg")
+                        }
+                    })
         }
     }
 
