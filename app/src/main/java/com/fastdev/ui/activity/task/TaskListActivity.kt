@@ -19,6 +19,7 @@ import com.fastdev.ui.R
 import com.fastdev.ui.activity.login.LoginMainActivity
 import com.fastdev.ui.activity.task.fragment.TaskListFragment
 import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
+import com.fastdev.ui.dialog.ConfigDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_task_list.*
 import org.litepal.LitePal
@@ -55,7 +56,8 @@ class TaskListActivity : CommToolBarActivity() {
         setTitleBar("资产盘点"){
             menuText = TextSpanController().pushColorSpan(Color.parseColor("#666666")).append("参数设置").popSpan().build()
             onClick { rootView, any ->
-                ToastHelper.showToast("参数设置")
+                ConfigDialog(fragmentActivity).show()
+//                ToastHelper.showToast("参数设置")
             }
         }
         val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()

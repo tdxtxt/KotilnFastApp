@@ -25,10 +25,10 @@ class TaskListPresenter @Inject constructor(val netRepository: NetApiRepository,
                     if(resp.data?.isEmpty() == false && dbRepository.isStartTask()){
                         Flowable.fromIterable(resp.data.getListData())
                                 .doAfterNext {
-                                    it.task_py_count = dbRepository.queryTaskPyNumByTask(it.task_id)
-                                    it.task_pk_count = dbRepository.queryTaskPkNumByTask(it.task_id)
-                                    it.task_wait_count = dbRepository.queryTaskWaitNumByTask(it.task_id)
-                                    it.task_complete_count = dbRepository.queryCompletePkNumByTask(it.task_id)
+                                    it.task_py_count = dbRepository.queryTaskPyNum(it.task_id)
+                                    it.task_pk_count = dbRepository.queryTaskPkNum(it.task_id)
+                                    it.task_wait_count = dbRepository.queryTaskWaitNum(it.task_id)
+                                    it.task_complete_count = dbRepository.queryTaskFinishNum(it.task_id)
                                 }.buffer(resp.data.getListData()?.size?: 0)
                                 .map { resp }
                     }else{

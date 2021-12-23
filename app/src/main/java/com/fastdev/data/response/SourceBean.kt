@@ -10,6 +10,12 @@ import org.litepal.crud.LitePalSupport
  * @since 2021/12/11
  */
 class SourceBean : LitePalSupport() {
+    companion object{
+        val STATUS_PY = "10" //盘盈
+        val STATUS_PK = "20" //盘亏
+        val STATUS_WAIT = "0" //待盘
+        val STATUS_FINISH = "1" //已盘
+    }
     private val id: Int = 0
 
     var task_id: String = "" //所属任务id
@@ -24,7 +30,7 @@ class SourceBean : LitePalSupport() {
 
     var pp_status: String? = null //资产状态 10 正常  20闲置  30异常  -1 报废
 
-    var pp_act: String = "0" //盘点状态 0 待盘  1 已盘 10 盘盈  20盘亏
+    var pp_act: String = STATUS_WAIT //盘点状态 0 待盘  1 已盘 10 盘盈  20盘亏
 
     var building_code: String? = null //楼栋id
 
