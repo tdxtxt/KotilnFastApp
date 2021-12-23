@@ -9,6 +9,7 @@ import com.baselib.app.ApplicationDelegate
 import com.baselib.helper.LogA
 import com.fastdev.app.CustomApp
 import com.fastdev.ui.R
+import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.seuic.uhf.EPC
 
 /**
@@ -16,7 +17,7 @@ import com.seuic.uhf.EPC
  * @author tangdexiang
  * @since 2021/12/12
  */
-class ReadTagMonitor(looper: Looper?) : MonitorProtocol(looper) {
+class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel?) : MonitorProtocol(looper) {
     var soundPool: SoundPool? = null
     var localData: MutableList<EPC>? = null
 
@@ -28,6 +29,7 @@ class ReadTagMonitor(looper: Looper?) : MonitorProtocol(looper) {
         LogA.i("readTag： $data")
 
         //将数据传递到主线程之中
+//        viewModel?.sourceViewModel?.postValue()
     }
 
     override fun start() {
@@ -37,6 +39,7 @@ class ReadTagMonitor(looper: Looper?) : MonitorProtocol(looper) {
 
     override fun close() {
         UHFSdk.stop()
+        viewModel = null
         super.close()
     }
 

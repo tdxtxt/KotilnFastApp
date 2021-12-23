@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="config_params">
+    <string-array name="array_config_params">
         <item>10W</item>
         <item>20W</item>
         <item>30W</item>
+    </string-array>
+
+    <string-array name="array_source_status">
+        <item>待盘</item>
+        <item>已盘</item>
+        <item>盘亏</item>
+        <item>盘盈</item>
     </string-array>
 </resources>

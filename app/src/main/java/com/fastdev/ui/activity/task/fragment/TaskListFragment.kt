@@ -1,6 +1,7 @@
 package com.fastdev.ui.activity.task.fragment
 
 import android.os.Bundle
+import android.view.View
 import com.baselib.ui.fragment.BaseFragment
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -42,6 +43,20 @@ class TaskListFragment : BaseFragment() {
         recyclerView.setAdapter(adapter)
 
         adapter.setNewInstance(mutableListOf(TaskEntity(), TaskEntity(), TaskEntity(), TaskEntity(), TaskEntity()))
+
+        reload(null)
+    }
+
+    override fun reload(view: View?) {
+        pageNum = 1
+        load()
+    }
+
+    private fun load(){
+        when(type){
+            _ING -> presenter.queryCurrentTaskList(pageNum)
+            _END -> presenter.queryHistoryTaskList(pageNum)
+        }
     }
 
     fun isHistoryList() = _END == type

@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import com.baselib.helper.ToastHelper
+import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.seuic.uhf.UHFService
 
 /**
@@ -16,11 +17,11 @@ abstract class MonitorProtocol constructor(val looper: Looper?) {
         private var monitorThread: HandlerThread? = null
         private var readMonitor: MonitorProtocol? = null
 
-        fun startReadMonitor(){
+        fun startReadMonitor(viewModel: TaskDetailsViewModel){
             if(monitorThread != null) stopReadMonitor()
             monitorThread = HandlerThread("monitor_thread")
             monitorThread?.start()
-            readMonitor = ReadTagMonitor(monitorThread?.looper)
+            readMonitor = ReadTagMonitor(monitorThread?.looper, viewModel)
             readMonitor?.start()
         }
         fun stopReadMonitor(){

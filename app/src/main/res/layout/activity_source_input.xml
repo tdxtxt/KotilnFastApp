@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_comm_toolbar"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/red_f5222d"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="资产编号"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black_333333"/>
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="11dp"
+                android:singleLine="true"
+                android:textColor="@color/black_666666"
+                android:textSize="@dimen/_15sp"
+                android:hint="请输入资产编号"
+                android:background="@drawable/shape_stroke_d9d9d9"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/red_f5222d"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="资产名称"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black_333333"/>
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="11dp"
+                android:singleLine="true"
+                android:textColor="@color/black_666666"
+                android:textSize="@dimen/_15sp"
+                android:hint="请输入资产名称"
+                android:background="@drawable/shape_stroke_d9d9d9"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/red_f5222d"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="资产类型"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black_333333"/>
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="11dp"
+                android:singleLine="true"
+                android:textColor="@color/black_666666"
+                android:textSize="@dimen/_15sp"
+                android:hint="请输入资产类型"
+                android:background="@drawable/shape_stroke_d9d9d9"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="规格型号"
+                android:textSize="@dimen/_14sp"
+                android:textColor="@color/black_333333"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="11dp"
+                android:singleLine="true"
+                android:textColor="@color/black_666666"
+                android:textSize="@dimen/_15sp"
+                android:hint="请输入规格型号"
+                android:background="@drawable/shape_stroke_d9d9d9"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="*"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/red_f5222d"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="存放地址"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black_333333"/>
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_marginTop="10dp"
+                android:padding="11dp"
+                android:gravity="top"
+                android:singleLine="true"
+                android:textColor="@color/black_666666"
+                android:textSize="@dimen/_15sp"
+                android:hint="请输入存放地址"
+                android:background="@drawable/shape_stroke_d9d9d9"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="备注"
+                android:textSize="@dimen/_14sp"
+                android:textColor="@color/black_333333"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_marginTop="10dp"
+                android:padding="11dp"
+                android:gravity="top"
+                android:singleLine="true"
+                android:textColor="@color/black_666666"
+                android:textSize="@dimen/_15sp"
+                android:hint="请输入备注信息"
+                android:background="@drawable/shape_stroke_d9d9d9"/>
+
+            <top.androidman.SuperButton
+                android:id="@+id/btn_next"
+                style="@style/CommButtonStyle"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="35dp"
+                app:text="保存"
+                android:layout_marginBottom="25dp"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
