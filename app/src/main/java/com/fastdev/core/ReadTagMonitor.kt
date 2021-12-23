@@ -8,9 +8,11 @@ import android.os.Looper
 import com.baselib.app.ApplicationDelegate
 import com.baselib.helper.LogA
 import com.fastdev.app.CustomApp
+import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.seuic.uhf.EPC
+import org.litepal.LitePal
 
 /**
  * 功能描述:
@@ -18,18 +20,27 @@ import com.seuic.uhf.EPC
  * @since 2021/12/12
  */
 class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel?) : MonitorProtocol(looper) {
-    var soundPool: SoundPool? = null
-    var localData: MutableList<EPC>? = null
+    private var soundPool: SoundPool? = null
+    private val localData: HashMap<String, Boolean> = HashMap()
 
     override fun task() {
         //读取任务
         val data = UHFSdk.read()
-        if(localData?.size != data?.size) playSound()
-        localData = data
-        LogA.i("readTag： $data")
-
-        //将数据传递到主线程之中
-//        viewModel?.sourceViewModel?.postValue()
+        val diffData = data?.filter {
+            (localData[it.getId()] != true).apply {
+                if(this) localData[it.getId()] = true
+            }
+        }?.map {
+            SourceBean().apply {
+                pp_code = it.getId()
+            }
+        }
+        LogA.i("NewSource： $diffData")
+        if((diffData?.size?:0) > 0){
+            playSound()
+            //将数据传递到主线程之中
+            viewModel?.sourceViewModel?.postValue(diffData)
+        }
     }
 
     override fun start() {

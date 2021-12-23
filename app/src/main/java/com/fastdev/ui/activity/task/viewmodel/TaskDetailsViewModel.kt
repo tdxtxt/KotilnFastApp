@@ -10,6 +10,6 @@ import com.fastdev.data.response.SourceBean
  * @since 2021/12/22
  */
 class TaskDetailsViewModel : ViewModel(){
-    val sourceViewModel = MutableLiveData<SourceBean>()
+    val sourceViewModel = MutableLiveData<List<SourceBean>>()
 
 }

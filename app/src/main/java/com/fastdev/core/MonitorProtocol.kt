@@ -47,6 +47,7 @@ abstract class MonitorProtocol constructor(val looper: Looper?) {
 
     open fun close(){
         refreshHandler?.removeCallbacks(runnable)
+        refreshHandler = null
     }
 
     fun next(){

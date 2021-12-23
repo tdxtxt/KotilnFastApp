@@ -16,7 +16,7 @@ class SourceBean : LitePalSupport() {
         val STATUS_WAIT = "0" //待盘
         val STATUS_FINISH = "1" //已盘
     }
-    private val id: Int = 0
+    val id: Long = 0
 
     var task_id: String = "" //所属任务id
 

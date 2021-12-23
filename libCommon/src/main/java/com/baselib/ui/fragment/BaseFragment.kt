@@ -110,7 +110,12 @@ abstract class BaseFragment : RxFragment(), IView {
 
     override fun getProgressBar(): ProgressDialog? {
         if (mProgressDialog == null){
-            mProgressDialog = if(fragmentActivity is BaseActivity) (fragmentActivity as BaseActivity).getProgressBar() else DialogHelper.createProgressDialog(fragmentActivity as FragmentActivity, "请耐心等待，正在处理...", true)
+            when(fragmentActivity){
+                is BaseActivity -> {
+                    val activity: BaseActivity = fragmentActivity as BaseActivity
+                    mProgressDialog = activity.getProgressBar()
+                }
+            }
         }
         return mProgressDialog
     }
