@@ -2,6 +2,7 @@ package com.fastdev.data.repository
 
 import com.fastdev.data.response.SourceBean
 import com.fastdev.data.repository.base.BaseRepository
+import io.reactivex.Flowable
 import org.litepal.LitePal
 import org.litepal.extension.deleteAll
 import org.litepal.extension.findFirstAsync
@@ -79,6 +80,46 @@ class DbApiRepository @Inject constructor() : BaseRepository() {
      */
     fun deleteTask(taskId: String?): Boolean{
         return LitePal.deleteAll(SourceBean::class.java, "task_id = ?", taskId) >= 0
+    }
+
+    fun querySourceByPY(taskId: String?): Flowable<MutableList<SourceBean>> {
+        return Flowable.unsafeCreate {
+            val data = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PY).find(SourceBean::class.java)
+            it.onNext(data)
+            it.onComplete()
+        }
+    }
+
+    fun querySourceByFinish(taskId: String?): Flowable<MutableList<SourceBean>> {
+        return Flowable.unsafeCreate {
+            val data = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_FINISH).find(SourceBean::class.java)
+            it.onNext(data)
+            it.onComplete()
+        }
+    }
+
+    fun querySourceByPK(taskId: String?): Flowable<MutableList<SourceBean>> {
+        return Flowable.unsafeCreate {
+            val data = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PK).find(SourceBean::class.java)
+            it.onNext(data)
+            it.onComplete()
+        }
+    }
+
+    fun querySourceByWait(taskId: String?): Flowable<MutableList<SourceBean>> {
+        return Flowable.unsafeCreate {
+            val data = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_WAIT).find(SourceBean::class.java)
+            it.onNext(data)
+            it.onComplete()
+        }
+    }
+
+    fun querySourceAll(taskId: String?): Flowable<MutableList<SourceBean>> {
+        return Flowable.unsafeCreate {
+            val data = LitePal.where("task_id = ?", taskId).find(SourceBean::class.java)
+            it.onNext(data)
+            it.onComplete()
+        }
     }
 
     fun queryTaskPyNum(taskId: String?): Int = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PY).find(SourceBean::class.java)?.size?: 0

@@ -4,7 +4,9 @@ import com.fastdev.data.ResponseBody
 import com.fastdev.data.repository.api.NetApi
 import com.fastdev.net.ApiClient
 import com.fastdev.data.repository.base.BaseRepository
+import com.fastdev.data.request.SourceRequest
 import com.fastdev.data.response.LoginEntity
+import com.fastdev.data.response.SourceBean
 import com.fastdev.data.response.SourceResp
 import com.fastdev.data.response.TaskEntity
 import io.reactivex.Flowable
@@ -32,5 +34,13 @@ class NetApiRepository @Inject constructor() : BaseRepository() {
 
     fun queryAllSourceByTask(taskId: String?): Flowable<ResponseBody<SourceResp>>{
         return netApi.queryAllSourceByTask(taskId)
+    }
+
+    fun querySourceBycode(code: String?): Flowable<ResponseBody<SourceBean>>{
+        return netApi.querySourceBycode(code)
+    }
+
+    fun postAllSource(taskId: String?, sources: List<SourceBean>): Flowable<ResponseBody<Any>>{
+        return netApi.postAllSource(SourceRequest(taskId, sources))
     }
 }

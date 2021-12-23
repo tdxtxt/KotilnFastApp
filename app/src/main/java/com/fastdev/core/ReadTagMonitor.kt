@@ -50,6 +50,7 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel?) : Mo
 
     override fun close() {
         UHFSdk.stop()
+        localData.clear()
         viewModel = null
         super.close()
     }
