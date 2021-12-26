@@ -7,7 +7,9 @@
     android:orientation="vertical">
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
+        app:srlEnableLoadMore="false"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView

@@ -21,10 +21,9 @@ open abstract class CommToolBarMvpActivity : CommToolBarActivity(), BaseMvpView 
     abstract fun createMvpView(): BaseMvpView?
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         mvpDelegate.delegate(createPresenter() as BaseMvpPresenter<BaseMvpView>)
         mvpDelegate.attach(createMvpView())
+        super.onCreate(savedInstanceState)
     }
 
     override fun onResume() {

@@ -16,13 +16,13 @@ import kotlin.jvm.Throws
  */
 class TonNetProvider : BaseNetProvider() {
     override fun configInterceptors(): Array<Interceptor>? {
-        return arrayOf(ParamsInterceptor(), HeadInterceptor(), ResponseInterceptor())
+        return arrayOf(/*ParamsInterceptor(), */HeadInterceptor(), ResponseInterceptor())
     }
 
     internal class ParamsInterceptor : Interceptor {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response {
-            val oldRequest = chain.request()
+            /*val oldRequest = chain.request()
             val newRequestBuilder = oldRequest.newBuilder()
             if ("GET".equals(oldRequest.method(), ignoreCase = true)) {
                 val httpUrlBuilder = oldRequest.url().newBuilder()
@@ -30,17 +30,9 @@ class TonNetProvider : BaseNetProvider() {
 
                 newRequestBuilder.url(httpUrlBuilder.build())
             } else {
-                val formBodyBuilder = FormBody.Builder()
-//                formBodyBuilder.add("token", CommonCacheHelper.getToken())
-                val oldFormBody = oldRequest.body() as FormBody?
-                if (oldFormBody != null && oldFormBody.size() > 0) {
-                    for (i in 0 until oldFormBody.size()) {
-                        formBodyBuilder.add(oldFormBody.name(i), oldFormBody.value(i))
-                    }
-                }
-                newRequestBuilder.post(formBodyBuilder.build())
-            }
-            return chain.proceed(newRequestBuilder.build())
+                newRequestBuilder.post(oldRequest.body())
+            }*/
+            return chain.proceed(chain.request())
         }
     }
 

@@ -36,6 +36,7 @@
         android:textSize="@dimen/_14sp"/>
 
     <Spinner
+        android:id="@+id/spinner"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -51,6 +52,7 @@
         android:textSize="@dimen/_14sp"/>
 
     <EditText
+        android:id="@+id/et_remark"
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:paddingStart="12dp"

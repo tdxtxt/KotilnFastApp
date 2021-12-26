@@ -2,6 +2,7 @@ package com.fastdev.ui.activity.task.fragment
 
 import android.os.Bundle
 import android.view.View
+import com.baselib.helper.ToastHelper
 import com.baselib.ui.fragment.BaseFragment
 import com.baselib.ui.mvp.presenter.BaseMvpPresenter
 import com.baselib.ui.mvp.view.BaseMvpView
@@ -12,6 +13,7 @@ import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.TaskDetailsActivity
 import com.fastdev.ui.activity.task.presenter.TaskListPresenter
+import com.fastdev.ui.adapter.BaseQuickLoadMoreAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_list.*
 import javax.inject.Inject
@@ -21,7 +23,7 @@ class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
     @Inject
     lateinit var presenter: TaskListPresenter
 
-    lateinit var adapter: BaseQuickAdapter<TaskEntity, BaseViewHolder>
+    lateinit var adapter: BaseQuickLoadMoreAdapter<TaskEntity, BaseViewHolder>
 
     var pageNum: Int = 1
     var type: Int = 0
@@ -36,22 +38,34 @@ class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
     override fun getLayoutId() = R.layout.fragment_task_list
 
     override fun initUi() {
-        adapter = object : BaseQuickAdapter<TaskEntity, BaseViewHolder>(R.layout.item_task){
+        adapter = object : BaseQuickLoadMoreAdapter<TaskEntity, BaseViewHolder>(R.layout.item_task, -1){
             override fun convert(holder: BaseViewHolder, item: TaskEntity) {
+                holder.setText(R.id.tv_name, item.task_name)
+                        .setText(R.id.tv_status, item.getStatus())
+                        .setText(R.id.tv_create_name, "接口未返回")
+                        .setText(R.id.tv_starttime, item.task_time)
+                        .setText(R.id.tv_addr, "接口未返回")
+                        .setText(R.id.tv_num_all, item.task_pd_count)
+                        .setText(R.id.tv_num_wait, item.task_wait_count)
+                        .setText(R.id.tv_num_finish, item.task_complete_count)
+                        .setText(R.id.tv_num_py, item.task_py_count)
+                        .setText(R.id.tv_num_pk, item.task_pk_count)
             }
         }
-
         adapter.setOnItemClickListener { adapt, view, position ->
             if(!isHistoryList()){
                 presenter.loadAllSourceByTask(adapter.getItem(position))
-                //TaskDetailsActivity.open(fragmentActivity)
             }
         }
-
+        adapter.loadMoreModule.setOnLoadMoreListener {
+            load()
+        }
         recyclerView.setAdapter(adapter)
+        refreshLayout.setOnRefreshListener {
+            reload(null)
+        }
 
-        adapter.setNewInstance(mutableListOf(TaskEntity(), TaskEntity(), TaskEntity(), TaskEntity(), TaskEntity()))
-
+        getStateView(R.id.refreshLayout)?.showLoading()
         reload(null)
     }
 
@@ -67,11 +81,29 @@ class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
         }
     }
 
-    fun isHistoryList() = _END == type
-
-    override fun gotoTaskDetailsActivity() {
-        TaskDetailsActivity.open(fragmentActivity)
+    override fun fail(errorMsg: String?) {
+        refreshLayout.finishRefresh()
+        ToastHelper.showToast(errorMsg)
+        getStateView(R.id.refreshLayout)?.showError()
     }
+
+    override fun updateView(pageNum: Int, data: MutableList<TaskEntity>?) {
+        refreshLayout.finishRefresh()
+        if(pageNum == 1 && data?.size == 0) {
+            getStateView(R.id.refreshLayout)?.showEmpty()
+        }else{
+            getStateView(R.id.refreshLayout)?.showContent()
+            adapter.updateData(pageNum, data)
+        }
+
+        this.pageNum ++
+    }
+
+    override fun gotoTaskDetailsActivity(task: TaskEntity) {
+        TaskDetailsActivity.open(fragmentActivity, task)
+    }
+
+    private fun isHistoryList() = _END == type
 
     companion object{
         val _ING = 1

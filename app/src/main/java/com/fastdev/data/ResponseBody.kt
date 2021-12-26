@@ -15,7 +15,7 @@ data class ResponseBody<T> (
 
     override fun getMessage() = msg
 }
-data class ResultData<T>(val rows: List<T>?){
+data class ResultData<T>(val rows: MutableList<T>?){
     fun getData() = rows?.firstOrNull()
     fun getListData() = rows
     fun isEmpty() = rows?.firstOrNull() == null

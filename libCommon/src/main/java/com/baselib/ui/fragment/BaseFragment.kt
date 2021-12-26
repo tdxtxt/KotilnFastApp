@@ -91,9 +91,9 @@ abstract class BaseFragment : RxFragment(), IView {
     private fun initConfigStateView(view: View, stateLayout: StateLayout){
         stateLayout.configAll(
                 emptyText = "别看了，这里什么都没有",
-                loadingLayoutId = R.layout._loading_layout_loading, //自定义加载中布局
-                errorLayoutId = R.layout._loading_layout_error, //自定义加载失败布局
-                emptyLayoutId = R.layout._loading_layout_empty, //自定义数据位为空的布局
+                loadingLayoutId = R.layout.baselib_layout_loading, //自定义加载中布局
+                errorLayoutId = R.layout.baselib_layout_error, //自定义加载失败布局
+                emptyLayoutId = R.layout.baselib_layout_empty, //自定义数据位为空的布局
                 useContentBgWhenLoading = true, //加载过程中是否使用内容的背景
                 retryAutoLoading = true,
 //                enableLoadingShadow = true, //加载过程中是否启用半透明阴影盖在内容上面

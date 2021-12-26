@@ -11,7 +11,7 @@ import java.io.File
  */
 interface ILoader {
     fun init(){}
-
+    fun toggleGif(view: ImageView?, @DrawableRes resId: Int, resume: Boolean)
     fun loadImage(view: ImageView?, @DrawableRes resId: Int)
     fun loadImage(view: ImageView?, url: String)
     fun loadImage(view: ImageView?, url: String, @DrawableRes placeholderResId: Int)

@@ -7,19 +7,17 @@ import android.os.Build
 import android.os.Looper
 import com.baselib.app.ApplicationDelegate
 import com.baselib.helper.LogA
-import com.fastdev.app.CustomApp
+import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
-import com.seuic.uhf.EPC
-import org.litepal.LitePal
 
 /**
  * 功能描述:
  * @author tangdexiang
  * @since 2021/12/12
  */
-class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel?) : MonitorProtocol(looper) {
+class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var dbApiRepository: DbApiRepository) : MonitorProtocol(looper) {
     private var soundPool: SoundPool? = null
     private val localData: HashMap<String, Boolean> = HashMap()
 
@@ -33,25 +31,27 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel?) : Mo
         }?.map {
             SourceBean().apply {
                 pp_code = it.getId()
+                dbApiRepository.syncSaveOrUpdate(viewModel.taskId, this)
             }
         }
         LogA.i("NewSource： $diffData")
         if((diffData?.size?:0) > 0){
             playSound()
             //将数据传递到主线程之中
-            viewModel?.sourceViewModel?.postValue(diffData)
+            viewModel.sourceViewModel.postValue(diffData?.toMutableList())
         }
     }
 
     override fun start() {
         super.start()
         UHFSdk.start()
+        viewModel.switchScanner.postValue(true)
     }
 
     override fun close() {
         UHFSdk.stop()
         localData.clear()
-        viewModel = null
+        viewModel.switchScanner.postValue(false)
         super.close()
     }
 

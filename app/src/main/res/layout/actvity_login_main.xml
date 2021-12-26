@@ -13,12 +13,13 @@
         android:src="@mipmap/logo_login"/>
 
     <EditText
+        android:id="@+id/et_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
         android:hint="请输入手机号/账号"
         android:layout_marginTop="65dp"
-        android:inputType="number"
+        android:inputType="textVisiblePassword"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="12dp"
@@ -29,6 +30,7 @@
         android:layout_marginEnd="24dp"/>
 
     <EditText
+        android:id="@+id/et_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"

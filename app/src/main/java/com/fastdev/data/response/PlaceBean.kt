@@ -8,25 +8,25 @@ import cn.wzbos.android.widget.linked.IPickerData
  * @since 2021/12/16
  */
 class PlaceBean : IPickerData {
-    constructor(checked: Boolean, id: Int, parentId: Int?, name: String?, childs: MutableList<PlaceBean>?) {
+    constructor(checked: Boolean, id: String?, parentId: String?, name: String?, stub: MutableList<PlaceBean>?) {
         this.checked = checked
         this.id = id
         this.parentId = parentId
         this.name = name
-        this.childs = childs
+        this.stub = stub
     }
 
-    constructor(id: Int, name: String?) : this(false, id, null,  name, null)
+    constructor(id: String?, name: String?) : this(false, id, null,  name, null)
 
-    constructor(id: Int, name: String?, childs: MutableList<PlaceBean>) : this(false, id, null,  name, childs.apply { forEach { it.parentId = id } })
+    constructor(id: String?, name: String?, stub: MutableList<PlaceBean>) : this(false, id, null,  name, stub.apply { forEach { it.parentId = id } })
 
     var selected: Boolean = false
     var checked: Boolean = false
-    var id: Int = 0
-    var grandparentId: Int? = null
-    var parentId: Int? = null
+    var id: String? = ""
+    var grandparentId: String? = null
+    var parentId: String? = null
     var name: String? = ""
-    var childs: MutableList<PlaceBean>? = null
+    var stub: MutableList<PlaceBean>? = null
     override fun isSelectedItem(): Boolean {
         return selected
     }
@@ -52,6 +52,6 @@ class PlaceBean : IPickerData {
     }
 
     override fun nodes(): MutableList<out IPickerData>? {
-        return childs
+        return stub
     }
 }

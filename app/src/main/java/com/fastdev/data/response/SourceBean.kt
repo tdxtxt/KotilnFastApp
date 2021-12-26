@@ -1,5 +1,6 @@
 package com.fastdev.data.response
 
+import com.google.gson.annotations.SerializedName
 import org.litepal.annotation.Column
 import org.litepal.crud.LitePalSupport
 
@@ -11,10 +12,11 @@ import org.litepal.crud.LitePalSupport
  */
 class SourceBean : LitePalSupport() {
     companion object{
+        val STATUS_ALL = "all"
+        val STATUS_WAIT = "0" //待盘
         val STATUS_PY = "10" //盘盈
         val STATUS_PK = "20" //盘亏
-        val STATUS_WAIT = "0" //待盘
-        val STATUS_FINISH = "1" //已盘
+        val STATUS_FINISH = "30" //已盘
     }
     val id: Long = 0
 
@@ -30,7 +32,8 @@ class SourceBean : LitePalSupport() {
 
     var pp_status: String? = null //资产状态 10 正常  20闲置  30异常  -1 报废
 
-    var pp_act: String = STATUS_WAIT //盘点状态 0 待盘  1 已盘 10 盘盈  20盘亏
+    @SerializedName("act")
+    var pp_act: String = STATUS_WAIT //盘点状态 0 待盘   10 盘盈  20盘亏  30 已盘
 
     var building_code: String? = null //楼栋id
 
@@ -39,4 +42,14 @@ class SourceBean : LitePalSupport() {
     var house_code: String? = null //房间id
 
     var memo: String? = null //备注
+
+    fun getStatusName(): String{
+        return when (pp_act) {
+            STATUS_FINISH -> "已盘"
+            STATUS_PY -> "盘盈"
+            STATUS_PK -> "盘亏"
+            STATUS_WAIT -> "待盘"
+            else -> pp_act
+        }
+    }
 }

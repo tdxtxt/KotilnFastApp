@@ -10,8 +10,8 @@ import io.reactivex.Flowable
 import retrofit2.http.*
 
 interface NetApi {
-    @POST("api/public/login.do")
-    fun login(@Body params: Map<String, Any>): Flowable<ResponseBody<LoginEntity>>
+    @POST("api/pd/public/login.do")
+    fun login(@Body params: @JvmSuppressWildcards Map<String, Any>): Flowable<ResponseBody<LoginEntity>>
 
     @GET("api/pd/getTaskList.do")
     fun queryTaskList(@Query("type") type: String, @Query("page") pageNum: Int, @Query("rows") pageSize: Int): Flowable<ResponseBody<TaskEntity>>

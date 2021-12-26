@@ -2,6 +2,7 @@ package com.fastdev.helper
 
 import com.baselib.helper.CommonCacheHelper
 import com.fastdev.data.response.LoginEntity
+import com.fastdev.data.response.LoginUser
 
 /**
  * 功能描述:
@@ -15,6 +16,9 @@ fun CommonCacheHelper.putGuideVersion(versionCode: String) = CommonCacheHelper.p
 fun CommonCacheHelper.isLogin(): Boolean = getLogin() != null
 fun CommonCacheHelper.getAccountNo() = getLogin()?.passport
 fun CommonCacheHelper.getToken() = getLogin()?.token?: ""
+
+fun CommonCacheHelper.saveLoginUser(name: String?, pwd: String?) = CommonCacheHelper.put<LoginUser>("loginUser", LoginUser(name, pwd))
+fun CommonCacheHelper.getLoginUser() = CommonCacheHelper.getParcelable("loginUser", LoginUser::class.java)
 
 fun CommonCacheHelper.saveLogin(data: LoginEntity) = CommonCacheHelper.put<LoginEntity>("loginResult", data)
 fun CommonCacheHelper.getLogin(): LoginEntity? = CommonCacheHelper.getParcelable("loginResult", LoginEntity::class.java)

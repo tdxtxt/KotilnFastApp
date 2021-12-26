@@ -9,7 +9,7 @@
     <string-array name="array_source_status">
         <item>待盘</item>
         <item>已盘</item>
-        <item>盘亏</item>
         <item>盘盈</item>
+        <item>盘亏</item>
     </string-array>
 </resources>

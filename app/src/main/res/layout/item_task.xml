@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="16dp"
     android:layout_marginTop="12dp"
     android:layout_marginEnd="16dp"
@@ -28,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:layout_weight="1"
-                android:text="盘点任务名称"
+                tools:text="盘点任务名称"
                 android:textColor="@color/black_333333"
                 android:textSize="@dimen/_15sp" />
 
@@ -36,7 +37,7 @@
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="未完成"
+                tools:text="未完成"
                 android:textColor="@color/red_f5222d"
                 android:textSize="@dimen/_13sp" />
         </LinearLayout>
@@ -56,9 +57,10 @@
                 android:textSize="@dimen/_12sp" />
 
             <TextView
+                android:id="@+id/tv_create_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="王五"
+                tools:text="王五"
                 android:textColor="@color/black_333333"
                 android:textSize="@dimen/_12sp" />
 
@@ -79,6 +81,7 @@
                 android:textSize="@dimen/_12sp" />
 
             <TextView
+                android:id="@+id/tv_starttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2021-11-33"
@@ -102,6 +105,7 @@
                 android:textSize="@dimen/_12sp" />
 
             <TextView
+                android:id="@+id/tv_addr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="渝北区九龙东"
@@ -150,7 +154,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_num_uncheck"
+                    android:id="@+id/tv_num_wait"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -173,7 +177,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_num_complete"
+                    android:id="@+id/tv_num_finish"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -196,7 +200,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_num_outside"
+                    android:id="@+id/tv_num_py"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -219,7 +223,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_num_wane"
+                    android:id="@+id/tv_num_pk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"

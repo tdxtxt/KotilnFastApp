@@ -25,7 +25,7 @@ class LoginPresenter @Inject constructor(val repository: NetApiRepository) : Abs
                     override fun onSuccess(response: ResponseBody<LoginEntity>?) {
                         response?.data?.getData()?.apply {
                             baseView?.loginSuc(this)
-                        }?: ToastHelper.showToast("登录信息为空")
+                        }?: ToastHelper.showToast("返回登录信息为空")
                     }
                     override fun onFailure(response: ResponseBody<LoginEntity>?, errorMsg: String?, e: Throwable?) {
                         ToastHelper.showToast(errorMsg)

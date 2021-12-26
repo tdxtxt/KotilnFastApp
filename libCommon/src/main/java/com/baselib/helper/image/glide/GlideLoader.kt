@@ -6,6 +6,7 @@ import com.baselib.R
 import com.baselib.helper.image.ILoader
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.load.resource.gif.GifDrawable
 import java.io.File
 
 /**
@@ -19,8 +20,32 @@ object GlideLoader: ILoader {
 
   }
 
-  override fun loadImage(view: ImageView?, resId: Int){
-    view?.setImageResource(resId)
+    override fun toggleGif(view: ImageView?, resId: Int, resume: Boolean) {
+        if (view != null && view.drawable is GifDrawable) {
+            val drawable = view.drawable as GifDrawable
+            if(resume){
+                if(!drawable.isRunning) drawable.start()
+            }else{
+                if (drawable.isRunning) drawable.stop()
+            }
+        }else{
+            loadImage(view, resId)
+
+            if (view != null && view.drawable is GifDrawable) {
+                val drawable = view.drawable as GifDrawable
+                if(resume){
+                    if(!drawable.isRunning) drawable.start()
+                }else{
+                    if (drawable.isRunning) drawable.stop()
+                }
+            }
+        }
+    }
+
+    override fun loadImage(view: ImageView?, resId: Int){
+      if(view == null) return
+//    view?.setImageResource(resId)
+      GlideApp.with(view.context).load(resId).into(view)
   }
 
   override fun loadImage(view: ImageView?, url: String) {
@@ -34,8 +59,8 @@ object GlideLoader: ILoader {
   @SuppressLint("ResourceType")
   override fun loadImage(view: ImageView?, url: String,  placeholderResId: Int, isCache: Boolean) {
       if(view == null) return
-      var requests = GlideApp.with(view.context)
-      var request = requests.load(url)
+      val requests = GlideApp.with(view.context)
+      val request = requests.load(url)
       request.transition(DrawableTransitionOptions().crossFade())
       when{
           placeholderResId > 0 -> {

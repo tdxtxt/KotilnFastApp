@@ -12,6 +12,7 @@ import com.baselib.helper.ToastHelper
 import com.baselib.ui.activity.CommToolBarActivity
 import com.baselib.ui.fragment.BaseFragment
 import com.baselib.ui.view.other.TextSpanController
+import com.fastdev.data.response.SourceBean
 import com.fastdev.helper.clearLogin
 import com.fastdev.helper.getAccountNo
 import com.fastdev.helper.isLogin
@@ -47,7 +48,7 @@ class TaskListActivity : CommToolBarActivity() {
             }
         }else{
             //初始化数据库
-            val db = LitePalDB(CommonCacheHelper.getAccountNo(), 1)
+            val db = LitePalDB.fromDefault(CommonCacheHelper.getAccountNo())
             LitePal.use(db)
         }
     }

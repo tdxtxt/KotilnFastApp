@@ -2,30 +2,61 @@ package com.fastdev.ui.activity.task
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import com.baselib.helper.LogA
-import com.baselib.ui.activity.CommToolBarActivity
+import com.baselib.helper.ToastHelper
+import com.baselib.ui.mvp.view.activity.CommToolBarMvpActivity
 import com.fastdev.core.MonitorProtocol
-import com.fastdev.core.UHFSdk
+import com.fastdev.data.repository.DbApiRepository
+import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.qrcode.ScanQrcodeActivity
 import com.fastdev.ui.activity.task.fragment.SourceListFragment
+import com.fastdev.ui.activity.task.presenter.TaskDetailsPresenter
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
+import com.fastdev.ui.dialog.ConfirmSourceDialog
 import com.fastdev.ui.dialog.NewSourceFilterDialog
 import com.fastdev.ui.dialog.ScannerDialog
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_task_details.*
+import javax.inject.Inject
 
-class TaskDetailsActivity : CommToolBarActivity() {
-    val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
+@AndroidEntryPoint
+class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseMvpImpl {
+    @Inject
+    lateinit var dbApiRepository: DbApiRepository
+    @Inject
+    lateinit var presenter: TaskDetailsPresenter
+
     lateinit var viewModel: TaskDetailsViewModel
+
+    var scannerDialog: ScannerDialog? = null
+
+    val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
+    lateinit var task: TaskEntity
+    override fun getParams(bundle: Bundle?) {
+        val temp: TaskEntity? = bundle?.getParcelable("task")
+        if(temp == null){
+            ToastHelper.showToast("任务不能为空")
+            finish()
+        }else{
+            task = temp
+        }
+    }
+
+    override fun createPresenter() = presenter
+
+    override fun createMvpView() = this
 
     override fun getLayoutResId() = R.layout.activity_task_details
 
     override fun initUi() {
-        viewModel = ViewModelProvider(this).get(TaskDetailsViewModel::class.java)
+        viewModel = TaskDetailsViewModel.get(this)
+        viewModel.taskId = task.task_id
 
         setTitleBar("盘点任务详情"){
             menuText = "扫一扫"
@@ -44,12 +75,11 @@ class TaskDetailsActivity : CommToolBarActivity() {
             it.setOnClickListener {
                 when(it){
                     btn_start -> {
-//                        ScannerDialog(fragmentActivity).show()
-                        MonitorProtocol.startReadMonitor(viewModel)
+                        if(scannerDialog == null) scannerDialog = ScannerDialog(fragmentActivity, dbApiRepository)
+                        scannerDialog?.show()
                     }
-
                     btn_end -> {
-                        MonitorProtocol.stopReadMonitor()
+                        ConfirmSourceDialog(fragmentActivity).show()
                     }
 
                     tv_filter -> {
@@ -67,9 +97,21 @@ class TaskDetailsActivity : CommToolBarActivity() {
 
         viewPager.setAdapter(BaseFragmentPagerAdapter(fragments, supportFragmentManager))
         tabLayout.setViewPager(viewPager)
-
+        viewPager.offscreenPageLimit = 5
         viewPager.setCurrentItem(0)
         tabLayout.onPageSelected(0)
+
+        viewModel.refreshQuantity.observe(this, Observer {
+            tabLayout.getTitleView(0)?.text = "全部(${it.all_count})"
+            tabLayout.getTitleView(1)?.text = "待盘(${it.wait_count})"
+            tabLayout.getTitleView(2)?.text = "已盘(${it.finish_count})"
+            tabLayout.getTitleView(3)?.text = "盘盈(${it.py_count})"
+            tabLayout.getTitleView(4)?.text = "盘亏(${it.pk_count})"
+        })
+
+        presenter.queryStatusQuantity(task.task_id){
+            viewModel.refreshQuantity.value = it
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -84,17 +126,17 @@ class TaskDetailsActivity : CommToolBarActivity() {
 
     override fun onResume() {
         super.onResume()
-        UHFSdk.resume()
+        MonitorProtocol.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        UHFSdk.pause()
+        MonitorProtocol.onPause()
     }
 
     companion object{
-        fun open(activity: Activity?){
-            activity?.startActivity(Intent(activity, TaskDetailsActivity::class.java))
+        fun open(activity: Activity?, task: TaskEntity?){
+            activity?.startActivity(Intent(activity, TaskDetailsActivity::class.java).putExtra("task", task))
         }
     }
 }
