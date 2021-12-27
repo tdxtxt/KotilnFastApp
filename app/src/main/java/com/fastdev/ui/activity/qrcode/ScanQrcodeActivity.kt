@@ -8,41 +8,57 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Build
 import android.os.Bundle
-import android.os.Vibrator
-import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import cn.bingoogolapple.qrcode.core.QRCodeView
 import com.baselib.app.ApplicationDelegate
+import com.baselib.helper.HashMapParams
 import com.baselib.helper.RequestPermissionHelper
 import com.baselib.helper.ScreenHelper
 import com.baselib.helper.StatusBarHelper
 import com.baselib.ui.activity.BaseActivity
+import com.fastdev.data.repository.DbApiRepository
+import com.fastdev.data.repository.NetApiRepository
+import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
 import com.fastdev.ui.dialog.QrcodeInputDialog
+import com.fastdev.ui.dialog.QrcodeResultDialog
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_scan_qrcode.*
+import javax.inject.Inject
 
 /**
  * 公用类：二维码扫描
  */
+@AndroidEntryPoint
 class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
+    @Inject
+    lateinit var netApiRepository: NetApiRepository
+    @Inject
+    lateinit var dbApiRepository: DbApiRepository
+
     var soundPool: SoundPool? = null
 
+    var taskId: String? = null
+
+    override fun getParams(bundle: Bundle?) {
+        taskId = bundle?.getString("taskId")
+    }
     /**
      * 扫描结果处理
      */
     override fun onScanQRCodeSuccess(result: String?) {
-        hideProgressBar()
-//        val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
-//        vibrator.vibrate(200)
         playSound{
-            setResult(Activity.RESULT_OK, Intent().putExtra("result", result))
-            finish()
+            QrcodeResultDialog(this, taskId, dbApiRepository).showX(SourceBean().apply { pp_code = result?:"" }){
+                resultOK(it)
+            }
         }
     }
 
+    private fun resultOK(sourceBean: SourceBean?){
+        setResult(Activity.RESULT_OK, Intent().putExtra("result", sourceBean))
+        finish()
+    }
 
     override fun getLayoutResId() = R.layout.activity_scan_qrcode
 
@@ -80,9 +96,11 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
                     }
                     view_input_qrcode -> {
                         zxingview.stopSpot()
-                        QrcodeInputDialog(fragmentActivity).setCancelListener {
-                            zxingview.startSpotAndShowRect()
-                        }.show()
+                        QrcodeInputDialog(this@ScanQrcodeActivity, netApiRepository).showX {
+                            QrcodeResultDialog("查询结果", this@ScanQrcodeActivity, taskId, dbApiRepository).showX(it){
+                                resultOK(it)
+                            }
+                        }.setCancelListener { zxingview.startSpotAndShowRect() }
                     }
                 }
             }
@@ -185,11 +203,11 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
     }
 
     companion object{
-        fun open(activity: FragmentActivity?, listener: ((result: String?) -> Unit)? = null){
+        fun open(activity: FragmentActivity?, taskId: String?, listener: ((result: String?) -> Unit)? = null){
 //            Timber.i("open: time = ${System.currentTimeMillis()}")
             RequestPermissionHelper.requestCameraPermission(activity){
                 grantedPermission {
-                    activity?.startActivityForResult(ScanQrcodeActivity::class.java, null){
+                    activity?.startActivityForResult(ScanQrcodeActivity::class.java, HashMapParams().add("taskId", taskId?:"")){
                         onActivityResult { requestCode, resultCode, data ->
                             if(resultCode == Activity.RESULT_OK) listener?.invoke(data?.getStringExtra("result"))
                         }

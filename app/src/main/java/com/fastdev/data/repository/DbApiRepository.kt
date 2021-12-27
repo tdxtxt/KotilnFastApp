@@ -166,6 +166,14 @@ class DbApiRepository @Inject constructor(){
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun querySourceByCode(taskId: String?, code: String?): Flowable<SourceBean?>{
+        return Flowable.unsafeCreate<SourceBean?> {
+            val data: SourceBean? = LitePal.where("task_id = ? AND pp_code = ?", taskId, code).findFirst(SourceBean::class.java)
+            it.onNext(data)
+            it.onComplete()
+        }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
+    }
+
 //    fun queryTaskPyNum(taskId: String?): Int = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PY).find(SourceBean::class.java)?.size?: 0
 //    fun queryTaskPkNum(taskId: String?): Int = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PK).find(SourceBean::class.java)?.size?: 0
 //    fun queryTaskWaitNum(taskId: String?): Int = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_WAIT).find(SourceBean::class.java)?.size?: 0

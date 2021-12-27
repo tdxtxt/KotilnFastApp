@@ -44,8 +44,5 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
     }
 
     override fun showXX() {
-        ScanQrcodeActivity.open(activity) {
-            ToastHelper.showToast(it)
-        }
     }
 }

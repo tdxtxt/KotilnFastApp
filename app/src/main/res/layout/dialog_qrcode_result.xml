@@ -32,7 +32,7 @@
         android:paddingBottom="7dp"
         android:orientation="horizontal">
         <top.androidman.SuperButton
-            android:id="@+id/btn_start"
+            android:id="@+id/btn_cancel"
             android:layout_gravity="right"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -52,7 +52,7 @@
             android:layout_weight="0.5"/>
 
         <top.androidman.SuperButton
-            android:id="@+id/btn_end"
+            android:id="@+id/btn_next"
             android:layout_gravity="right"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -67,7 +67,7 @@
             app:textColor="@color/white_ffffff"
             app:background_normalColor="@color/blue_2981ff"
             app:textSize="@dimen/_16sp"
-            app:text="查询"/>
+            app:text="确定"/>
     </LinearLayout>
 
 </com.baselib.ui.view.container.RatioRoundLinearLayout>

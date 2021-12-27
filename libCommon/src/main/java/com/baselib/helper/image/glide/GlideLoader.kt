@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.widget.ImageView
 import com.baselib.R
 import com.baselib.helper.image.ILoader
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.load.resource.gif.GifOptions
 import java.io.File
 
 /**
@@ -21,7 +23,8 @@ object GlideLoader: ILoader {
   }
 
     override fun toggleGif(view: ImageView?, resId: Int, resume: Boolean) {
-        if (view != null && view.drawable is GifDrawable) {
+        if(view == null) return
+        if (view.drawable is GifDrawable) {
             val drawable = view.drawable as GifDrawable
             if(resume){
                 if(!drawable.isRunning) drawable.start()
@@ -29,9 +32,9 @@ object GlideLoader: ILoader {
                 if (drawable.isRunning) drawable.stop()
             }
         }else{
-            loadImage(view, resId)
+            GlideApp.with(view.context).load(resId).set(GifOptions.DECODE_FORMAT, DecodeFormat.DEFAULT).into(view)
 
-            if (view != null && view.drawable is GifDrawable) {
+            if (view.drawable is GifDrawable) {
                 val drawable = view.drawable as GifDrawable
                 if(resume){
                     if(!drawable.isRunning) drawable.start()

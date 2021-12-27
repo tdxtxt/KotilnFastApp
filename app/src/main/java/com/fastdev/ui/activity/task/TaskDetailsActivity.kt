@@ -61,7 +61,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         setTitleBar("盘点任务详情"){
             menuText = "扫一扫"
             onClick { rootView, any ->
-                ScanQrcodeActivity.open(fragmentActivity){
+                ScanQrcodeActivity.open(this@TaskDetailsActivity, viewModel.taskId){
 
                 }
             }
