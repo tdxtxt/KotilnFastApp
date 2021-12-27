@@ -1,5 +1,6 @@
 package com.fastdev.ui.dialog
 
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.baselib.ui.dialog.CenterBaseDialog
 import com.baselib.ui.dialog.impl.IBDialog
@@ -14,5 +15,13 @@ class QrcodeInputDialog constructor(activity: FragmentActivity) : CenterBaseDial
     override fun getLayoutId() = R.layout.dialog_input_qrcode
 
     override fun onCreate(dialog: IBDialog) {
+
+        findViewById<View>(R.id.btn_cancel)?.setOnClickListener {
+            dismiss()
+        }
+
+        findViewById<View>(R.id.btn_query)?.setOnClickListener {
+
+        }
     }
 }

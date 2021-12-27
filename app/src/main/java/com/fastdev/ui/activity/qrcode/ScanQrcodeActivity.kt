@@ -79,7 +79,10 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
                         view_flashlight.setBackgroundResource(R.drawable.shape_circle_scanqrcode_white)
                     }
                     view_input_qrcode -> {
-                        QrcodeInputDialog(fragmentActivity).show()
+                        zxingview.stopSpot()
+                        QrcodeInputDialog(fragmentActivity).setCancelListener {
+                            zxingview.startSpotAndShowRect()
+                        }.show()
                     }
                 }
             }
