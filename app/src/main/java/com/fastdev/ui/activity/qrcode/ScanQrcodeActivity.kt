@@ -17,10 +17,14 @@ import com.baselib.helper.RequestPermissionHelper
 import com.baselib.helper.ScreenHelper
 import com.baselib.helper.StatusBarHelper
 import com.baselib.ui.activity.BaseActivity
+import com.baselib.ui.mvp.presenter.BaseMvpPresenter
+import com.baselib.ui.mvp.view.BaseMvpView
+import com.baselib.ui.mvp.view.activity.CommToolBarMvpActivity
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.repository.NetApiRepository
 import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
+import com.fastdev.ui.activity.qrcode.presenter.ScanQrcodePresenter
 import com.fastdev.ui.dialog.QrcodeInputDialog
 import com.fastdev.ui.dialog.QrcodeResultDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,11 +35,13 @@ import javax.inject.Inject
  * 公用类：二维码扫描
  */
 @AndroidEntryPoint
-class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
+class ScanQrcodeActivity : CommToolBarMvpActivity(), QRCodeView.Delegate, ScanQrcodePresenter.BaseMvpImpl {
     @Inject
-    lateinit var netApiRepository: NetApiRepository
-    @Inject
-    lateinit var dbApiRepository: DbApiRepository
+    lateinit var presenter: ScanQrcodePresenter
+
+    override fun createPresenter() = presenter
+
+    override fun createMvpView() = this
 
     var soundPool: SoundPool? = null
 
@@ -49,15 +55,17 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
      */
     override fun onScanQRCodeSuccess(result: String?) {
         playSound{
-            QrcodeResultDialog(this, taskId, dbApiRepository).showX(SourceBean().apply { pp_code = result?:"" }){
-                resultOK(it)
+            QrcodeResultDialog(this, taskId, presenter.dbRepository()).showX(SourceBean().apply { pp_code = result?:"" }){
+                saveSource(it)
             }
         }
     }
 
-    private fun resultOK(sourceBean: SourceBean?){
-        setResult(Activity.RESULT_OK, Intent().putExtra("result", sourceBean))
-        finish()
+    private fun saveSource(sourceBean: SourceBean?){
+        presenter.saveSource(taskId, sourceBean){
+            setResult(Activity.RESULT_OK, Intent().putExtra("result", it))
+            finish()
+        }
     }
 
     override fun getLayoutResId() = R.layout.activity_scan_qrcode
@@ -96,10 +104,15 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
                     }
                     view_input_qrcode -> {
                         zxingview.stopSpot()
-                        QrcodeInputDialog(this@ScanQrcodeActivity, netApiRepository).showX {
-                            QrcodeResultDialog("查询结果", this@ScanQrcodeActivity, taskId, dbApiRepository).showX(it){
-                                resultOK(it)
+                        QrcodeInputDialog(this@ScanQrcodeActivity, taskId, presenter.netRepository()).showX { isSave, sourceBean ->
+                            if(isSave){
+                                saveSource(sourceBean)
+                            }else{
+                                QrcodeResultDialog("查询结果", this@ScanQrcodeActivity, taskId, presenter.dbRepository()).showX(sourceBean){
+                                    saveSource(it)
+                                }
                             }
+
                         }.setCancelListener { zxingview.startSpotAndShowRect() }
                     }
                 }
@@ -159,35 +172,7 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
         })
     }
 
-    override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {
-//        if(isDark){
-//            if(view_flashlight.visibility == View.VISIBLE) return
-//            view_flashlight.visibility = View.VISIBLE
-//            flashingAnimation(iv_flashlight)
-//        }else{
-//            iv_flashlight.clearAnimation()
-//            if(zxingview.isFlashlight){
-//                view_flashlight.visibility = View.VISIBLE
-//            }else{
-//                view_flashlight.visibility = View.GONE
-//            }
-//        }
-    }
-
-   /* private fun flashingAnimation(view: View) {
-        view.apply {
-            startAnimation(AlphaAnimation(0.1f, 1.0f).apply {
-                duration = 1000
-                repeatCount = Animation.INFINITE
-                repeatMode = Animation.RESTART
-                setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationRepeat(p0: Animation?) {}
-                    override fun onAnimationEnd(p0: Animation?) {}
-                    override fun onAnimationStart(p0: Animation?) {}
-                })
-            })
-        }
-    }*/
+    override fun onCameraAmbientBrightnessChanged(isDark: Boolean) { }
 
     override fun onScanQRCodeOpenCameraError() {
          RequestPermissionHelper.requestCameraPermission(this){
@@ -203,13 +188,13 @@ class ScanQrcodeActivity : BaseActivity(), QRCodeView.Delegate {
     }
 
     companion object{
-        fun open(activity: FragmentActivity?, taskId: String?, listener: ((result: String?) -> Unit)? = null){
+        fun open(activity: FragmentActivity?, taskId: String?, listener: ((SourceBean?) -> Unit)? = null){
 //            Timber.i("open: time = ${System.currentTimeMillis()}")
             RequestPermissionHelper.requestCameraPermission(activity){
                 grantedPermission {
                     activity?.startActivityForResult(ScanQrcodeActivity::class.java, HashMapParams().add("taskId", taskId?:"")){
                         onActivityResult { requestCode, resultCode, data ->
-                            if(resultCode == Activity.RESULT_OK) listener?.invoke(data?.getStringExtra("result"))
+                            if(resultCode == Activity.RESULT_OK) listener?.invoke(data?.getParcelableExtra("result"))
                         }
                     }
                 }

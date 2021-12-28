@@ -25,14 +25,18 @@ class RemarkDialog constructor(activity: FragmentActivity) : BottomBaseDialog(ac
 
     var oldStatus: String? = null
     var oldRemark: String? = null
-/*
-   val STATUS_WAIT = "0" //待盘
-   val STATUS_FINISH = "1" //已盘
-   val STATUS_PY = "10" //盘盈
-   val STATUS_PK = "20" //盘亏
-*/
-    val indexMap: HashMap<String, Int> = hashMapOf("0" to 0, "1" to 1, "10" to 2, "20" to 3)
-    val statusMap: HashMap<Int, String> = hashMapOf(0 to "0", 1 to "1", 2 to "10", 3 to "20")
+
+    val indexMap: HashMap<String, Int> = hashMapOf(
+        SourceBean.STATUS_WAIT to 0,
+        SourceBean.STATUS_PY to 1,
+        SourceBean.STATUS_PK to 2,
+        SourceBean.STATUS_FINISH to 3)
+
+    val statusMap: HashMap<Int, String> = hashMapOf(
+            0 to SourceBean.STATUS_WAIT,
+            1 to SourceBean.STATUS_PY,
+            2 to SourceBean.STATUS_PK,
+            3 to SourceBean.STATUS_FINISH)
 
     override fun getLayoutId() = R.layout.dialog_remark
 
@@ -43,15 +47,6 @@ class RemarkDialog constructor(activity: FragmentActivity) : BottomBaseDialog(ac
         oldRemark = source?.memo
         spinner?.setSelection(indexMap[oldStatus] ?: 0)
         etRemark?.setText(oldRemark?: "")
-
-//        spinner?.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                ToastHelper.showToast("onNothingSelected")
-//            }
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                ToastHelper.showToast("onItemSelected:$position")
-//            }
-//        })
 
         findViewById<View>(R.id.btn_next)?.setOnClickListener {
             source?.apply {

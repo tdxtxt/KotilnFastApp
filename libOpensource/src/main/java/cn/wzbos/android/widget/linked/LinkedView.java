@@ -144,6 +144,7 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
         if (nodes != null) {
             for (IPickerData d : nodes) {
                 d.setCheckedItem(false);
+                d.setSelectItem(false);
                 if (d.nodes() != null)
                     reset(d.nodes());
             }
@@ -299,8 +300,8 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
         int nextLevel = prevLevel + 1;
         PickerView nextPicker = createNextPickerView(prevOption, prevLevel, nextLevel, data);
         for (IPickerData pickerData : data) {
-            if (pickerData.isCheckedItem()) {
-                if (pickerData.nodes() != null) {
+            if (pickerData.isSelectedItem()) {
+                if (pickerData.nodes() != null && pickerData.nodes().size() > 0) {
                     autoCreate(nextPicker, prevLevel + 1, pickerData.nodes());
                     break;
                 }
@@ -368,6 +369,8 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
     private int getNextLevelCount(List<? extends IPickerData> nodes) {
         if (nodes == null)
             return 0;
+        if (nodes.size() == 0)
+            return 0;
         return getCount(nodes, 1);
     }
 
@@ -376,7 +379,7 @@ public class LinkedView extends RelativeLayout implements ILinked.IView, PickerV
             return level;
         for (IPickerData pickerData : nodes) {
             if (pickerData.isSelectedItem()) {
-                if (pickerData.nodes() != null) {
+                if (pickerData.nodes() != null && pickerData.nodes().size() > 0) {
                     return getCount(pickerData.nodes(), level + 1);
                 } else {
                     return level;

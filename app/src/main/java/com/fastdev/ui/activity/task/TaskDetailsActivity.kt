@@ -11,6 +11,7 @@ import com.baselib.helper.ToastHelper
 import com.baselib.ui.mvp.view.activity.CommToolBarMvpActivity
 import com.fastdev.core.MonitorProtocol
 import com.fastdev.data.repository.DbApiRepository
+import com.fastdev.data.response.PlaceBean
 import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.qrcode.ScanQrcodeActivity
@@ -35,6 +36,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     lateinit var viewModel: TaskDetailsViewModel
 
     var scannerDialog: ScannerDialog? = null
+    var placeList: List<PlaceBean>? = null
 
     val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
     lateinit var task: TaskEntity
@@ -83,7 +85,8 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                     }
 
                     tv_filter -> {
-                        NewSourceFilterDialog(fragmentActivity).show()
+                        if(placeList == null) placeList = dbApiRepository.queryPlaceList(viewModel.taskId)
+                        NewSourceFilterDialog(fragmentActivity, placeList).show()
                     }
                 }
             }
@@ -101,7 +104,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         viewPager.setCurrentItem(0)
         tabLayout.onPageSelected(0)
 
-        viewModel.refreshQuantity.observe(this, Observer {
+        viewModel.quantityViewModel.observe(this, Observer {
             tabLayout.getTitleView(0)?.text = "全部(${it.all_count})"
             tabLayout.getTitleView(1)?.text = "待盘(${it.wait_count})"
             tabLayout.getTitleView(2)?.text = "已盘(${it.finish_count})"
@@ -109,9 +112,15 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
             tabLayout.getTitleView(4)?.text = "盘亏(${it.pk_count})"
         })
 
-        presenter.queryStatusQuantity(task.task_id){
-            viewModel.refreshQuantity.value = it
-        }
+        viewModel.refreshQuantity.observe(this, Observer { isRefresh ->
+            if(isRefresh){
+                viewModel.refreshQuantity.value = false
+                presenter.queryStatusQuantity(task.task_id){
+                    viewModel.quantityViewModel.value = it
+                }
+            }
+        })
+        viewModel.refreshQuantity.value = true
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

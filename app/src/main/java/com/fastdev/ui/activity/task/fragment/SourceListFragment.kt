@@ -61,22 +61,36 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
             addChildClickViewIds(R.id.btn_remark)
             setOnItemChildClickListener { adapt, view, position ->
                 val item = getItem(position)
-                val currentStatus = item.pp_act
+                val oldStatus = item.pp_act
                 fragmentActivity?.apply {
-                    RemarkDialog(this).show(item){
-                        presenter.updateSource(viewModel?.taskId, it){
-                            if(it != null) viewModel?.refreshAll?.postValue(Pair(Option.UPDATE, it))
-                            if(currentStatus == it?.pp_act){//没有修改状态
-                                adapter.notifyItemChanged(position)
+                    RemarkDialog(this).show(item){ newItem ->
+                        presenter.updateSource(viewModel?.taskId, newItem){
+                            if(newItem != null) viewModel?.refreshAll?.postValue(Pair(Option.UPDATE, newItem))
+
+                            if(oldStatus == newItem?.pp_act){//没有修改状态
+                                when(newItem.pp_act){
+                                    SourceBean.STATUS_FINISH ->  viewModel?.refreshFinish?.postValue(Pair(Option.UPDATE, newItem))
+                                    SourceBean.STATUS_PK ->  viewModel?.refreshPK?.postValue(Pair(Option.UPDATE, newItem))
+                                    SourceBean.STATUS_PY ->  viewModel?.refreshPY?.postValue(Pair(Option.UPDATE, newItem))
+                                    SourceBean.STATUS_WAIT ->  viewModel?.refreshWait?.postValue(Pair(Option.UPDATE, newItem))
+                                }
                             }else{//修改了状态
                                 //移除当前的内容
-                                if(type != SourceBean.STATUS_ALL) adapter.removeAt(position)
-                                when(it?.pp_act){
-                                    SourceBean.STATUS_FINISH -> viewModel?.refreshFinish?.postValue(Pair(Option.INSERT, it))
-                                    SourceBean.STATUS_PK -> viewModel?.refreshPK?.postValue(Pair(Option.INSERT, it))
-                                    SourceBean.STATUS_PY -> viewModel?.refreshPY?.postValue(Pair(Option.INSERT, it))
-                                    SourceBean.STATUS_WAIT -> viewModel?.refreshWait?.postValue(Pair(Option.INSERT, it))
+                                when(oldStatus){
+                                    SourceBean.STATUS_FINISH -> viewModel?.refreshFinish?.postValue(Pair(Option.DELETE, item))
+                                    SourceBean.STATUS_PK -> viewModel?.refreshPK?.postValue(Pair(Option.INSERT, item))
+                                    SourceBean.STATUS_PY -> viewModel?.refreshPY?.postValue(Pair(Option.INSERT, item))
+                                    SourceBean.STATUS_WAIT -> viewModel?.refreshWait?.postValue(Pair(Option.INSERT, item))
                                 }
+                                //新增当前内容
+                                when(newItem?.pp_act){
+                                    SourceBean.STATUS_FINISH -> viewModel?.refreshFinish?.postValue(Pair(Option.INSERT, newItem))
+                                    SourceBean.STATUS_PK -> viewModel?.refreshPK?.postValue(Pair(Option.INSERT, newItem))
+                                    SourceBean.STATUS_PY -> viewModel?.refreshPY?.postValue(Pair(Option.INSERT, newItem))
+                                    SourceBean.STATUS_WAIT -> viewModel?.refreshWait?.postValue(Pair(Option.INSERT, newItem))
+                                }
+
+                                viewModel?.refreshQuantity?.postValue(true)
                             }
                         }
                     }
@@ -88,32 +102,42 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
         when(type){
             SourceBean.STATUS_ALL ->{
                 viewModel?.refreshAll?.observe(this, Observer {
-                    if(it.first == Option.UPDATE) adapter.updateItem(it.second)
+                    optAdapter(it)
                 })
             }
             SourceBean.STATUS_WAIT ->{
                 viewModel?.refreshWait?.observe(this, Observer {
-                    if(it.first == Option.INSERT) adapter.addData(it.second)
+                    optAdapter(it)
                 })
             }
             SourceBean.STATUS_FINISH ->{
                 viewModel?.refreshFinish?.observe(this, Observer {
-                    if(it.first == Option.INSERT) adapter.addData(it.second)
+                    optAdapter(it)
                 })
             }
             SourceBean.STATUS_PK ->{
                 viewModel?.refreshPK?.observe(this, Observer {
-                    if(it.first == Option.INSERT) adapter.addData(it.second)
+                    optAdapter(it)
                 })
             }
             SourceBean.STATUS_PY ->{
                 viewModel?.refreshPY?.observe(this, Observer {
-                    if(it.first == Option.INSERT) adapter.addData(it.second)
+                    optAdapter(it)
                 })
             }
         }
 
         reload(null)
+    }
+
+    private fun optAdapter(opt: Pair<Option, SourceBean>){
+        if(opt.first == Option.INSERT){
+            adapter.addData(opt.second)
+        }else if(opt.first == Option.UPDATE){
+            adapter.updateItem(opt.second)
+        }else if(opt.first == Option.DELETE){
+            adapter.remove(opt.second)
+        }
     }
 
     override fun reload(view: View?) {

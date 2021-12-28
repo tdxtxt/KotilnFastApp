@@ -14,14 +14,16 @@ import com.fastdev.data.response.SourceBean
 class TaskDetailsViewModel : ViewModel(){
     var taskId: String = ""
     val sourceViewModel = MutableLiveData<MutableList<SourceBean>>()
-    val switchScanner = MutableLiveData<Boolean>()
+    val quantityViewModel = MutableLiveData<Quantity>()
+    val switchScannerViewModel = MutableLiveData<Boolean>()
 
     val refreshAll = MutableLiveData<Pair<Option, SourceBean>>()
     val refreshPK = MutableLiveData<Pair<Option, SourceBean>>()
     val refreshPY = MutableLiveData<Pair<Option, SourceBean>>()
     val refreshWait = MutableLiveData<Pair<Option, SourceBean>>()
     val refreshFinish = MutableLiveData<Pair<Option, SourceBean>>()
-    val refreshQuantity = MutableLiveData<Quantity>()
+    val refreshQuantity = MutableLiveData<Boolean>()
+
 
     companion object{
         fun get(owner: ViewModelStoreOwner) = ViewModelProvider(owner).get(TaskDetailsViewModel::class.java)

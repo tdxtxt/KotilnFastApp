@@ -22,6 +22,8 @@ data class SourceBean(
 
     var pp_name: String? = null, //资产名称
 
+    var pp_type: String? = null, //资产类型
+
     var pp_model: String? = null, //规格型号
 
     var pp_addr: String? = null, //存放详细地址
@@ -54,5 +56,13 @@ data class SourceBean(
             STATUS_WAIT -> "待盘"
             else -> pp_act
         }
+    }
+
+    override fun hashCode(): Int {
+        return "sourceBean_${task_id}_${pp_code}".hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return hashCode() == other?.hashCode()
     }
 }

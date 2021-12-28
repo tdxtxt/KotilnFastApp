@@ -67,7 +67,7 @@
             app:textColor="@color/white_ffffff"
             app:background_normalColor="@color/blue_2981ff"
             app:textSize="@dimen/_16sp"
-            app:text="确定"/>
+            app:text="保存"/>
     </LinearLayout>
 
 </com.baselib.ui.view.container.RatioRoundLinearLayout>

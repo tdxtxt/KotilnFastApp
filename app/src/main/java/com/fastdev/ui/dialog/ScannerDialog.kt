@@ -38,6 +38,7 @@ class ScannerDialog constructor(val activity: FragmentActivity, val dbApiReposit
     override fun getLayoutId() = R.layout.dialog_scanner
 
     override fun onCreate(dialog: IBDialog) {
+        setCancelable(false)
         recyclerView = findViewById(R.id.recyclerView)
         btnSwicth = findViewById(R.id.btn_pause)
         btnNext = findViewById(R.id.btn_ok)
@@ -50,10 +51,9 @@ class ScannerDialog constructor(val activity: FragmentActivity, val dbApiReposit
         }.apply { adapter = this }
 
         viewModel = TaskDetailsViewModel.get(activity)
-        setCancelable(false)
         setCancelListener {
             viewModel.sourceViewModel.removeObserver(observer)
-            viewModel.switchScanner.removeObserver(observerSwitcher)
+            viewModel.switchScannerViewModel.removeObserver(observerSwitcher)
         }
         observer = Observer<MutableList<SourceBean>> {
             adapter.addData(it)
@@ -71,13 +71,13 @@ class ScannerDialog constructor(val activity: FragmentActivity, val dbApiReposit
             }
         }
         viewModel.sourceViewModel.observeForever(observer)
-        viewModel.switchScanner.observeForever(observerSwitcher)
+        viewModel.switchScannerViewModel.observeForever(observerSwitcher)
 
         btnSwicth?.setOnClickListener {
             if(MonitorProtocol.isRun){
-                viewModel.switchScanner.postValue(false)
+                viewModel.switchScannerViewModel.postValue(false)
             }else{
-                viewModel.switchScanner.postValue(true)
+                viewModel.switchScannerViewModel.postValue(true)
             }
         }
 

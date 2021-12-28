@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken
 class UserCacheHelper constructor(userName: String) : CEngine by object : MMKVEngine(){
     override fun createMMKVFileKey() = userName
 }{
-    val gson = GsonBuilder().create()
+    private val gson = GsonBuilder().create()
 
     fun saveTaskPlace(taskId: String?, place: List<PlaceBean>?): Boolean{
         if(place == null) return true

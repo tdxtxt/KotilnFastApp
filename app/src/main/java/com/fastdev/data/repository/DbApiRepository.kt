@@ -47,30 +47,42 @@ class DbApiRepository @Inject constructor(){
         return result
     }
 
+    fun queryPlaceList(taskId: String?) = UserCacheHelper.getInstance().getPlaceList(taskId)
+
     /**
      * 更新扫描资源数据，根据任务查询所有资产，若存在则根据状态来更新,不存在则存储并更新状态
      */
-    fun syncSaveOrUpdate(taskId: String, source: SourceBean?){
-        if(source == null) return
+    fun syncSaveOrUpdate(taskId: String, source: SourceBean?): SourceBean?{
+        if(source == null) return null
         source.task_id = taskId
-        val list = LitePal.where("task_id = ?", taskId).find(SourceBean::class.java)
+        val list = LitePal.where("task_id = ? And pp_code = ?", taskId, source.pp_code).find(SourceBean::class.java)
         if(list.isEmpty()){
             source.pp_act = SourceBean.STATUS_PY
             source.save()
+            return source
         }else{
             val existSourceBean = list.firstOrNull { source.pp_code == it.pp_code }
             if(existSourceBean == null){
-                source.pp_act = SourceBean.STATUS_PY;
+                source.pp_act = SourceBean.STATUS_PY
                 source.save()
+                return source
             }else{
                 if(existSourceBean.pp_act == SourceBean.STATUS_WAIT){
                     existSourceBean.pp_act = SourceBean.STATUS_FINISH
                     existSourceBean.update(existSourceBean.id)
                 }
+                return existSourceBean
             }
         }
-//        source.saveOrUpdate("task_id = ? AND pp_code = ?", taskId, source.pp_code)
     }
+
+    fun saveOrUpdate(taskId: String, source: SourceBean?): Flowable<SourceBean?>{
+        return Flowable.unsafeCreate<SourceBean?> {
+            it.onNext(syncSaveOrUpdate(taskId, source))
+            it.onComplete()
+        }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
+    }
+
     /**
      * 更新扫描资源数据，根据任务查询所有资产，若存在则根据状态来更新,不存在则存储并更新状态
      */

@@ -56,7 +56,7 @@ public abstract class BaseQuickLoadMoreAdapter<T, VH extends BaseViewHolder> ext
     public void updateItem(T item){
         if(item == null) return;
         int index = getData().indexOf(item);
-        if(index > 0){
+        if(index > -1){
             getData().set(index, item);
             notifyItemChanged(index);
         }
