@@ -18,13 +18,14 @@
         app:stickyOffset="0dp">
 
         <TextView
+            android:id="@+id/tv_task_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingTop="16dp"
             android:paddingEnd="16dp"
             android:paddingBottom="12dp"
-            android:text="盘点任务名称"
+            tools:text="盘点任务名称"
             android:textColor="@color/black_333333"
             android:textSize="@dimen/_14sp" />
 
@@ -44,6 +45,7 @@
                 android:textSize="@dimen/_12sp" />
 
             <TextView
+                android:id="@+id/tv_task_createname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="王五"
@@ -69,9 +71,10 @@
                 android:textSize="@dimen/_12sp" />
 
             <TextView
+                android:id="@+id/tv_task_starttime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2021-11-33"
+                tools:text="2021-11-33"
                 android:textColor="@color/black_333333"
                 android:textSize="@dimen/_12sp" />
 
@@ -95,9 +98,10 @@
                 android:textSize="@dimen/_12sp" />
 
             <TextView
+                android:id="@+id/tv_task_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="渝北区九龙东"
+                tools:text="渝北区九龙东"
                 android:textColor="@color/black_333333"
                 android:textSize="@dimen/_12sp" />
         </LinearLayout>

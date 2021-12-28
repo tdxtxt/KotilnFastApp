@@ -126,17 +126,17 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
                 })
             }
         }
-
-        reload(null)
     }
 
-    private fun optAdapter(opt: Pair<Option, SourceBean>){
+    private fun optAdapter(opt: Pair<Option, SourceBean?>){
         if(opt.first == Option.INSERT){
-            adapter.addData(opt.second)
+            if(opt.second != null) adapter.addData(opt.second)
         }else if(opt.first == Option.UPDATE){
             adapter.updateItem(opt.second)
         }else if(opt.first == Option.DELETE){
-            adapter.remove(opt.second)
+            if(opt.second != null) adapter.remove(opt.second)
+        }else if(opt.first == Option.RELOAD){
+            reload(null)
         }
     }
 

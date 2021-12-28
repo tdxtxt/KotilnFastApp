@@ -17,12 +17,13 @@ class TaskDetailsViewModel : ViewModel(){
     val quantityViewModel = MutableLiveData<Quantity>()
     val switchScannerViewModel = MutableLiveData<Boolean>()
 
-    val refreshAll = MutableLiveData<Pair<Option, SourceBean>>()
-    val refreshPK = MutableLiveData<Pair<Option, SourceBean>>()
-    val refreshPY = MutableLiveData<Pair<Option, SourceBean>>()
-    val refreshWait = MutableLiveData<Pair<Option, SourceBean>>()
-    val refreshFinish = MutableLiveData<Pair<Option, SourceBean>>()
+    val refreshAll = MutableLiveData<Pair<Option, SourceBean?>>()
+    val refreshPK = MutableLiveData<Pair<Option, SourceBean?>>()
+    val refreshPY = MutableLiveData<Pair<Option, SourceBean?>>()
+    val refreshWait = MutableLiveData<Pair<Option, SourceBean?>>()
+    val refreshFinish = MutableLiveData<Pair<Option, SourceBean?>>()
     val refreshQuantity = MutableLiveData<Boolean>()
+    val refreshGlobal = MutableLiveData<Boolean>()
 
 
     companion object{
@@ -30,7 +31,7 @@ class TaskDetailsViewModel : ViewModel(){
     }
 }
 enum class Option{
-    INSERT, DELETE, UPDATE
+    INSERT, DELETE, UPDATE, RELOAD
 }
 
 class Quantity(

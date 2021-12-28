@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.MotionEvent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.baselib.helper.LogA
@@ -17,6 +18,7 @@ import com.fastdev.ui.R
 import com.fastdev.ui.activity.qrcode.ScanQrcodeActivity
 import com.fastdev.ui.activity.task.fragment.SourceListFragment
 import com.fastdev.ui.activity.task.presenter.TaskDetailsPresenter
+import com.fastdev.ui.activity.task.viewmodel.Option
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
 import com.fastdev.ui.dialog.ConfirmSourceDialog
@@ -64,7 +66,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
             menuText = "扫一扫"
             onClick { rootView, any ->
                 ScanQrcodeActivity.open(this@TaskDetailsActivity, viewModel.taskId){
-
+                    viewModel.refreshGlobal.value = true
                 }
             }
         }
@@ -78,7 +80,9 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                 when(it){
                     btn_start -> {
                         if(scannerDialog == null) scannerDialog = ScannerDialog(fragmentActivity, dbApiRepository)
-                        scannerDialog?.show()
+                        scannerDialog?.show{
+                            viewModel.refreshGlobal.value = true
+                        }
                     }
                     btn_end -> {
                         ConfirmSourceDialog(fragmentActivity).show()
@@ -120,7 +124,27 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                 }
             }
         })
-        viewModel.refreshQuantity.value = true
+        viewModel.refreshGlobal.observe(this, Observer { isRefresh ->
+            if(isRefresh){
+                viewModel.refreshQuantity.value = true
+                viewModel.refreshAll.value = Pair(Option.RELOAD, null)
+                viewModel.refreshWait.value = Pair(Option.RELOAD, null)
+                viewModel.refreshPY.value = Pair(Option.RELOAD, null)
+                viewModel.refreshPK.value = Pair(Option.RELOAD, null)
+                viewModel.refreshFinish.value = Pair(Option.RELOAD, null)
+
+                viewModel.refreshGlobal.value = false
+            }
+        })
+        updateTask()
+        viewModel.refreshGlobal.value = true
+    }
+
+    private fun updateTask(){
+        tv_task_name.text = task.task_name
+        tv_task_createname.text = "接口未返"
+        tv_task_starttime.text = task.task_time
+        tv_task_desc.text = task.task_info
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

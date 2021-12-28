@@ -10,7 +10,7 @@ import com.seuic.uhf.UHFService
  * @since 2021/12/19
  */
 object UHFSdk {
-    val device: UHFService? = null //UHFService.getInstance()
+    val device: UHFService? = UHFService.getInstance()
     fun config(){
 
     }
@@ -26,6 +26,7 @@ object UHFSdk {
     fun read(): MutableList<EPC>?{
         return device?.tagIDs
     }
+
 
     fun resume(){
         val ret = device?.open()

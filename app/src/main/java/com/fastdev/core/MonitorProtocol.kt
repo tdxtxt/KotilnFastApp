@@ -7,6 +7,8 @@ import com.baselib.helper.ToastHelper
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.seuic.uhf.UHFService
+import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * 功能描述:
@@ -35,7 +37,11 @@ abstract class MonitorProtocol constructor(val looper: Looper?) {
         }
 
         fun onResume(){
-            UHFSdk.resume()
+            Flowable.unsafeCreate<Unit> {
+                UHFSdk.resume()
+                it.onNext(Unit)
+                it.onComplete()
+            }.subscribeOn(Schedulers.io()).subscribe()
         }
 
         fun onPause(){

@@ -36,7 +36,7 @@ public class ProgressTransformer<T> implements ObservableTransformer<T, T>, Flow
 
     @Override
     public ObservableSource<T> apply(Observable<T> upstream) {
-        return upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        return upstream.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(final Disposable disposable) throws Exception {
@@ -70,7 +70,7 @@ public class ProgressTransformer<T> implements ObservableTransformer<T, T>, Flow
     @NonNull
     @Override
     public Publisher<T> apply(@NonNull Flowable<T> upstream) {
-        return upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        return upstream.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Subscription>() {
                     @Override
                     public void accept(final Subscription subscription) throws Exception {

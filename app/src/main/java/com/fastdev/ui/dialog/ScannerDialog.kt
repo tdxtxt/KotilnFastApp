@@ -29,6 +29,7 @@ class ScannerDialog constructor(val activity: FragmentActivity, val dbApiReposit
     var btnNext: SuperButton? = null
     var ivAnimation: ImageView? = null
 
+    var action: (() -> Unit)? = null
 
     lateinit var viewModel: TaskDetailsViewModel
     lateinit var observer: Observer<MutableList<SourceBean>>
@@ -83,10 +84,16 @@ class ScannerDialog constructor(val activity: FragmentActivity, val dbApiReposit
 
 
         btnNext?.setOnClickListener {
+            action?.invoke()
             MonitorProtocol.stopReadMonitor()
             dismiss()
         }
 
         btnSwicth?.performClick()
+    }
+
+    fun show(action: () -> Unit){
+        this.action = action
+        super.show()
     }
 }
