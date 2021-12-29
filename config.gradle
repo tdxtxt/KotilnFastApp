@@ -20,8 +20,8 @@ ext{
     host = [
             HOST1_DEVE : "\"http://dev.management.gzf.sczlcq.com/\"",//服务器1开发地址
             HOST1_TEST : "\"http://dev.management.gzf.sczlcq.com/\"",//服务器1测试地址
-            HOST1_RELEASE : "\"https://www.wanandroid.com/release/\"",//服务器1正式地址
-            HOST1_RELEASE_PRE : "\"https://www.wanandroid.com/\"",//服务器1预发布国内正式地址
+            HOST1_RELEASE : "\"http://dev.management.gzf.sczlcq.com/\"",//服务器1正式地址
+            HOST1_RELEASE_PRE : "\"http://dev.management.gzf.sczlcq.com/\"",//服务器1预发布国内正式地址
     ]
 
     supprotLibs = [

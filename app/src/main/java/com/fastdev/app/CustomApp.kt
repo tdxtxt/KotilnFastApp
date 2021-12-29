@@ -42,9 +42,9 @@ class CustomApp : Application() {
             //设置网络框架
             NetMgr.getInstance().registerProvider(TonNetProvider())
             //设置字体不跟随系统变化
-            setTextSize()
+//            setTextSize()
             //设置分享
-            ShareSdk.init(this)
+//            ShareSdk.init(this)
             //rxjava全局异常处理 https://juejin.im/post/5ecc10626fb9a047e25d5aac
             RxJavaPlugins.setErrorHandler { it.printStackTrace() }
             //数据库

@@ -37,18 +37,18 @@ abstract class ApplicationDelegate constructor(val application: Application) : A
     override fun onCreate() {
         context = application
         delegate = this
-        closeAndroidPDialog()
+//        closeAndroidPDialog()
         LogA.init(isLoggable())
         CommonCacheHelper.init(context)
-        ForegroundCallbacks.init(application)
-                .addListener(object : ForegroundListener{
-                    override fun onBecameForeground() {
-                    }
-                    override fun onBecameBackground() {
-                    }
-                })
-
-        initDefaultPicker()
+//        ForegroundCallbacks.init(application)
+//                .addListener(object : ForegroundListener{
+//                    override fun onBecameForeground() {
+//                    }
+//                    override fun onBecameBackground() {
+//                    }
+//                })
+//
+//        initDefaultPicker()
     }
 
     override fun onTerminate() {

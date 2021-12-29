@@ -16,6 +16,8 @@ data class ResponseBody<T> (
     override fun getMessage() = msg
 }
 data class ResultData<T>(val rows: MutableList<T>?){
+    var total: Int = 0
+
     fun getData() = rows?.firstOrNull()
     fun getListData() = rows
     fun isEmpty() = rows?.firstOrNull() == null
