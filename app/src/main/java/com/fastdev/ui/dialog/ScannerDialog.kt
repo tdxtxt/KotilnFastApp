@@ -22,7 +22,7 @@ import top.androidman.SuperButton
  * @author tangdexiang
  * @since 2021/12/19
  */
-class ScannerDialog constructor(val activity: FragmentActivity, val dbApiRepository: DbApiRepository) : CenterBaseDialog(activity) {
+class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDialog(activity) {
     var recyclerView: RecyclerView? = null
     var tvCount: TextView? = null
     var btnSwicth: SuperButton? = null
@@ -54,31 +54,29 @@ class ScannerDialog constructor(val activity: FragmentActivity, val dbApiReposit
         viewModel = TaskDetailsViewModel.get(activity)
         setCancelListener {
             viewModel.sourceViewModel.removeObserver(observer)
-            viewModel.switchScannerViewModel.removeObserver(observerSwitcher)
+            viewModel.switchScanner.removeObserver(observerSwitcher)
         }
         observer = Observer<MutableList<SourceBean>> {
             adapter.addData(it)
             tvCount?.text = "已扫描${adapter.itemCount}条数据"
             recyclerView?.scrollToPosition(adapter.itemCount - 1)
         }
-        observerSwitcher = Observer {
-            ImageLoaderHelper.toggleGif(ivAnimation, R.drawable.gif_scan, it)
-            if(it){
+        observerSwitcher = Observer { switch ->
+            ImageLoaderHelper.toggleGif(ivAnimation, R.drawable.gif_scan, switch)
+            if(switch){
                 btnSwicth?.setText("暂停")
-                MonitorProtocol.startReadMonitor(viewModel, dbApiRepository)
             }else{
                 btnSwicth?.setText("继续")
-                MonitorProtocol.stopReadMonitor()
             }
         }
         viewModel.sourceViewModel.observeForever(observer)
-        viewModel.switchScannerViewModel.observeForever(observerSwitcher)
+        viewModel.switchScanner.observeForever(observerSwitcher)
 
         btnSwicth?.setOnClickListener {
             if(MonitorProtocol.isRun){
-                viewModel.switchScannerViewModel.postValue(false)
+                viewModel.switchScanner.postValue(false)
             }else{
-                viewModel.switchScannerViewModel.postValue(true)
+                viewModel.switchScanner.postValue(true)
             }
         }
 

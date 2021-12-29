@@ -45,13 +45,13 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var d
     override fun start() {
         super.start()
         UHFSdk.start()
-        viewModel.switchScannerViewModel.postValue(true)
+        viewModel.switchScanner.postValue(true)
     }
 
     override fun close() {
         UHFSdk.stop()
         localData.clear()
-        viewModel.switchScannerViewModel.postValue(false)
+        viewModel.switchScanner.postValue(false)
         super.close()
     }
 

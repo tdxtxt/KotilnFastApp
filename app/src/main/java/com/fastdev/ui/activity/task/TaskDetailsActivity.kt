@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.MotionEvent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.baselib.helper.LogA
@@ -13,7 +12,6 @@ import com.baselib.rx.event.RxBus
 import com.baselib.ui.mvp.view.activity.CommToolBarMvpActivity
 import com.fastdev.core.MonitorProtocol
 import com.fastdev.data.event.TaskEventCode
-import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.response.PlaceBean
 import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
@@ -37,7 +35,6 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
 
     lateinit var viewModel: TaskDetailsViewModel
 
-    var scannerDialog: ScannerDialog? = null
     var placeList: List<PlaceBean>? = null
 
     val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
@@ -79,8 +76,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
             it.setOnClickListener {
                 when(it){
                     btn_start -> {
-                        if(scannerDialog == null) scannerDialog = ScannerDialog(fragmentActivity, presenter.dbRepository())
-                        scannerDialog?.show{
+                        ScannerDialog(fragmentActivity).show{
                             viewModel.refreshGlobal.value = true
                         }
                     }
@@ -142,6 +138,13 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         })
         updateTask()
         viewModel.refreshGlobal.value = true
+        viewModel.switchScanner.observe(this, Observer { switch ->
+            if(switch){
+                MonitorProtocol.startReadMonitor(viewModel, presenter.dbRepository())
+            }else{
+                MonitorProtocol.stopReadMonitor()
+            }
+        })
     }
 
     private fun updateTask(){

@@ -15,7 +15,8 @@ class TaskDetailsViewModel : ViewModel(){
     var taskId: String = ""
     val sourceViewModel = MutableLiveData<MutableList<SourceBean>>()
     val quantityViewModel = MutableLiveData<Quantity>()
-    val switchScannerViewModel = MutableLiveData<Boolean>()
+    //扫描器开关
+    val switchScanner = MutableLiveData<Boolean>()
 
     val refreshAll = MutableLiveData<Pair<Option, SourceBean?>>()
     val refreshPK = MutableLiveData<Pair<Option, SourceBean?>>()
