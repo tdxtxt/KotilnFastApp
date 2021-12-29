@@ -15,11 +15,15 @@ class UserCacheHelper constructor(userName: String) : CEngine by object : MMKVEn
 
     fun saveTaskPlace(taskId: String?, place: List<PlaceBean>?): Boolean{
         if(place == null) return true
-        return putString("${taskId}-placeList", gson.toJson(place))?: false
+        return putString("taskPlace_${taskId}", gson.toJson(place))?: false
     }
 
-    fun getPlaceList(taskId: String?): List<PlaceBean>?{
-        val json = getString("$taskId-placeList")
+    fun deleteTaskPlace(taskId: String?): Boolean?{
+        return remove("taskPlace_${taskId}")
+    }
+
+    fun getTaskPlace(taskId: String?): List<PlaceBean>?{
+        val json = getString("taskPlace_${taskId}")
         if(json?.startsWith("[") == true){
             return gson.fromJson<List<PlaceBean>>(json, object : TypeToken<List<PlaceBean>>() {}.type)
         }
@@ -27,15 +31,15 @@ class UserCacheHelper constructor(userName: String) : CEngine by object : MMKVEn
     }
 
     fun saveTask(taskId: String?, task: TaskEntity?): Boolean{
-        return put<TaskEntity>(taskId?:"", task)?: false
+        return put<TaskEntity>("task_${taskId}", task)?: false
     }
 
-    fun deleteTask(taskId: String?){
-        remove(taskId?:"")
+    fun deleteTask(taskId: String?) : Boolean?{
+        return remove("task_${taskId}")
     }
 
     fun getTask(taskId: String?): TaskEntity?{
-        return getParcelable(taskId?:"", TaskEntity::class.java)
+        return getParcelable("task_${taskId}", TaskEntity::class.java)
     }
 
     fun isStartTask(taskId: String?) = getTask(taskId) != null

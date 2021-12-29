@@ -1,19 +1,15 @@
 package com.fastdev.data.repository
 
 import android.content.ContentValues
-import com.baselib.helper.CommonCacheHelper
+import com.baselib.helper.LogA
 import com.fastdev.data.response.SourceBean
-import com.fastdev.data.repository.base.BaseRepository
 import com.fastdev.data.response.SourceResp
 import com.fastdev.helper.UserCacheHelper
-import com.fastdev.helper.getAccountNo
 import com.fastdev.ui.activity.task.viewmodel.Quantity
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.litepal.LitePal
-import org.litepal.extension.deleteAll
-import org.litepal.extension.findFirstAsync
 import org.litepal.extension.runInTransaction
 import javax.inject.Inject
 
@@ -36,18 +32,21 @@ class DbApiRepository @Inject constructor(){
         if(data == null) return false
         val sourceList = data.property_list?.map { it.apply { task_id = taskId } } ?: return false
         if(data.area_list == null) return false
+
         val result = LitePal.runInTransaction {
-            deleteTask(taskId) && LitePal.saveAll(sourceList) &&
+            syncDeleteCacheByTask(taskId) &&
+            LitePal.saveAll(sourceList) &&
             UserCacheHelper.getInstance().saveTask(taskId, data.detail) &&
             UserCacheHelper.getInstance().saveTaskPlace(taskId, data.area_list)
         }
         if(!result){
             UserCacheHelper.getInstance().deleteTask(taskId)
+            UserCacheHelper.getInstance().deleteTaskPlace(taskId)
         }
         return result
     }
 
-    fun queryPlaceList(taskId: String?) = UserCacheHelper.getInstance().getPlaceList(taskId)
+    fun queryPlaceList(taskId: String?) = UserCacheHelper.getInstance().getTaskPlace(taskId)
 
     /**
      * 更新扫描资源数据，根据任务查询所有资产，若存在则根据状态来更新,不存在则存储并更新状态
@@ -55,24 +54,19 @@ class DbApiRepository @Inject constructor(){
     fun syncSaveOrUpdate(taskId: String, source: SourceBean?): SourceBean?{
         if(source == null) return null
         source.task_id = taskId
-        val list = LitePal.where("task_id = ? And pp_code = ?", taskId, source.pp_code).find(SourceBean::class.java)
-        if(list.isEmpty()){
+        val existSourceBean = LitePal.where("task_id = ? And pp_code = ?", taskId, source.pp_code).findFirst(SourceBean::class.java)
+        if(existSourceBean == null){
             source.pp_act = SourceBean.STATUS_PY
-            source.save()
+            val b = source.save()
+            LogA.e("资产${source.pp_code}新增：$b (状态${source.pp_act})")
             return source
         }else{
-            val existSourceBean = list.firstOrNull { source.pp_code == it.pp_code }
-            if(existSourceBean == null){
-                source.pp_act = SourceBean.STATUS_PY
-                source.save()
-                return source
-            }else{
-                if(existSourceBean.pp_act == SourceBean.STATUS_WAIT){
-                    existSourceBean.pp_act = SourceBean.STATUS_FINISH
-                    existSourceBean.update(existSourceBean.id)
-                }
-                return existSourceBean
+            if(existSourceBean.pp_act == SourceBean.STATUS_WAIT){
+                existSourceBean.pp_act = SourceBean.STATUS_FINISH
+                val b = existSourceBean.update(existSourceBean.id)
+                LogA.e("资产${existSourceBean.pp_code}更新：$b (状态${existSourceBean.pp_act})")
             }
+            return existSourceBean
         }
     }
 
@@ -109,18 +103,40 @@ class DbApiRepository @Inject constructor(){
     /**
      * 删除任务与本地相关的所有资源
      */
-    fun deleteTask(taskId: String?): Boolean{
-        return LitePal.deleteAll(SourceBean::class.java, "task_id = ?", taskId) >= 0
+    fun syncDeleteCacheByTask(taskId: String?): Boolean{
+        //删除数据库相关记录
+        val result1 = LitePal.deleteAll(SourceBean::class.java, "task_id = ?", taskId)
+        //删除mmkv相关记录
+        val result2 = UserCacheHelper.getInstance().deleteTask(taskId)
+        val result3 = UserCacheHelper.getInstance().deleteTaskPlace(taskId)
+        return result1 >= 0
     }
 
-    fun update(taskId: String?, source: SourceBean?): Flowable<Boolean>{
+    fun deleteCacheByTask(taskId: String?): Flowable<Boolean>{
         return Flowable.unsafeCreate<Boolean> {
-            val result = LitePal.update(SourceBean::class.java, ContentValues().apply {
-                put("pp_act", source?.pp_act)
-                put("memo", source?.memo)
-            }, source?.id?: -1)
+            it.onNext(syncDeleteCacheByTask(taskId))
+            it.onComplete()
+        }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
+    }
 
-            it.onNext(result > 0)
+    fun update(taskId: String?, source: SourceBean?): Flowable<SourceBean?>{
+        return Flowable.unsafeCreate<SourceBean?> {
+            val existSourceBean = LitePal.where("task_id = ? AND pp_code = ?", taskId, source?.pp_code).findFirst(SourceBean::class.java)
+            if(existSourceBean != null){
+                existSourceBean.apply {
+                    pp_act = source?.pp_act?: pp_act
+                    memo = source?.memo?: memo
+                }
+
+                val b = LitePal.update(SourceBean::class.java, ContentValues().apply {
+                    put("pp_act", existSourceBean.pp_act)
+                    put("memo", existSourceBean.memo)
+                }, existSourceBean.id)
+
+                LogA.e("资产${existSourceBean.pp_code}更新：$b (状态${existSourceBean.pp_act})")
+            }
+
+            it.onNext(existSourceBean)
             it.onComplete()
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
@@ -170,9 +186,14 @@ class DbApiRepository @Inject constructor(){
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun querySourceAll(taskId: String?, pageNum: Int): Flowable<MutableList<SourceBean>> {
+    fun querySourceAll(taskId: String?, pageNum: Int = 0): Flowable<MutableList<SourceBean>> {
         return Flowable.unsafeCreate<MutableList<SourceBean>> {
-            val data = LitePal.where("task_id = ? LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}", taskId).find(SourceBean::class.java)
+            val data =
+                if(pageNum <= 0){
+                    LitePal.where("task_id = ?", taskId).find(SourceBean::class.java)
+                }else{
+                    LitePal.where("task_id = ? LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}", taskId).find(SourceBean::class.java)
+                }
             it.onNext(data)
             it.onComplete()
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())

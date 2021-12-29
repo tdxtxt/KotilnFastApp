@@ -31,8 +31,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseMvpImpl {
     @Inject
-    lateinit var dbApiRepository: DbApiRepository
-    @Inject
     lateinit var presenter: TaskDetailsPresenter
 
     lateinit var viewModel: TaskDetailsViewModel
@@ -79,17 +77,21 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
             it.setOnClickListener {
                 when(it){
                     btn_start -> {
-                        if(scannerDialog == null) scannerDialog = ScannerDialog(fragmentActivity, dbApiRepository)
+                        if(scannerDialog == null) scannerDialog = ScannerDialog(fragmentActivity, presenter.dbRepository())
                         scannerDialog?.show{
                             viewModel.refreshGlobal.value = true
                         }
                     }
                     btn_end -> {
-                        ConfirmSourceDialog(fragmentActivity).show()
+                        presenter.queryStatusQuantity(task.task_id){
+                            ConfirmSourceDialog(fragmentActivity, it).show {
+                                presenter.commitAllSource(task.task_id)
+                            }
+                        }
                     }
 
                     tv_filter -> {
-                        if(placeList == null) placeList = dbApiRepository.queryPlaceList(viewModel.taskId)
+                        if(placeList == null) placeList = presenter.queryPlaceList(viewModel.taskId)
                         NewSourceFilterDialog(fragmentActivity, placeList).show()
                     }
                 }
@@ -147,6 +149,13 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         tv_task_desc.text = task.task_info
     }
 
+    override fun commitSuc() {
+        //删除任务相关的缓存
+        presenter.deleteCacheByTask(task.task_id){
+            finish()
+        }
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         LogA.i("keyCode=$keyCode;")
         return super.onKeyDown(keyCode, event)
@@ -172,4 +181,5 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
             activity?.startActivity(Intent(activity, TaskDetailsActivity::class.java).putExtra("task", task))
         }
     }
+
 }

@@ -10,7 +10,7 @@ import com.seuic.uhf.UHFService
  * @since 2021/12/19
  */
 object UHFSdk {
-    val device: UHFService? = UHFService.getInstance()
+    val device: UHFService? = null //UHFService.getInstance()
     fun config(){
 
     }

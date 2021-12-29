@@ -24,6 +24,7 @@
         android:layout_marginTop="28dp"
         android:orientation="horizontal">
         <TextView
+            android:id="@+id/tv_total"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -32,6 +33,7 @@
             android:textSize="@dimen/_16sp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_num_wait"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -40,6 +42,7 @@
             android:textSize="@dimen/_16sp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_num_finish"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -59,6 +62,7 @@
             android:layout_weight="0.6"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_num_py"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -67,6 +71,7 @@
             android:textSize="@dimen/_16sp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:id="@+id/tv_num_pk"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -88,7 +93,7 @@
         android:paddingBottom="7dp"
         android:orientation="horizontal">
         <top.androidman.SuperButton
-            android:id="@+id/btn_start"
+            android:id="@+id/btn_cancel"
             android:layout_gravity="right"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -108,7 +113,7 @@
             android:layout_weight="0.5"/>
 
         <top.androidman.SuperButton
-            android:id="@+id/btn_end"
+            android:id="@+id/btn_next"
             android:layout_gravity="right"
             android:layout_width="0dp"
             android:layout_weight="1"

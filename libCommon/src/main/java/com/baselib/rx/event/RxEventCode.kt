@@ -2,11 +2,15 @@ package com.baselib.rx.event
 
 abstract class RxEventCode constructor(val code: Int, val data: Any? = null) {
     override fun equals(other: Any?): Boolean {
-        if(other is RxEventCode){
-            return code == other.code
-        }
-        return false
+        return if (other is RxEventCode) code == other.code else false
     }
+
+    override fun hashCode(): Int {
+        var result = code?.hashCode() ?: 0
+        result = 31 * result + (data?.hashCode() ?: 0)
+        return result
+    }
+
     companion object{
         //登录成功通知
         val LOGIN = object : RxEventCode(1){}

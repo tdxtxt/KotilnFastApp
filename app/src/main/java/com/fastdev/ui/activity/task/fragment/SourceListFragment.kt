@@ -64,30 +64,30 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
                 val oldStatus = item.pp_act
                 fragmentActivity?.apply {
                     RemarkDialog(this).show(item){ newItem ->
-                        presenter.updateSource(viewModel?.taskId, newItem){
-                            if(newItem != null) viewModel?.refreshAll?.postValue(Pair(Option.UPDATE, newItem))
+                        presenter.updateSource(viewModel?.taskId, newItem){ existNewItem ->
+                            if(existNewItem != null) viewModel?.refreshAll?.postValue(Pair(Option.UPDATE, existNewItem))
 
-                            if(oldStatus == newItem?.pp_act){//没有修改状态
-                                when(newItem.pp_act){
-                                    SourceBean.STATUS_FINISH ->  viewModel?.refreshFinish?.postValue(Pair(Option.UPDATE, newItem))
-                                    SourceBean.STATUS_PK ->  viewModel?.refreshPK?.postValue(Pair(Option.UPDATE, newItem))
-                                    SourceBean.STATUS_PY ->  viewModel?.refreshPY?.postValue(Pair(Option.UPDATE, newItem))
-                                    SourceBean.STATUS_WAIT ->  viewModel?.refreshWait?.postValue(Pair(Option.UPDATE, newItem))
+                            if(oldStatus == existNewItem?.pp_act){//没有修改状态
+                                when(existNewItem.pp_act){
+                                    SourceBean.STATUS_FINISH ->  viewModel?.refreshFinish?.postValue(Pair(Option.UPDATE, existNewItem))
+                                    SourceBean.STATUS_PK ->  viewModel?.refreshPK?.postValue(Pair(Option.UPDATE, existNewItem))
+                                    SourceBean.STATUS_PY ->  viewModel?.refreshPY?.postValue(Pair(Option.UPDATE, existNewItem))
+                                    SourceBean.STATUS_WAIT ->  viewModel?.refreshWait?.postValue(Pair(Option.UPDATE, existNewItem))
                                 }
                             }else{//修改了状态
                                 //移除当前的内容
                                 when(oldStatus){
                                     SourceBean.STATUS_FINISH -> viewModel?.refreshFinish?.postValue(Pair(Option.DELETE, item))
-                                    SourceBean.STATUS_PK -> viewModel?.refreshPK?.postValue(Pair(Option.INSERT, item))
-                                    SourceBean.STATUS_PY -> viewModel?.refreshPY?.postValue(Pair(Option.INSERT, item))
-                                    SourceBean.STATUS_WAIT -> viewModel?.refreshWait?.postValue(Pair(Option.INSERT, item))
+                                    SourceBean.STATUS_PK -> viewModel?.refreshPK?.postValue(Pair(Option.DELETE, item))
+                                    SourceBean.STATUS_PY -> viewModel?.refreshPY?.postValue(Pair(Option.DELETE, item))
+                                    SourceBean.STATUS_WAIT -> viewModel?.refreshWait?.postValue(Pair(Option.DELETE, item))
                                 }
                                 //新增当前内容
-                                when(newItem?.pp_act){
-                                    SourceBean.STATUS_FINISH -> viewModel?.refreshFinish?.postValue(Pair(Option.INSERT, newItem))
-                                    SourceBean.STATUS_PK -> viewModel?.refreshPK?.postValue(Pair(Option.INSERT, newItem))
-                                    SourceBean.STATUS_PY -> viewModel?.refreshPY?.postValue(Pair(Option.INSERT, newItem))
-                                    SourceBean.STATUS_WAIT -> viewModel?.refreshWait?.postValue(Pair(Option.INSERT, newItem))
+                                when(existNewItem?.pp_act){
+                                    SourceBean.STATUS_FINISH -> viewModel?.refreshFinish?.postValue(Pair(Option.INSERT, existNewItem))
+                                    SourceBean.STATUS_PK -> viewModel?.refreshPK?.postValue(Pair(Option.INSERT, existNewItem))
+                                    SourceBean.STATUS_PY -> viewModel?.refreshPY?.postValue(Pair(Option.INSERT, existNewItem))
+                                    SourceBean.STATUS_WAIT -> viewModel?.refreshWait?.postValue(Pair(Option.INSERT, existNewItem))
                                 }
 
                                 viewModel?.refreshQuantity?.postValue(true)

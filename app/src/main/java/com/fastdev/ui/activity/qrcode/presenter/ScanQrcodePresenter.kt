@@ -17,10 +17,11 @@ class ScanQrcodePresenter @Inject constructor(val netRepository: NetApiRepositor
     @SuppressLint("CheckResult")
     fun saveSource(taskId: String?, source: SourceBean?, suc: ((SourceBean?) -> Unit)){
         dbRepository.saveOrUpdate(taskId?:"", source)
-                .compose(baseView?.bindLifecycle())
                 .compose(baseView?.bindProgress())
-                .subscribe {
+                .subscribe ({
                     suc.invoke(it)
+                }){
+                    it.printStackTrace()
                 }
     }
 

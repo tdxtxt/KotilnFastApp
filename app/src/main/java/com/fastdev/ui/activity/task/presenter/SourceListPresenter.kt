@@ -62,12 +62,12 @@ class SourceListPresenter @Inject constructor(val netRepository: NetApiRepositor
                         }
     }
 
-    fun updateSource(taskId: String?, source: SourceBean?, callback: () -> Unit){
+    fun updateSource(taskId: String?, source: SourceBean?, callback: (SourceBean?) -> Unit){
         val disposable =
             dbRepository.update(taskId, source)
                     .compose(baseView?.bindLifecycle())
                     .subscribe {
-                        callback.invoke()
+                        callback.invoke(it)
                     }
     }
 
