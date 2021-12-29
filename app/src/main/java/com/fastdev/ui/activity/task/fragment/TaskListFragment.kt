@@ -2,6 +2,7 @@ package com.fastdev.ui.activity.task.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import com.baselib.helper.ToastHelper
 import com.baselib.ui.fragment.BaseFragment
 import com.baselib.ui.mvp.presenter.BaseMvpPresenter
@@ -13,6 +14,8 @@ import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.TaskDetailsActivity
 import com.fastdev.ui.activity.task.presenter.TaskListPresenter
+import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
+import com.fastdev.ui.activity.task.viewmodel.TaskListViewModel
 import com.fastdev.ui.adapter.BaseQuickLoadMoreAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_list.*
@@ -22,6 +25,7 @@ import javax.inject.Inject
 class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
     @Inject
     lateinit var presenter: TaskListPresenter
+    var viewModel: TaskListViewModel? = null
 
     lateinit var adapter: BaseQuickLoadMoreAdapter<TaskEntity, BaseViewHolder>
 
@@ -38,21 +42,28 @@ class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
     override fun getLayoutId() = R.layout.fragment_task_list
 
     override fun initUi() {
+        viewModel = fragmentActivity?.run { TaskListViewModel.get(this) }
+        viewModel?.refreshGlobal?.observe(this, Observer {
+            reload(null)
+        })
+
         adapter = object : BaseQuickLoadMoreAdapter<TaskEntity, BaseViewHolder>(R.layout.item_task, -1){
             override fun convert(holder: BaseViewHolder, item: TaskEntity) {
                 holder.setText(R.id.tv_name, item.task_name)
                         .setText(R.id.tv_status, item.getStatus())
                         .setText(R.id.tv_create_name, "接口未返回")
                         .setText(R.id.tv_starttime, item.task_time)
-                        .setText(R.id.tv_addr, "接口未返回")
+                        .setText(R.id.tv_remark, item.task_info)
                         .setText(R.id.tv_num_all, item.task_pd_count)
                         .setText(R.id.tv_num_wait, item.task_wait_count)
                         .setText(R.id.tv_num_finish, item.task_complete_count)
                         .setText(R.id.tv_num_py, item.task_py_count)
                         .setText(R.id.tv_num_pk, item.task_pk_count)
+                        .setGone(R.id.btn_next, isHistoryList())
             }
         }
-        adapter.setOnItemClickListener { adapt, view, position ->
+        adapter.addChildClickViewIds(R.id.btn_next)
+        adapter.setOnItemChildClickListener { adapt, view, position ->
             if(!isHistoryList()){
                 presenter.loadAllSourceByTask(adapter.getItem(position))
             }

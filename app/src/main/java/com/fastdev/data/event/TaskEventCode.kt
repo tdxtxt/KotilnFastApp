@@ -7,10 +7,10 @@ import com.baselib.rx.event.RxEventCode
  * @author tangdexiang
  * @since 2021/4/13
  */
-abstract class TaskEventCode(code: Int, data: Any? = null) : RxEventCode(code, data) {
+abstract class TaskEventCode(code: Int) : RxEventCode(code) {
 
     companion object{
-        val DELETE_TASK = object : TaskEventCode(10111) {}
+        val COMMIT_SUCCESS = object : TaskEventCode(10111) {}
     }
 
 }

@@ -5,13 +5,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import com.baselib.helper.CommonCacheHelper
 import com.baselib.helper.DialogHelper
+import com.baselib.helper.LogA
 import com.baselib.helper.ToastHelper
+import com.baselib.rx.event.RxBus
 import com.baselib.ui.activity.CommToolBarActivity
 import com.baselib.ui.fragment.BaseFragment
 import com.baselib.ui.view.other.TextSpanController
+import com.fastdev.data.event.TaskEventCode
+import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.response.SourceBean
 import com.fastdev.helper.clearLogin
 import com.fastdev.helper.getAccountNo
@@ -19,19 +24,28 @@ import com.fastdev.helper.isLogin
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.login.LoginMainActivity
 import com.fastdev.ui.activity.task.fragment.TaskListFragment
+import com.fastdev.ui.activity.task.viewmodel.TaskListViewModel
 import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
 import com.fastdev.ui.dialog.ConfigDialog
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_task_list.*
 import org.litepal.LitePal
 import org.litepal.LitePalDB
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TaskListActivity : CommToolBarActivity() {
+    @Inject
+    lateinit var dbRepository: DbApiRepository
+    lateinit var viewModel: TaskListViewModel
+
     override fun getLayoutResId() = R.layout.activity_task_list
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = TaskListViewModel.get(this)
         if(TextUtils.isEmpty(CommonCacheHelper.getAccountNo())){
             DialogHelper.showCommDialog(fragmentActivity, "警告", "未获取到登录信息", {
                 menuText = "退出"
@@ -71,6 +85,14 @@ class TaskListActivity : CommToolBarActivity() {
 
         viewPager.setCurrentItem(0)
         tabLayout.onPageSelected(0)
+
+        val disposable =
+                RxBus.listen(TaskEventCode.COMMIT_SUCCESS::class.java)
+                        .subscribe {
+                            ToastHelper.showToast("删除任务${it.getData()?.toString()}")
+                            deleteCacheByTask(it.getData()?.toString())
+                            viewModel.refreshGlobal.postValue(true)
+                        }
     }
 
     override fun clickTitleBarBack(): Boolean {
@@ -88,6 +110,25 @@ class TaskListActivity : CommToolBarActivity() {
             }
         }
         return false
+    }
+
+    fun deleteCacheByTask(taskId: String?){
+        val disposable =
+                dbRepository.deleteCacheByTask(taskId)
+                        .compose(bindProgress())
+                        .subscribe {
+
+                        }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        LogA.i("keyCode=$keyCode;")
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        LogA.i("keyCode=$keyCode;")
+        return super.onKeyUp(keyCode, event)
     }
 
     companion object{

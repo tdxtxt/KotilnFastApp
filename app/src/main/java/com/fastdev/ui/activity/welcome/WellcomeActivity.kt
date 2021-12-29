@@ -67,6 +67,7 @@ class WellcomeActivity : BaseActivity() {
     fun startMain(){
         if(CommonCacheHelper.isLogin()){
             TaskListActivity.open(fragmentActivity)
+            finish()
         }else{
             LoginMainActivity.open(fragmentActivity, {
                 TaskListActivity.open(fragmentActivity)

@@ -11,6 +11,8 @@ import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.repository.NetApiRepository
 import com.fastdev.net.observer.BaseObserver
 import com.fastdev.ui.activity.task.viewmodel.Quantity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -31,7 +33,7 @@ class TaskDetailsPresenter @Inject constructor(val netRepository: NetApiReposito
 
     fun commitAllSource(taskId: String?){
         val disposable =
-            dbRepository.querySourceAll(taskId)
+            dbRepository.querySourceAll(taskId).observeOn(Schedulers.single())
                     .flatMap {
                         netRepository.postAllSource(taskId, it)
                     }.compose(baseView?.bindProgress())
@@ -43,15 +45,6 @@ class TaskDetailsPresenter @Inject constructor(val netRepository: NetApiReposito
                             ToastHelper.showToast(errorMsg)
                         }
                     })
-    }
-
-    fun deleteCacheByTask(taskId: String?, action: () -> Unit){
-        val disposable =
-            dbRepository.deleteCacheByTask(taskId)
-                    .compose(baseView?.bindProgress())
-                    .subscribe {
-                        RxBus.send(TaskEventCode.DELETE_TASK)
-                    }
     }
 
     fun queryPlaceList(taskId: String?) = dbRepository.queryPlaceList(taskId)

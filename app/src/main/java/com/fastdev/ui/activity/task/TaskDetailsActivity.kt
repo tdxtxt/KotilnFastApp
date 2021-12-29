@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.baselib.helper.LogA
 import com.baselib.helper.ToastHelper
+import com.baselib.rx.event.RxBus
 import com.baselib.ui.mvp.view.activity.CommToolBarMvpActivity
 import com.fastdev.core.MonitorProtocol
+import com.fastdev.data.event.TaskEventCode
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.response.PlaceBean
 import com.fastdev.data.response.TaskEntity
@@ -150,10 +152,8 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     }
 
     override fun commitSuc() {
-        //删除任务相关的缓存
-        presenter.deleteCacheByTask(task.task_id){
-            finish()
-        }
+        RxBus.send(TaskEventCode.COMMIT_SUCCESS.setData(taskId))
+        finish()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

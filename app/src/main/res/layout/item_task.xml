@@ -105,7 +105,7 @@
                 android:textSize="@dimen/_12sp" />
 
             <TextView
-                android:id="@+id/tv_addr"
+                android:id="@+id/tv_remark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="渝北区九龙东"

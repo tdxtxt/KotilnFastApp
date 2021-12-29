@@ -1,14 +1,21 @@
 package com.baselib.rx.event
 
-abstract class RxEventCode constructor(val code: Int, val data: Any? = null) {
+abstract class RxEventCode constructor(val code: Int) {
+    private var data: Any? = null
+
+    fun setData(data: Any): RxEventCode{
+        this.data = data
+        return this
+    }
+
+    fun getData() = data
+
     override fun equals(other: Any?): Boolean {
         return if (other is RxEventCode) code == other.code else false
     }
 
     override fun hashCode(): Int {
-        var result = code?.hashCode() ?: 0
-        result = 31 * result + (data?.hashCode() ?: 0)
-        return result
+        return code.hashCode()
     }
 
     companion object{
