@@ -7,7 +7,7 @@
     <item android:bottom="@dimen/dp_40">
         <bitmap
             android:gravity="center"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo_splash" />
     </item>
 
     <!-- 最下面的文字，注意这里有个 bottom 设置 -->
