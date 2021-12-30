@@ -22,9 +22,9 @@ import javax.inject.Inject
  */
 class TaskDetailsPresenter @Inject constructor(val netRepository: NetApiRepository, val dbRepository: DbApiRepository): AbsPresenter<TaskDetailsPresenter.BaseMvpImpl>() {
 
-    fun queryStatusQuantity(taskId: String?, callback: (quantity: Quantity) -> Unit){
+    fun queryStatusQuantity(taskId: String?, sqlWhere: String? = null, callback: (quantity: Quantity) -> Unit){
         val disposable =
-        dbRepository.queryStatusQuantity(taskId)
+        dbRepository.queryStatusQuantity(taskId, sqlWhere)
                 .compose(baseView?.bindLifecycle())
                 .subscribe {
                     callback.invoke(it)

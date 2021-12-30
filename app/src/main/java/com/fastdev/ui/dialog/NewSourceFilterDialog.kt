@@ -9,6 +9,7 @@ import com.baselib.ui.dialog.BottomBaseDialog
 import com.baselib.ui.dialog.impl.IBDialog
 import com.fastdev.data.response.PlaceBean
 import com.fastdev.ui.R
+import java.lang.StringBuilder
 
 /**
  * 功能描述:
@@ -16,7 +17,7 @@ import com.fastdev.ui.R
  * @since 2021/12/16
  */
 class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeList: List<PlaceBean>?) : BottomBaseDialog(activity) {
-    var action: ((List<PlaceBean>?, List<PlaceBean>?) -> Unit)? = null
+    var action: ((String) -> Unit)? = null
 
     private var linkedView: LinkedView? = null
 
@@ -109,9 +110,8 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeLis
                 }
             }
 
-            action?.invoke(foorList, roomList)
+            action?.invoke(createSqlWhere(foorList, roomList))
             dismiss()
-//            ToastHelper.showToast("楼层：${foorList}\n房间:${roomList}")
 
         }
         linkedView?.setData(placeList)
@@ -121,7 +121,22 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeLis
         }
     }
 
-    fun show(action: (List<PlaceBean>?, List<PlaceBean>?) -> Unit){
+    private fun createSqlWhere(selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?): String{
+        val resutWhere = StringBuilder("")
+        if(selectFoor?.isEmpty() == true && selectRoom?.isEmpty() == true) return resutWhere.toString()
+        selectFoor?.forEachIndexed { index, foor ->
+            resutWhere.append("( building_code = '${foor.parentId}' AND floor_code = '${foor.id}' )")
+            if(index < selectFoor.size - 1) resutWhere.append(" OR ")
+        }
+        selectRoom?.forEachIndexed { index, room ->
+            resutWhere.append("( building_code = '${room.grandparentId}' AND floor_code = '${room.parentId}' AND house_code = '${room.id}' )")
+            if(index < selectRoom.size - 1) resutWhere.append(" OR ")
+        }
+        if(!TextUtils.isEmpty(resutWhere.toString())) resutWhere.insert(0, "( ").append(" )")
+        return resutWhere.toString()
+    }
+
+    fun show(action: (String) -> Unit){
         this.action = action
         super.show()
     }

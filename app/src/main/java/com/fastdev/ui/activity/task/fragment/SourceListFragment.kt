@@ -148,19 +148,19 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
     private fun load(){
         when(type){
             SourceBean.STATUS_ALL ->{
-                presenter.querySourceAll(viewModel?.taskId, pageNum, viewModel?.selectFoorList, viewModel?.selectRoomList)
+                presenter.querySourceAll(viewModel?.taskId, pageNum, viewModel?.sqlWhere)
             }
             SourceBean.STATUS_WAIT ->{
-                presenter.querySourceByWait(viewModel?.taskId, pageNum, viewModel?.selectFoorList, viewModel?.selectRoomList)
+                presenter.querySourceByWait(viewModel?.taskId, pageNum, viewModel?.sqlWhere)
             }
             SourceBean.STATUS_PY ->{
-                presenter.querySourceByPY(viewModel?.taskId, pageNum, viewModel?.selectFoorList, viewModel?.selectRoomList)
+                presenter.querySourceByPY(viewModel?.taskId, pageNum, viewModel?.sqlWhere)
             }
             SourceBean.STATUS_PK ->{
-                presenter.querySourceByPK(viewModel?.taskId, pageNum, viewModel?.selectFoorList, viewModel?.selectRoomList)
+                presenter.querySourceByPK(viewModel?.taskId, pageNum, viewModel?.sqlWhere)
             }
             SourceBean.STATUS_FINISH ->{
-                presenter.querySourceByFinish(viewModel?.taskId, pageNum, viewModel?.selectFoorList, viewModel?.selectRoomList)
+                presenter.querySourceByFinish(viewModel?.taskId, pageNum, viewModel?.sqlWhere)
             }
         }
     }

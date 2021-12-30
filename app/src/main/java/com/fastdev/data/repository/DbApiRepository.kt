@@ -1,6 +1,7 @@
 package com.fastdev.data.repository
 
 import android.content.ContentValues
+import android.text.TextUtils
 import com.baselib.helper.LogA
 import com.fastdev.data.response.SourceBean
 import com.fastdev.data.response.SourceResp
@@ -141,58 +142,70 @@ class DbApiRepository @Inject constructor(){
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun queryStatusQuantity(taskId: String?): Flowable<Quantity>{
+    fun queryStatusQuantity(taskId: String?, where: String? = null): Flowable<Quantity>{
         return Flowable.unsafeCreate<Quantity>{
             it.onNext(Quantity(
-                    LitePal.where("task_id = ?", taskId).count(SourceBean::class.java),
-                    LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_WAIT).count(SourceBean::class.java),
-                    LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_FINISH).count(SourceBean::class.java),
-                    LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PY).count(SourceBean::class.java),
-                    LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PK).count(SourceBean::class.java)
+                    LitePal.where("task_id = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"}", taskId).count(SourceBean::class.java),
+                    LitePal.where("task_id = ? AND pp_act = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"}", taskId, SourceBean.STATUS_WAIT).count(SourceBean::class.java),
+                    LitePal.where("task_id = ? AND pp_act = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"}", taskId, SourceBean.STATUS_FINISH).count(SourceBean::class.java),
+                    LitePal.where("task_id = ? AND pp_act = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"}", taskId, SourceBean.STATUS_PY).count(SourceBean::class.java),
+                    LitePal.where("task_id = ? AND pp_act = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"}", taskId, SourceBean.STATUS_PK).count(SourceBean::class.java)
             ))
             it.onComplete()
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun querySourceByPY(taskId: String?, pageNum: Int): Flowable<MutableList<SourceBean>> {
+    fun querySourceByPY(taskId: String?, pageNum: Int, where: String?): Flowable<MutableList<SourceBean>> {
         return Flowable.unsafeCreate<MutableList<SourceBean>> {
-            val data = LitePal.where("task_id = ? AND pp_act = ? LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}", taskId, SourceBean.STATUS_PY).find(SourceBean::class.java)
+            val sql = "task_id = ? AND pp_act = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"} LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}"
+            LogA.i(sql.replace("task_id = ?", "task_id = $taskId").replace("pp_act = ?", "pp_act = ${SourceBean.STATUS_PY}"))
+            val data = LitePal.where(sql, taskId, SourceBean.STATUS_PY).find(SourceBean::class.java)
             it.onNext(data)
             it.onComplete()
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun querySourceByFinish(taskId: String?, pageNum: Int): Flowable<MutableList<SourceBean>> {
+    fun querySourceByFinish(taskId: String?, pageNum: Int, where: String?): Flowable<MutableList<SourceBean>> {
         return Flowable.unsafeCreate<MutableList<SourceBean>> {
-            val data = LitePal.where("task_id = ? AND pp_act = ? LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}", taskId, SourceBean.STATUS_FINISH).find(SourceBean::class.java)
+            val sql = "task_id = ? AND pp_act = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"} LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}"
+            LogA.i(sql.replace("task_id = ?", "task_id = $taskId").replace("pp_act = ?", "pp_act = ${SourceBean.STATUS_FINISH}"))
+            val data = LitePal.where(sql, taskId, SourceBean.STATUS_FINISH).find(SourceBean::class.java)
             it.onNext(data)
             it.onComplete()
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun querySourceByPK(taskId: String?, pageNum: Int): Flowable<MutableList<SourceBean>> {
+    fun querySourceByPK(taskId: String?, pageNum: Int, where: String?): Flowable<MutableList<SourceBean>> {
         return Flowable.unsafeCreate<MutableList<SourceBean>> {
-            val data = LitePal.where("task_id = ? AND pp_act = ? LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}", taskId, SourceBean.STATUS_PK).find(SourceBean::class.java)
+            val sql = "task_id = ? AND pp_act = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"} LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}"
+            LogA.i(sql.replace("task_id = ?", "task_id = $taskId").replace("pp_act = ?", "pp_act = ${SourceBean.STATUS_PK}"))
+            val data = LitePal.where(sql, taskId, SourceBean.STATUS_PK).find(SourceBean::class.java)
             it.onNext(data)
             it.onComplete()
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun querySourceByWait(taskId: String?, pageNum: Int): Flowable<MutableList<SourceBean>> {
+    fun querySourceByWait(taskId: String?, pageNum: Int, where: String? = null): Flowable<MutableList<SourceBean>> {
         return Flowable.unsafeCreate<MutableList<SourceBean>> {
-            val data = LitePal.where("task_id = ? AND pp_act = ? LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}", taskId, SourceBean.STATUS_WAIT).find(SourceBean::class.java)
+            val sql = "task_id = ? AND pp_act = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"} LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}"
+            LogA.i(sql.replace("task_id = ?", "task_id = $taskId").replace("pp_act = ?", "pp_act = ${SourceBean.STATUS_WAIT}"))
+            val data = LitePal.where(sql, taskId, SourceBean.STATUS_WAIT).find(SourceBean::class.java)
             it.onNext(data)
             it.onComplete()
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun querySourceAll(taskId: String?, pageNum: Int = 0): Flowable<MutableList<SourceBean>> {
+    fun querySourceAll(taskId: String?, pageNum: Int = 0, where: String? = null): Flowable<MutableList<SourceBean>> {
         return Flowable.unsafeCreate<MutableList<SourceBean>> {
             val data =
                 if(pageNum <= 0){
-                    LitePal.where("task_id = ?", taskId).find(SourceBean::class.java)
+                    val sql = "task_id = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"}"
+                    LogA.i(sql.replace("?", taskId?: "?"))
+                    LitePal.where(sql, taskId).find(SourceBean::class.java)
                 }else{
-                    LitePal.where("task_id = ? LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}", taskId).find(SourceBean::class.java)
+                    val sql = "task_id = ? ${if(TextUtils.isEmpty(where)) "" else "AND $where"} LIMIT $pageSize OFFSET ${pageSize * (pageNum - 1)}"
+                    LogA.i(sql.replace("?", taskId?: "?"))
+                    LitePal.where(sql, taskId).find(SourceBean::class.java)
                 }
             it.onNext(data)
             it.onComplete()

@@ -92,8 +92,9 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
         btnSwicth?.performClick()
     }
 
-    fun show(action: () -> Unit){
+    fun show(action: () -> Unit): ScannerDialog{
         this.action = action
         super.show()
+        return this
     }
 }

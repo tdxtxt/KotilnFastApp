@@ -38,6 +38,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     private val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
     private var placeList: List<PlaceBean>? = null
     private lateinit var task: TaskEntity
+    private var scanDialogDisplay = false
 
     private var scanKeyService: ScanKeyService? = try{ ScanKeyService.getInstance() } catch (e: Exception) { null }
     private var keyEventListener: IKeyEventCallback.Stub? = null
@@ -65,13 +66,20 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         if(scanKeyService != null){
             keyEventListener = object : IKeyEventCallback.Stub(){
                 override fun onKeyDown(keyCode: Int) {
-                    LogA.i("onKeyDown keyCode=$keyCode;")
                     if(250 == keyCode){
-//                btn_start.performClick()
+                        runOnUiThread{
+                            if(scanDialogDisplay){
+                                if(viewModel.switchScanner.value == false) viewModel.switchScanner.postValue(true)
+                            }else{
+                                btn_start.performClick()
+                            }
+                        }
                     }
                 }
                 override fun onKeyUp(keyCode: Int) {
-                    LogA.i("onKeyUp keyCode=$keyCode;")
+                    if(250 == keyCode){
+                        viewModel.switchScanner.postValue(false)
+                    }
                 }
             }
         }
@@ -93,9 +101,11 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
             it.setOnClickListener {
                 when(it){
                     btn_start -> {
+                        scanDialogDisplay = true
                         ScannerDialog(fragmentActivity).show{
                             //刷新全部
                             viewModel.refreshGlobal.value = true
+                            scanDialogDisplay = false
                         }
                     }
                     btn_end -> {
@@ -107,9 +117,8 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                     }
                     tv_filter -> {
                         if(placeList == null) placeList = presenter.queryPlaceList(viewModel.taskId)
-                        NewSourceFilterDialog(fragmentActivity, placeList).show{ foorList, roomList ->
-                            viewModel.selectFoorList = foorList
-                            viewModel.selectRoomList = roomList
+                        NewSourceFilterDialog(fragmentActivity, placeList).show{ sqlWhere ->
+                            viewModel.sqlWhere = sqlWhere
                             //刷新全部
                             viewModel.refreshGlobal.value = true
                         }
@@ -141,7 +150,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         viewModel.refreshQuantity.observe(this, Observer { isRefresh ->
             if(isRefresh){
                 viewModel.refreshQuantity.value = false
-                presenter.queryStatusQuantity(task.task_id){
+                presenter.queryStatusQuantity(task.task_id, viewModel.sqlWhere){
                     viewModel.quantityViewModel.value = it
                 }
             }

@@ -9,6 +9,7 @@ import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.activity.task.viewmodel.Quantity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.lang.StringBuilder
 import javax.inject.Inject
 
 /**
@@ -18,45 +19,46 @@ import javax.inject.Inject
  */
 class SourceListPresenter @Inject constructor(val netRepository: NetApiRepository, val dbRepository: DbApiRepository): AbsPresenter<SourceListPresenter.BaseMvpImpl>() {
 
-    fun querySourceAll(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
+    fun querySourceAll(taskId: String?, pageNum: Int, sqlWhere: String?){
+
         val disposable =
-                dbRepository.querySourceAll(taskId, pageNum)
+                dbRepository.querySourceAll(taskId, pageNum, sqlWhere)
                         .compose(baseView?.bindLifecycle())
                         .subscribe {
                             baseView?.updateView(pageNum, it)
                         }
     }
 
-    fun querySourceByWait(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
+    fun querySourceByWait(taskId: String?, pageNum: Int, sqlWhere: String?){
         val disposable =
-                dbRepository.querySourceByWait(taskId, pageNum)
+                dbRepository.querySourceByWait(taskId, pageNum, sqlWhere)
                         .compose(baseView?.bindLifecycle())
                         .subscribe {
                             baseView?.updateView(pageNum, it)
                         }
     }
 
-    fun querySourceByPY(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
+    fun querySourceByPY(taskId: String?, pageNum: Int, sqlWhere: String?){
         val disposable =
-        dbRepository.querySourceByPY(taskId, pageNum)
+        dbRepository.querySourceByPY(taskId, pageNum, sqlWhere)
                 .compose(baseView?.bindLifecycle())
                 .subscribe {
                     baseView?.updateView(pageNum, it)
                 }
     }
 
-    fun querySourceByPK(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
+    fun querySourceByPK(taskId: String?, pageNum: Int, sqlWhere: String?){
         val disposable =
-                dbRepository.querySourceByPK(taskId, pageNum)
+                dbRepository.querySourceByPK(taskId, pageNum, sqlWhere)
                         .compose(baseView?.bindLifecycle())
                         .subscribe {
                             baseView?.updateView(pageNum, it)
                         }
     }
 
-    fun querySourceByFinish(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
+    fun querySourceByFinish(taskId: String?, pageNum: Int, sqlWhere: String?){
         val disposable =
-                dbRepository.querySourceByFinish(taskId, pageNum)
+                dbRepository.querySourceByFinish(taskId, pageNum, sqlWhere)
                         .compose(baseView?.bindLifecycle())
                         .subscribe {
                             baseView?.updateView(pageNum, it)

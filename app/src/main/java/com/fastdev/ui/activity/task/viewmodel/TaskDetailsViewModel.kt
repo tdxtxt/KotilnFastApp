@@ -14,8 +14,9 @@ import com.fastdev.data.response.SourceBean
  */
 class TaskDetailsViewModel : ViewModel(){
     var taskId: String = ""
-    var selectFoorList: List<PlaceBean>? = null
-    var selectRoomList: List<PlaceBean>? = null
+//    var selectFoorList: List<PlaceBean>? = null
+//    var selectRoomList: List<PlaceBean>? = null
+    var sqlWhere: String = ""
 
     val sourceViewModel = MutableLiveData<MutableList<SourceBean>>()
     val quantityViewModel = MutableLiveData<Quantity>()
