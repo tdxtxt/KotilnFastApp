@@ -1,5 +1,6 @@
 package com.fastdev.ui.dialog
 
+import android.text.TextUtils
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import cn.wzbos.android.widget.linked.LinkedView
@@ -15,6 +16,7 @@ import com.fastdev.ui.R
  * @since 2021/12/16
  */
 class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeList: List<PlaceBean>?) : BottomBaseDialog(activity) {
+    var action: ((List<PlaceBean>?, List<PlaceBean>?) -> Unit)? = null
 
     private var linkedView: LinkedView? = null
 
@@ -44,7 +46,7 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeLis
                     nextView.setWidth(0)
                     nextView.setWeight(0.6f)
                     nextView.setMultiSelect(true)
-                    nextView.setBackgroundResource(R.color.white_f3f5f7)
+                    nextView.setBackgroundResource(R.color.white_ffffff)
                 }
                 1 -> {
                     nextView.setWidth(0)
@@ -63,7 +65,6 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeLis
             }
         }
         linkedView?.setOnPickerViewItemClickedListener { pickerView, position, data ->
-            ToastHelper.showToast("position = $position; data = ${data.displayName}")
             when(position){
                 0 -> {
                     val optionRoom = linkedView?.getPickerView(2)
@@ -84,7 +85,34 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeLis
             }
         }
         linkedView?.setOnPickedListener { linkView, result ->
-            ToastHelper.showToast(result.toString())
+            val foorList = mutableListOf<PlaceBean>()
+            val roomList = mutableListOf<PlaceBean>()
+            for(leveOne in result.selectVaules){
+                for(value in leveOne){
+                    if(value is PlaceBean){
+                        if(!TextUtils.isEmpty(value.parentId) && TextUtils.isEmpty(value.grandparentId)){
+                            foorList.add(value)
+                        }else if(!TextUtils.isEmpty(value.parentId) && !TextUtils.isEmpty(value.grandparentId)){
+                            roomList.add(value)
+                        }
+                    }
+                }
+            }
+
+            for(foor in foorList){
+                val roomIterator = roomList.iterator()
+                while (roomIterator.hasNext()){
+                    val room = roomIterator.next()
+                    if(foor.id == room.parentId){
+                        roomIterator.remove()
+                    }
+                }
+            }
+
+            action?.invoke(foorList, roomList)
+            dismiss()
+//            ToastHelper.showToast("楼层：${foorList}\n房间:${roomList}")
+
         }
         linkedView?.setData(placeList)
 
@@ -93,8 +121,9 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeLis
         }
     }
 
-    private fun clickView(view: View?){
-
+    fun show(action: (List<PlaceBean>?, List<PlaceBean>?) -> Unit){
+        this.action = action
+        super.show()
     }
 
 }

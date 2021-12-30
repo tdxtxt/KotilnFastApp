@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import com.fastdev.data.response.PlaceBean
 import com.fastdev.data.response.SourceBean
 
 /**
@@ -13,6 +14,9 @@ import com.fastdev.data.response.SourceBean
  */
 class TaskDetailsViewModel : ViewModel(){
     var taskId: String = ""
+    var selectFoorList: List<PlaceBean>? = null
+    var selectRoomList: List<PlaceBean>? = null
+
     val sourceViewModel = MutableLiveData<MutableList<SourceBean>>()
     val quantityViewModel = MutableLiveData<Quantity>()
     //扫描器开关

@@ -25,13 +25,13 @@ android {
     }
 //    TODO AS4.0
 //    Android Studio 4.0
-    buildFeatures{
-        viewBinding=true
-    }
-    //Android Studio 低于4.0
-//    viewBinding {
-//        enabled = true
+//    buildFeatures{
+//        viewBinding=true
 //    }
+    //Android Studio 低于4.0
+    viewBinding {
+        enabled = true
+    }
 
     //配置调用aar
     repositories {
@@ -159,6 +159,10 @@ dependencies {
     }
     //https://github.com/donkingliang/ConsecutiveScroller
     implementation 'com.github.donkingliang:ConsecutiveScroller:4.6.0'
+    //https://github.com/koral--/android-gif-drawable
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 }
 
 kapt {

@@ -1,20 +1,19 @@
 package com.fastdev.ui.dialog
 
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.baselib.helper.ImageLoaderHelper
 import com.baselib.ui.dialog.CenterBaseDialog
 import com.baselib.ui.dialog.impl.IBDialog
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fastdev.core.MonitorProtocol
-import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
+import pl.droidsonroids.gif.GifDrawable
+import pl.droidsonroids.gif.GifImageView
 import top.androidman.SuperButton
 
 /**
@@ -27,7 +26,7 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
     var tvCount: TextView? = null
     var btnSwicth: SuperButton? = null
     var btnNext: SuperButton? = null
-    var ivAnimation: ImageView? = null
+    var ivAnimation: GifImageView? = null
 
     var action: (() -> Unit)? = null
 
@@ -45,6 +44,8 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
         btnNext = findViewById(R.id.btn_ok)
         tvCount = findViewById(R.id.tv_count)
         ivAnimation = findViewById(R.id.iv_animation)
+        val gifDrwable = ivAnimation?.drawable as GifDrawable?
+
         recyclerView?.adapter = object : BaseQuickAdapter<SourceBean, BaseViewHolder>(R.layout.item_dialog_scanner){
             override fun convert(holder: BaseViewHolder, item: SourceBean) {
                 holder.setText(R.id.tv_code, item.pp_code)
@@ -62,10 +63,11 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
             recyclerView?.scrollToPosition(adapter.itemCount - 1)
         }
         observerSwitcher = Observer { switch ->
-            ImageLoaderHelper.toggleGif(ivAnimation, R.drawable.gif_scan, switch)
             if(switch){
+                gifDrwable?.start()
                 btnSwicth?.setText("暂停")
             }else{
+                gifDrwable?.stop()
                 btnSwicth?.setText("继续")
             }
         }

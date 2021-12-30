@@ -4,6 +4,7 @@ import com.baselib.ui.mvp.presenter.AbsPresenter
 import com.baselib.ui.mvp.view.BaseMvpView
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.repository.NetApiRepository
+import com.fastdev.data.response.PlaceBean
 import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.activity.task.viewmodel.Quantity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,7 +18,7 @@ import javax.inject.Inject
  */
 class SourceListPresenter @Inject constructor(val netRepository: NetApiRepository, val dbRepository: DbApiRepository): AbsPresenter<SourceListPresenter.BaseMvpImpl>() {
 
-    fun querySourceAll(taskId: String?, pageNum: Int){
+    fun querySourceAll(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
         val disposable =
                 dbRepository.querySourceAll(taskId, pageNum)
                         .compose(baseView?.bindLifecycle())
@@ -26,7 +27,7 @@ class SourceListPresenter @Inject constructor(val netRepository: NetApiRepositor
                         }
     }
 
-    fun querySourceByWait(taskId: String?, pageNum: Int){
+    fun querySourceByWait(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
         val disposable =
                 dbRepository.querySourceByWait(taskId, pageNum)
                         .compose(baseView?.bindLifecycle())
@@ -35,7 +36,7 @@ class SourceListPresenter @Inject constructor(val netRepository: NetApiRepositor
                         }
     }
 
-    fun querySourceByPY(taskId: String?, pageNum: Int){
+    fun querySourceByPY(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
         val disposable =
         dbRepository.querySourceByPY(taskId, pageNum)
                 .compose(baseView?.bindLifecycle())
@@ -44,7 +45,7 @@ class SourceListPresenter @Inject constructor(val netRepository: NetApiRepositor
                 }
     }
 
-    fun querySourceByPK(taskId: String?, pageNum: Int){
+    fun querySourceByPK(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
         val disposable =
                 dbRepository.querySourceByPK(taskId, pageNum)
                         .compose(baseView?.bindLifecycle())
@@ -53,7 +54,7 @@ class SourceListPresenter @Inject constructor(val netRepository: NetApiRepositor
                         }
     }
 
-    fun querySourceByFinish(taskId: String?, pageNum: Int){
+    fun querySourceByFinish(taskId: String?, pageNum: Int, selectFoor: List<PlaceBean>?, selectRoom: List<PlaceBean>?){
         val disposable =
                 dbRepository.querySourceByFinish(taskId, pageNum)
                         .compose(baseView?.bindLifecycle())
@@ -69,15 +70,6 @@ class SourceListPresenter @Inject constructor(val netRepository: NetApiRepositor
                     .subscribe {
                         callback.invoke(it)
                     }
-    }
-
-    fun queryStatusQuantity(taskId: String?, callback: (quantity: Quantity) -> Unit){
-        val disposable =
-        dbRepository.queryStatusQuantity(taskId)
-                .compose(baseView?.bindLifecycle())
-                .subscribe {
-                    callback.invoke(it)
-                }
     }
 
     interface BaseMvpImpl: BaseMvpView{

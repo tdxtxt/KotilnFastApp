@@ -54,4 +54,8 @@ class PlaceBean : IPickerData {
     override fun nodes(): MutableList<out IPickerData>? {
         return stub
     }
+
+    override fun toString(): String {
+        return name?:""
+    }
 }

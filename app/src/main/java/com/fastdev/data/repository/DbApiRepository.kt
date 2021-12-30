@@ -207,8 +207,4 @@ class DbApiRepository @Inject constructor(){
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }
 
-//    fun queryTaskPyNum(taskId: String?): Int = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PY).find(SourceBean::class.java)?.size?: 0
-//    fun queryTaskPkNum(taskId: String?): Int = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_PK).find(SourceBean::class.java)?.size?: 0
-//    fun queryTaskWaitNum(taskId: String?): Int = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_WAIT).find(SourceBean::class.java)?.size?: 0
-//    fun queryTaskFinishNum(taskId: String?): Int = LitePal.where("task_id = ? AND pp_act = ?", taskId, SourceBean.STATUS_FINISH).find(SourceBean::class.java)?.size?: 0
 }

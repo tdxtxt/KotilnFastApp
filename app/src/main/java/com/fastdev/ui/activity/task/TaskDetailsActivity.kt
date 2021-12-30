@@ -24,6 +24,8 @@ import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
 import com.fastdev.ui.dialog.ConfirmSourceDialog
 import com.fastdev.ui.dialog.NewSourceFilterDialog
 import com.fastdev.ui.dialog.ScannerDialog
+import com.seuic.scankey.IKeyEventCallback
+import com.seuic.scankey.ScanKeyService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_task_details.*
 import javax.inject.Inject
@@ -32,13 +34,14 @@ import javax.inject.Inject
 class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseMvpImpl {
     @Inject
     lateinit var presenter: TaskDetailsPresenter
-
     lateinit var viewModel: TaskDetailsViewModel
+    private val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
+    private var placeList: List<PlaceBean>? = null
+    private lateinit var task: TaskEntity
 
-    var placeList: List<PlaceBean>? = null
+    private var scanKeyService: ScanKeyService? = try{ ScanKeyService.getInstance() } catch (e: Exception) { null }
+    private var keyEventListener: IKeyEventCallback.Stub? = null
 
-    val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
-    lateinit var task: TaskEntity
     override fun getParams(bundle: Bundle?) {
         val temp: TaskEntity? = bundle?.getParcelable("task")
         if(temp == null){
@@ -59,6 +62,20 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         viewModel = TaskDetailsViewModel.get(this)
         viewModel.taskId = task.task_id
 
+        if(scanKeyService != null){
+            keyEventListener = object : IKeyEventCallback.Stub(){
+                override fun onKeyDown(keyCode: Int) {
+                    LogA.i("onKeyDown keyCode=$keyCode;")
+                    if(250 == keyCode){
+//                btn_start.performClick()
+                    }
+                }
+                override fun onKeyUp(keyCode: Int) {
+                    LogA.i("onKeyUp keyCode=$keyCode;")
+                }
+            }
+        }
+
         setTitleBar("盘点任务详情"){
             menuText = "扫一扫"
             onClick { rootView, any ->
@@ -77,6 +94,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                 when(it){
                     btn_start -> {
                         ScannerDialog(fragmentActivity).show{
+                            //刷新全部
                             viewModel.refreshGlobal.value = true
                         }
                     }
@@ -87,10 +105,14 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                             }
                         }
                     }
-
                     tv_filter -> {
                         if(placeList == null) placeList = presenter.queryPlaceList(viewModel.taskId)
-                        NewSourceFilterDialog(fragmentActivity, placeList).show()
+                        NewSourceFilterDialog(fragmentActivity, placeList).show{ foorList, roomList ->
+                            viewModel.selectFoorList = foorList
+                            viewModel.selectRoomList = roomList
+                            //刷新全部
+                            viewModel.refreshGlobal.value = true
+                        }
                     }
                 }
             }
@@ -159,24 +181,16 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         finish()
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        LogA.i("keyCode=$keyCode;")
-        return super.onKeyDown(keyCode, event)
-    }
-
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        LogA.i("keyCode=$keyCode;")
-        return super.onKeyUp(keyCode, event)
-    }
-
     override fun onResume() {
         super.onResume()
         MonitorProtocol.onResume()
+        scanKeyService?.registerCallback(keyEventListener, null)
     }
 
     override fun onPause() {
         super.onPause()
         MonitorProtocol.onPause()
+        scanKeyService?.unregisterCallback(keyEventListener)
     }
 
     companion object{
