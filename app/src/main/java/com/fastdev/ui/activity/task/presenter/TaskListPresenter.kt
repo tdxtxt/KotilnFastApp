@@ -23,7 +23,6 @@ import javax.inject.Inject
  */
 @SuppressLint("CheckResult")
 class TaskListPresenter @Inject constructor(val netRepository: NetApiRepository, val dbRepository: DbApiRepository) : AbsPresenter<TaskListPresenter.BaseMvpImpl>() {
-
     fun queryCurrentTaskList(pageNum: Int){
         netRepository.queryTaskList("cur", pageNum, 20)
                 .flatMap { resp ->
@@ -57,7 +56,6 @@ class TaskListPresenter @Inject constructor(val netRepository: NetApiRepository,
                         if(pageNum == 1) baseView?.fail(errorMsg)
                     }
                 })
-
     }
 
     fun queryHistoryTaskList(pageNum: Int){
@@ -71,6 +69,21 @@ class TaskListPresenter @Inject constructor(val netRepository: NetApiRepository,
                         if(pageNum == 1) baseView?.fail(errorMsg)
                     }
                 })
+    }
+
+    fun queryStatusQuantity(task: TaskEntity, action: (TaskEntity) -> Unit){
+        Flowable.just(task).flatMap {
+            dbRepository.queryStatusQuantity(it.task_id).map { quantity ->
+                it.apply {
+                    task_py_count = "${quantity.py_count}"
+                    task_pk_count = "${quantity.pk_count}"
+                    task_wait_count = "${quantity.wait_count}"
+                    task_complete_count = "${quantity.finish_count}"
+                }
+            }
+        }.compose(baseView?.bindProgress()).subscribe {
+            action.invoke(it)
+        }
     }
 
     fun loadAllSourceByTask(task: TaskEntity){

@@ -31,4 +31,12 @@ class TaskEntity (
             else -> ""
         }
     }
+
+    override fun hashCode(): Int {
+        return "task_$task_id".hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return hashCode() == other.hashCode()
+    }
 }

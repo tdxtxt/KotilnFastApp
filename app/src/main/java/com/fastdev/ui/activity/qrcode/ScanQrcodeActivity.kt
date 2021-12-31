@@ -192,7 +192,7 @@ class ScanQrcodeActivity : CommToolBarMvpActivity(), QRCodeView.Delegate, ScanQr
 //            Timber.i("open: time = ${System.currentTimeMillis()}")
             RequestPermissionHelper.requestCameraPermission(activity){
                 grantedPermission {
-                    activity?.startActivityForResult(ScanQrcodeActivity::class.java, HashMapParams().add("taskId", taskId?:"")){
+                    activity?.startActivityForResult(Intent(activity, ScanQrcodeActivity::class.java).putExtra("taskId", taskId)){
                         onActivityResult { requestCode, resultCode, data ->
                             if(resultCode == Activity.RESULT_OK) listener?.invoke(data?.getParcelableExtra("result"))
                         }

@@ -132,7 +132,10 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeLis
             resutWhere.append("( building_code = '${room.grandparentId}' AND floor_code = '${room.parentId}' AND house_code = '${room.id}' )")
             if(index < selectRoom.size - 1) resutWhere.append(" OR ")
         }
-        if(!TextUtils.isEmpty(resutWhere.toString())) resutWhere.insert(0, "( ").append(" )")
+        if(!TextUtils.isEmpty(resutWhere.toString())){
+            resutWhere.append(" OR (building_code is null AND floor_code is null AND house_code is null)")
+            resutWhere.insert(0, "( ").append(" )")
+        }
         return resutWhere.toString()
     }
 

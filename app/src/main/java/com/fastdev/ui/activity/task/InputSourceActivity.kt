@@ -1,6 +1,7 @@
 package com.fastdev.ui.activity.task
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -71,8 +72,8 @@ class InputSourceActivity : CommToolBarActivity() {
 
     companion object{
         fun open(activity: Activity?, taskId: String?, code: String?, action: (SourceBean?) -> Unit){
-            activity?.startActivityForResult(InputSourceActivity::class.java, HashMapParams().add("taskId", taskId?: "")
-                    .add("code", code?: "")) {
+            activity?.startActivityForResult(Intent(activity, InputSourceActivity::class.java).putExtra("taskId", taskId)
+                    .putExtra("code", code)) {
                 onActivityResult { requestCode, resultCode, data ->
                     action.invoke(data?.getParcelableExtra("sourceBean"))
                 }

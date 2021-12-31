@@ -1,6 +1,7 @@
 package com.fastdev.ui.activity.login
 
 import android.app.Activity
+import android.content.Intent
 import com.baselib.helper.CommonCacheHelper
 import com.baselib.ui.mvp.presenter.BaseMvpPresenter
 import com.baselib.ui.mvp.view.BaseMvpView
@@ -54,7 +55,7 @@ class LoginMainActivity : CommToolBarMvpActivity(), LoginPresenter.BaseMvpImpl {
 
     companion object{
         fun open(activity: Activity?, loginSuccess: () -> Unit, loginCancel: () -> Unit){
-            activity?.startActivityForResult(LoginMainActivity::class.java, null){
+            activity?.startActivityForResult(Intent(activity, LoginMainActivity::class.java)){
                 onActivityResult { requestCode, resultCode, data ->
                     loginSuccess.invoke()
                 }

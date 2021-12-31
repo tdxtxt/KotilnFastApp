@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
+import com.baselib.callback.StartForResultListener
+import com.baselib.helper.HashMapParams
 import com.baselib.helper.LogA
 import com.baselib.helper.ToastHelper
 import com.baselib.rx.event.RxBus
@@ -95,6 +98,8 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
 
         setInterceptBackEvent(false){
             MonitorProtocol.stopReadMonitor()
+            setResult(Activity.RESULT_OK)
+            finish()
         }
 
         listOf(btn_start, btn_end, tv_filter).forEach {
@@ -203,8 +208,13 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     }
 
     companion object{
-        fun open(activity: Activity?, task: TaskEntity?){
-            activity?.startActivity(Intent(activity, TaskDetailsActivity::class.java).putExtra("task", task))
+        fun open(activity: FragmentActivity?, task: TaskEntity?, callback: () -> Unit){
+            if(task == null) return
+            activity?.startActivityForResult(Intent(activity, TaskDetailsActivity::class.java).putExtra("task", task)){
+                onActivityResult { requestCode, resultCode, data ->
+                    callback.invoke()
+                }
+            }
         }
     }
 

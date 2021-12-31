@@ -111,7 +111,12 @@ class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
     }
 
     override fun gotoTaskDetailsActivity(task: TaskEntity) {
-        TaskDetailsActivity.open(fragmentActivity, task)
+        TaskDetailsActivity.open(fragmentActivity, task){
+            //刷新数据
+            presenter.queryStatusQuantity(task){
+                adapter.updateItem(it)
+            }
+        }
     }
 
     private fun isHistoryList() = _END == type
