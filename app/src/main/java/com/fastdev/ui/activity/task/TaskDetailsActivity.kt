@@ -11,9 +11,11 @@ import com.baselib.callback.StartForResultListener
 import com.baselib.helper.HashMapParams
 import com.baselib.helper.LogA
 import com.baselib.helper.ToastHelper
+import com.baselib.helper.composeUIThread
 import com.baselib.rx.event.RxBus
 import com.baselib.ui.mvp.view.activity.CommToolBarMvpActivity
 import com.fastdev.core.MonitorProtocol
+import com.fastdev.core.SKeyEventCallback
 import com.fastdev.data.event.TaskEventCode
 import com.fastdev.data.response.PlaceBean
 import com.fastdev.data.response.TaskEntity
@@ -30,7 +32,9 @@ import com.fastdev.ui.dialog.ScannerDialog
 import com.seuic.scankey.IKeyEventCallback
 import com.seuic.scankey.ScanKeyService
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.activity_task_details.*
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,8 +47,9 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     private lateinit var task: TaskEntity
     private var scanDialogDisplay = false
 
-    private var scanKeyService: ScanKeyService? = try{ ScanKeyService.getInstance() } catch (e: Exception) { null }
-    private var keyEventListener: IKeyEventCallback.Stub? = null
+    private var scanKeyService: ScanKeyService? = null
+    private var keyEventListener: WeakReference<IKeyEventCallback.Stub>? = null
+
 
     override fun getParams(bundle: Bundle?) {
         val temp: TaskEntity? = bundle?.getParcelable("task")
@@ -56,6 +61,31 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         }
     }
 
+    private fun initScanKey(){
+        scanKeyService = try{ ScanKeyService.getInstance() } catch (e: Exception) { null }
+        if(scanKeyService != null){
+            keyEventListener = WeakReference(SKeyEventCallback())
+            val disposableDown =
+                RxBus.listen(TaskEventCode.KEY_DOWN::class.java)
+                        .compose(bindLifecycle())
+                        .compose(bindUIThread())
+                        .subscribe {
+                            if(scanDialogDisplay){
+                                if(viewModel.switchScanner.value == false) viewModel.switchScanner.postValue(true)
+                            }else{
+                                btn_start.performClick()
+                            }
+                        }
+
+            val disposableUp =
+                RxBus.listen(TaskEventCode.KEY_UP::class.java)
+                        .compose(bindLifecycle())
+                        .subscribe {
+                            viewModel.switchScanner.postValue(false)
+                        }
+        }
+    }
+
     override fun createPresenter() = presenter
 
     override fun createMvpView() = this
@@ -63,29 +93,9 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     override fun getLayoutResId() = R.layout.activity_task_details
 
     override fun initUi() {
+        initScanKey()
         viewModel = TaskDetailsViewModel.get(this)
         viewModel.taskId = task.task_id
-
-        if(scanKeyService != null){
-            keyEventListener = object : IKeyEventCallback.Stub(){
-                override fun onKeyDown(keyCode: Int) {
-                    if(250 == keyCode){
-                        runOnUiThread{
-                            if(scanDialogDisplay){
-                                if(viewModel.switchScanner.value == false) viewModel.switchScanner.postValue(true)
-                            }else{
-                                btn_start.performClick()
-                            }
-                        }
-                    }
-                }
-                override fun onKeyUp(keyCode: Int) {
-                    if(250 == keyCode){
-                        viewModel.switchScanner.postValue(false)
-                    }
-                }
-            }
-        }
 
         setTitleBar("盘点任务详情"){
             menuText = "扫一扫"
@@ -198,13 +208,20 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     override fun onResume() {
         super.onResume()
         MonitorProtocol.onResume()
-        scanKeyService?.registerCallback(keyEventListener, null)
+        scanKeyService?.registerCallback(keyEventListener?.get(), null)
     }
 
     override fun onPause() {
         super.onPause()
         MonitorProtocol.onPause()
-        scanKeyService?.unregisterCallback(keyEventListener)
+        scanKeyService?.unregisterCallback(keyEventListener?.get())
+    }
+
+    override fun finish() {
+        super.finish()
+        scanKeyService = null
+        keyEventListener?.clear()
+        keyEventListener = null
     }
 
     companion object{

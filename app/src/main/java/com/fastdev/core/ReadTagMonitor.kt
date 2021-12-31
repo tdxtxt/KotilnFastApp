@@ -34,7 +34,7 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var d
                 dbApiRepository.syncSaveOrUpdate(viewModel.taskId, this)
             }
         }
-        LogA.i("NewSource： $diffData")
+//        LogA.i("NewSource： $diffData")
         if((diffData?.size?:0) > 0){
             playSound()
             //将数据传递到主线程之中

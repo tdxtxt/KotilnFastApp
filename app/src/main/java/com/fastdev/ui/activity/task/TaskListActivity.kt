@@ -15,6 +15,7 @@ import com.baselib.rx.event.RxBus
 import com.baselib.ui.activity.CommToolBarActivity
 import com.baselib.ui.fragment.BaseFragment
 import com.baselib.ui.view.other.TextSpanController
+import com.fastdev.core.UHFSdk
 import com.fastdev.data.event.TaskEventCode
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.response.SourceBean
@@ -28,6 +29,7 @@ import com.fastdev.ui.activity.task.viewmodel.TaskListViewModel
 import com.fastdev.ui.adapter.BaseFragmentPagerAdapter
 import com.fastdev.ui.dialog.ConfigDialog
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_task_list.*
@@ -71,8 +73,16 @@ class TaskListActivity : CommToolBarActivity() {
         setTitleBar("资产盘点"){
             menuText = TextSpanController().pushColorSpan(Color.parseColor("#666666")).append("参数设置").popSpan().build()
             onClick { rootView, any ->
-                ConfigDialog(fragmentActivity).show()
-//                ToastHelper.showToast("参数设置")
+                Flowable.unsafeCreate<Boolean> {
+                    it.onNext(UHFSdk.syncOpen())
+                    it.onComplete()
+                }.compose(bindProgress()).subscribe { isOpen ->
+                    if(isOpen){
+                        ConfigDialog(fragmentActivity).show()
+                    }else{
+                        ToastHelper.showToast("设备打开失败")
+                    }
+                }
             }
         }
         val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()
@@ -88,6 +98,7 @@ class TaskListActivity : CommToolBarActivity() {
 
         val disposable =
                 RxBus.listen(TaskEventCode.COMMIT_SUCCESS::class.java)
+                        .compose(bindLifecycle())
                         .subscribe {
                             ToastHelper.showToast("删除任务${it.getData()?.toString()}")
                             deleteCacheByTask(it.getData()?.toString())
@@ -121,14 +132,9 @@ class TaskListActivity : CommToolBarActivity() {
                         }
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        LogA.i("keyCode=$keyCode;")
-        return super.onKeyDown(keyCode, event)
-    }
-
-    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        LogA.i("keyCode=$keyCode;")
-        return super.onKeyUp(keyCode, event)
+    override fun onPause() {
+        super.onPause()
+        UHFSdk.pause()
     }
 
     companion object{

@@ -57,20 +57,27 @@ public class StatusBarHelper {
      * 设置状态栏透明【内容全入侵】
      */
     public static void transparentStatusBar(Activity activity) {
-        if (OSUtils.isMiui() || OSUtils.isFlyme()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                transparentStatusBarAbove21(activity.getWindow());
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            }
-        } else if ((OSUtils.isOppo() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)) {
-            transparentStatusBarAbove21(activity.getWindow());
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            transparentStatusBarAbove21(activity.getWindow());
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = activity.getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+            );
         }
+//        if (OSUtils.isMiui() || OSUtils.isFlyme()) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                transparentStatusBarAbove21(activity.getWindow());
+//            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            }
+//        } else if ((OSUtils.isOppo() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)) {
+//            transparentStatusBarAbove21(activity.getWindow());
+//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            transparentStatusBarAbove21(activity.getWindow());
+//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            Window window = activity.getWindow();
+//            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        }
     }
 
     @TargetApi(21)

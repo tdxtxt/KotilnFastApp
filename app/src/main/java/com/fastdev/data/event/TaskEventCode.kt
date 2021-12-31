@@ -11,6 +11,8 @@ abstract class TaskEventCode(code: Int) : RxEventCode(code) {
 
     companion object{
         val COMMIT_SUCCESS = object : TaskEventCode(10111) {}
+        val KEY_UP = object : TaskEventCode(10112) {}
+        val KEY_DOWN = object : TaskEventCode(10113) {}
     }
 
 }

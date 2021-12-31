@@ -5,12 +5,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.lang.ref.WeakReference;
+
 import androidx.core.view.GravityCompat;
 
 
 public final class DebugAppContainer implements AppContainer {
 
-    private static DebugAppContainer instance;
+    private static WeakReference<DebugAppContainer> instance = null;
     private final Context context;
     private final Endpoint endpoint;
     private final LumberYard lumberYard;
@@ -29,11 +31,17 @@ public final class DebugAppContainer implements AppContainer {
         if (instance == null) {
             synchronized (DebugAppContainer.class) {
                 if (instance == null) {
-                    instance = new DebugAppContainer(context, endpoint);
+                    instance = new WeakReference<>(new DebugAppContainer(context, endpoint));
+                }
+            }
+        }else if(instance.get() == null){
+            synchronized (DebugAppContainer.class) {
+                if (instance == null) {
+                    instance = new WeakReference<>(new DebugAppContainer(context, endpoint));
                 }
             }
         }
-        return instance;
+        return instance.get();
     }
 
     public DebugEnvironment debugEnvironment() {
