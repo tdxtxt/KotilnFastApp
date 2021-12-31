@@ -181,16 +181,9 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         } else super.onKeyDown(keyCode, event)
     }
 
-    fun startActivityForResult(clazz: Class<*>, listener: (StartForResultListener.() -> Unit)?){
-        startActivityForResult(clazz, null, listener)
-    }
-
-    fun startActivityForResult(clazz: Class<*>, params: HashMapParams?, listener: (StartForResultListener.() -> Unit)?){
-        startActivityForResult(clazz, params, listener)
-    }
-
     companion object{
-        fun Activity.startActivityForResult(clazz: Class<*>, params: HashMapParams?, listener: (StartForResultListener.() -> Unit)?){
+        fun Activity.startActivityForResult(intent: Intent?, listener: (StartForResultListener.() -> Unit)?){
+            if(intent == null) return
             if (!isActivityValid(this)) {
                 LogA.i("startActivityForResult ------>  Activity is null or has finished")
                 return
@@ -203,26 +196,19 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
                 }) as StartForResultFragment1
 
                 fragment.setListener(listener)
-                val intent = Intent()
-                if(params != null) intent.putExtra("Bundle", params?.toBundle())
-                intent.setClass(this, clazz)
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)//单例
                 fragment.startActivityForResult(intent, 0x001122)
             }else{
                 val fragment: StartForResultFragment2 = (fragmentManager.findFragmentByTag("__start_for_result")?:
                 StartForResultFragment2().apply {
-                    fragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
-                    fragmentManager.executePendingTransactions()
+                    activity.fragmentManager.beginTransaction().add(this, "__start_for_result").commitAllowingStateLoss()
+                    activity.fragmentManager.executePendingTransactions()
                 }) as StartForResultFragment2
 
                 fragment.setListener(listener)
-                val intent = Intent()
-                if(params != null) intent.putExtra("Bundle", params?.toBundle())
-                intent.setClass(this, clazz)
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)//单例
                 fragment.startActivityForResult(intent, 0x001122)
             }
-
         }
         private fun isActivityValid(activity: Activity?): Boolean {
             if (activity == null || activity.isFinishing) {
