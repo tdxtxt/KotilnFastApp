@@ -1,6 +1,7 @@
 package com.baselib.helper
 
 import android.os.Bundle
+import android.os.Parcelable
 import java.io.Serializable
 import java.lang.Exception
 
@@ -33,6 +34,7 @@ class HashMapParams : HashMap<String,Any>(){
                 is Int -> bundle.putInt(it.key, (it.value as Int))
                 is Boolean -> bundle.putBoolean(it.key, (it.value as Boolean))
                 is Serializable -> bundle.putSerializable(it.key, (it.value as Serializable))
+                is Parcelable -> bundle.putParcelable(it.key, it.value as Parcelable)
             }
         }
         return bundle

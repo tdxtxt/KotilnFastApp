@@ -24,6 +24,8 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 
+import java.lang.ref.WeakReference;
+
 /**
  * 功能描述:
  * @author tangdexiang
@@ -31,7 +33,7 @@ import androidx.core.content.ContextCompat;
  */
 @SuppressLint("InflateParams")
 public class XToast {
-    private static Toast lastToast = null;
+    private static WeakReference<Toast> lastToast = null;
 
     public static final int LENGTH_SHORT = Toast.LENGTH_SHORT;
     public static final int LENGTH_LONG = Toast.LENGTH_LONG;
@@ -320,9 +322,10 @@ public class XToast {
 
         if (!Config.get().allowQueue) {
             if (lastToast != null) {
-                lastToast.cancel();
+                Toast toast = lastToast.get();
+                if(toast != null) toast.cancel();
             }
-            lastToast = currentToast;
+            lastToast = new WeakReference<>(currentToast);
         }
         if (Config.get().gravity != -1) {
             currentToast.setGravity(Config.get().gravity, Config.get().xOffset, Config.get().yOffset);
