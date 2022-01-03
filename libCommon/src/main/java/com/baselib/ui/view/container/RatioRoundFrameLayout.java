@@ -4,8 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
-
+import android.widget.FrameLayout;
 import com.baselib.ui.view.container.delegate.RatioDatumMode;
 import com.baselib.ui.view.container.delegate.RatioLayoutDelegate;
 import com.baselib.ui.view.container.delegate.RatioMeasureDelegate;
@@ -20,7 +19,7 @@ import androidx.annotation.RequiresApi;
  * @author tangdexiang
  * @since 2021/4/13
  */
-public class RatioRoundFrameLayout extends RelativeLayout implements RoundMethodInterface, RatioMeasureDelegate {
+public class RatioRoundFrameLayout extends FrameLayout implements RoundMethodInterface, RatioMeasureDelegate {
     private RoundHelper mHelper = new RoundHelper();
     private RatioLayoutDelegate mRatioLayoutDelegate;
 

@@ -16,24 +16,29 @@ import com.openlib.R
 
 class StateLayout @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attributeSet, defStyleAttr) {
-    var state = None // default state
-    var loadingView: View? = null
-    var emptyView: View? = null
-    var errorView: View? = null
-    var contentView: View? = null
-    var animDuration = 250L
-    var useContentBgWhenLoading = false //是否在Loading状态使用内容View的背景
-    var enableLoadingShadow = false //是否启用加载状态时的半透明阴影
-    var emptyText: String = "暂无数据"
-    var emptyIcon: Int = 0
-    var enableTouchWhenLoading = false
-    var defaultShowLoading = false
-    var noEmptyAndError = false //是否去除empty和error状态，有时候只需要一个loading状态，这样减少内存
-    var showLoadingOnce = false //是否只显示一次Loading
-    var loadingLayoutId = 0
-    var emptyLayoutId = 0
-    var errorLayoutId = 0
+    private var state = State.None // default state
+    private var loadingView: View? = null
+    private var emptyView: View? = null
+    private var errorView: View? = null
+    private var contentView: View? = null
+    private var animDuration = 250L
+    private var useContentBgWhenLoading = false //是否在Loading状态使用内容View的背景
+    private var enableLoadingShadow = false //是否启用加载状态时的半透明阴影
+    private var emptyText: String = ""
+    private var emptyIcon: Int = 0
+    private var enableTouchWhenLoading = false
+    private var defaultShowLoading = false
+    private var noEmptyAndError = false //是否去除empty和error状态，有时候只需要一个loading状态，这样减少内存
+    private var showLoadingOnce = false //是否只显示一次Loading
+    private var retryBtnId: Int = 0  //错误点击重试按钮id
+    private var retryAutoLoading: Boolean = true // 错误重试是否自动显示loadding
+    private var loadingLayoutId = 0
+    private var emptyLayoutId = 0
+    private var errorLayoutId = 0
+    private var paddingTopDp: Int? = null
+    private var paddingBottomDp: Int? = null
     private var hasShowLoading = false
+    private var lastSwitchStateTime = 0L;
 
     init {
         val ta = context.obtainStyledAttributes(attributeSet, R.styleable.StateLayout)
@@ -62,8 +67,8 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
         setEmptyLayout()
         setErrorLayout()
 
-        view.visibility = View.VISIBLE
-        view.alpha = 1f
+        view.visibility = View.INVISIBLE
+        view.alpha = 0f
         if (view.parent == null) {
             //no attach parent.
             addView(view, 0, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
@@ -81,7 +86,7 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
             parent.addView(this, index, lp)
             contentView = view
         }
-        switchLayout(if (defaultShowLoading) Loading else Content)
+        switchLayout(if (defaultShowLoading) State.Loading else State.Content)
         return this
     }
 
@@ -96,14 +101,15 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
             setLoadingLayout()
             setEmptyLayout()
             setErrorLayout()
-            switchLayout(if (defaultShowLoading) Loading else Content)
+            switchLayout(if (defaultShowLoading) State.Loading else State.Content)
         }
     }
 
     private fun switchLayout(s: State) {
+        if(state==s)return
         state = s
         when (state) {
-            Loading -> {
+            State.Loading -> {
                 switch(loadingView)
                 if (useContentBgWhenLoading && contentView?.background != null) {
                     background = contentView?.background
@@ -114,13 +120,13 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
                     loadingView?.setBackgroundResource(0)
                 }
             }
-            Empty -> {
+            State.Empty -> {
                 switch(emptyView)
             }
-            Error -> {
+            State.Error -> {
                 switch(errorView)
             }
-            Content -> {
+            State.Content -> {
                 if(contentView?.visibility==VISIBLE && loadingView?.visibility!=VISIBLE
                         && emptyView?.visibility!=VISIBLE && errorView?.visibility!=VISIBLE)return
                 switch(contentView)
@@ -130,32 +136,53 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
 
     fun showLoading(): StateLayout {
         if(showLoadingOnce && hasShowLoading) return this
-        switchLayout(Loading)
-        if(showLoadingOnce) hasShowLoading = true
+
+        post {
+            switchLayout(State.Loading)
+            if(showLoadingOnce) hasShowLoading = true
+        }
         return this
     }
 
     fun showContent(): StateLayout {
-        switchLayout(Content)
+        if(state == State.None) return this;
+        postDelayed({ switchLayout(State.Content) }, createSwitchTimeDiff())
         return this
     }
 
     fun showEmpty(): StateLayout {
-        if(noEmptyAndError) {
-            switchLayout(Content)
-        }else{
-            switchLayout(Empty)
-        }
+        postDelayed( {
+            if(noEmptyAndError) {
+                switchLayout(State.Content)
+            }else{
+                switchLayout(State.Empty)
+            }
+        }, createSwitchTimeDiff())
         return this
     }
 
     fun showError(): StateLayout {
-        if(noEmptyAndError) {
-            switchLayout(Content)
-        }else{
-            switchLayout(Error)
-        }
+        postDelayed( {
+            if(noEmptyAndError) {
+                switchLayout(State.Content)
+            }else{
+                switchLayout(State.Error)
+            }
+        }, createSwitchTimeDiff())
         return this
+    }
+
+    /**
+     * 保证两次切换状态时间差至少300毫秒，否则切换无效
+     */
+    private fun createSwitchTimeDiff(): Long{
+        if(Math.abs(System.currentTimeMillis() - lastSwitchStateTime) > 300){
+            lastSwitchStateTime = System.currentTimeMillis()
+            return 0
+        }else{
+            lastSwitchStateTime = System.currentTimeMillis()
+            return 300
+        }
     }
 
     private fun switch(v: View?) {
@@ -168,11 +195,15 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
 
     private fun retry() {
         if (errorView == null) return
-        hasShowLoading = false
-        showLoading()
-        postDelayed({
+        if(retryAutoLoading){
+            hasShowLoading = false
+            showLoading()
+            postDelayed({
+                mRetryAction?.invoke(errorView!!)
+            }, animDuration)
+        }else{
             mRetryAction?.invoke(errorView!!)
-        }, animDuration)
+        }
     }
 
     var switchTask: SwitchTask? = null
@@ -180,7 +211,7 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
     inner class SwitchTask(private var target: View?) : Runnable {
         override fun run() {
             for (i in 0..childCount) {
-                if (state == Loading && enableLoadingShadow && getChildAt(i) == contentView) continue
+                if (state == State.Loading && enableLoadingShadow && getChildAt(i) == contentView) continue
                 hideAnim(getChildAt(i))
             }
             showAnim(target)
@@ -212,7 +243,7 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if (state == Loading && loadingView?.visibility == View.VISIBLE && !enableTouchWhenLoading) return true
+        if (state == State.Loading && loadingView?.visibility == View.VISIBLE && !enableTouchWhenLoading) return true
         return super.dispatchTouchEvent(ev)
     }
 
@@ -241,7 +272,11 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
         if (emptyView?.parent != null) removeView(emptyView)
         emptyView = LayoutInflater.from(context).inflate(emptyLayoutId, this, false)
         emptyView?.apply {
-            (layoutParams as LayoutParams).gravity = Gravity.CENTER
+
+            (layoutParams as LayoutParams).apply {
+                gravity = Gravity.CENTER
+                setPadding(paddingLeft, paddingTopDp?: paddingTop, paddingRight, paddingBottomDp?: paddingBottom)
+            }
             visibility = View.GONE
             alpha = 0f
             addView(emptyView)
@@ -251,9 +286,9 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
                 val group = emptyView as ViewGroup
                 (0 until group.childCount).forEach {
                     val child = group.getChildAt(it)
-                    if(child is TextView) {
+                    if(child is TextView && child.text.isNullOrEmpty() && !emptyText.isNullOrEmpty()) {
                         child.text = emptyText
-                    }else if(child is ImageView && emptyIcon!=0){
+                    }else if(child is ImageView && child.drawable==null && emptyIcon!=0){
                         child.setImageResource(emptyIcon)
                     }
                 }
@@ -271,10 +306,13 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
         if (errorView?.parent != null) removeView(errorView)
         errorView = LayoutInflater.from(context).inflate(errorLayoutId, this, false)
         errorView?.apply {
-            (layoutParams as LayoutParams).gravity = Gravity.CENTER
+            (layoutParams as LayoutParams).apply {
+                gravity = Gravity.CENTER
+                setPadding(paddingLeft, paddingTopDp?: paddingTop, paddingRight, paddingBottomDp?: paddingBottom)
+            }
             visibility = View.GONE
             alpha = 0f
-            setOnClickListener { retry() }
+            (findViewById<View?>(retryBtnId)?: this).setOnClickListener { retry() }
             addView(errorView)
         }
         return this
@@ -291,28 +329,32 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
      * @param enableTouchWhenLoading 是否在加载时允许触摸下层View
      * @param retryAction 加载失败状态下点击重试的行为
      */
-    fun config(loadingLayoutId: Int? = null,
-               emptyLayoutId: Int? = null,
-               errorLayoutId: Int? = null,
-               emptyText: String? = null,
-               emptyIcon: Int? = null,
-               useContentBgWhenLoading: Boolean? = null,
-               animDuration: Long? = null,
-               noEmptyAndError: Boolean? = null,
-               defaultShowLoading: Boolean? = null,
-               enableLoadingShadow: Boolean? = null,
-               enableTouchWhenLoading: Boolean? = null,
-               showLoadingOnce: Boolean? = null,
-               retryAction: ((errView: View) -> Unit)? = null): StateLayout {
-        if(emptyText!=null)this.emptyText = emptyText
-        if(emptyIcon!=null)this.emptyIcon = emptyIcon
+    fun configAll(loadingLayoutId: Int? = null,
+                  emptyLayoutId: Int? = null,
+                  errorLayoutId: Int? = null,
+                  emptyText: String? = null,
+                  emptyIcon: Int? = null,
+                  useContentBgWhenLoading: Boolean? = null,
+                  animDuration: Long? = null,
+                  noEmptyAndError: Boolean? = null,
+                  defaultShowLoading: Boolean? = null,
+                  enableLoadingShadow: Boolean? = null,
+                  enableTouchWhenLoading: Boolean? = null,
+                  showLoadingOnce: Boolean? = null,
+                  paddingTop: Int? = null,
+                  paddingBottom: Int? = null,
+                  retryBtnId: Int? = null,
+                  retryAutoLoading: Boolean = true,
+                  retryAction: ((errView: View) -> Unit)? = null): StateLayout {
+        if(emptyText!=null) this.emptyText = emptyText
+        if(emptyIcon!=null) this.emptyIcon = emptyIcon
         if(noEmptyAndError!=null) this.noEmptyAndError = noEmptyAndError
         if (loadingLayoutId != null) {
             this.loadingLayoutId = loadingLayoutId
             setLoadingLayout()
         }
-        if (emptyLayoutId != null){
-            this.emptyLayoutId  = emptyLayoutId
+        if (emptyLayoutId != null) this.emptyLayoutId  = emptyLayoutId
+        if(emptyLayoutId!=null || emptyText!=null || emptyIcon!=null){
             setEmptyLayout()
         }
         if (errorLayoutId != null){
@@ -325,11 +367,51 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
         if (animDuration != null) {
             this.animDuration = animDuration
         }
+        if(paddingBottom != null) paddingBottomDp = dp2px(paddingBottom.toFloat())
+        if(paddingTop != null) paddingTopDp = dp2px(paddingTop.toFloat())
         if(defaultShowLoading!=null) this.defaultShowLoading = defaultShowLoading
         if(enableLoadingShadow!=null) this.enableLoadingShadow = enableLoadingShadow
         if(enableTouchWhenLoading!=null) this.enableTouchWhenLoading = enableTouchWhenLoading
         if(showLoadingOnce!=null) this.showLoadingOnce = showLoadingOnce
-        if(mRetryAction!=null)mRetryAction = retryAction
+        if(retryBtnId!=null) this.retryBtnId = retryBtnId
+        this.retryAutoLoading = retryAutoLoading
+        if(retryAction!=null) mRetryAction = retryAction
         return this
+    }
+
+    /**
+     * 配置空视图
+     */
+    fun configEmptyLayoutId(emptyLayoutId: Int? = null, emptyText: String? = null, emptyIcon: Int? = null){
+        if (emptyLayoutId != null) this.emptyLayoutId  = emptyLayoutId
+        if(emptyLayoutId!=null || emptyText!=null || emptyIcon!=null){
+            setEmptyLayout()
+        }
+    }
+
+    /**
+     * 配置错误视图
+     */
+    fun configErrorLayoutId(errorLayoutId: Int? = null, retryBtnId: Int? = null, retryAutoLoading:Boolean = true, retryAction: ((errView: View) -> Unit)? = null){
+        if (errorLayoutId != null){
+            this.errorLayoutId = errorLayoutId
+            setErrorLayout()
+        }
+        if(retryBtnId!=null) this.retryBtnId = retryBtnId
+        this.retryAutoLoading = retryAutoLoading
+        if(retryAction!=null) mRetryAction = retryAction
+    }
+
+    /**
+     * 配置间距，可用于微调, 单位pd，仅适用于空视图和错误视图的间距调整
+     */
+    fun configPadding(paddingTop: Int?, paddingBottom: Int?){
+        if(paddingBottom != null) paddingBottomDp = dp2px(paddingBottom.toFloat())
+        if(paddingTop != null) paddingTopDp = dp2px(paddingTop.toFloat())
+    }
+
+    private fun dp2px(value: Float): Int {
+        val scale = context?.resources?.displayMetrics?.density
+        return (value * (scale?: 0f) + 0.5f).toInt()
     }
 }

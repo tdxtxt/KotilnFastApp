@@ -15,4 +15,6 @@ public interface Endpoint {
   String url(int index);
 
   List<ExtraUrl> extraUrls(int index);
+
+  void changeIndex(int index);
 }

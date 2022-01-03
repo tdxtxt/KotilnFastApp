@@ -5,14 +5,14 @@ import com.hjq.bar.TitleBar
 import com.hjq.bar.OnTitleBarListener
 import android.view.View
 import com.baselib.R
+import com.baselib.callback.MenuCallBack
 import com.baselib.helper.StatusBarHelper
-import com.baselib.callback.TitleClickListener
-import com.lxj.statelayout.StateLayout
 
 
 abstract class CommToolBarActivity : BaseActivity() {
     private var mTitleBar: TitleBar? = null
-    private var titleListener: TitleClickListener? = null
+    private var realMenuCallBack: MenuCallBack? = null
+//    private var titleListener: TitleClickListener? = null
 
     /**
      * 布局中TitleBar控件id默认R.id.titlebar，若自定义id，需要重写此方法
@@ -21,29 +21,23 @@ abstract class CommToolBarActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTitleBarListener()
+        initTitleBar()
     }
 
-    private fun setTitleBarListener() {
+    private fun initTitleBar() {
         getTitleBar()?.setOnTitleBarListener(object : OnTitleBarListener {
             override fun onLeftClick(v: View) {
                 interceptCallBack?.invoke()
                 if (!interceptBackEvent) finish()
-                titleListener?.onLeftClick(v)
+
             }
             override fun onTitleClick(v: View) {
-                titleListener?.onTitleClick(v)
             }
             override fun onRightClick(v: View) {
-                titleListener?.onRightClick(v)
+                realMenuCallBack?.click?.invoke(v, null)
             }
         })
 
-        if(getTitleBar() != null) titleListener?.initCustomClick(getTitleBar()!!)
-    }
-
-    protected fun setTitleBarClickListener(listener: TitleClickListener){
-        this.titleListener = listener
     }
 
     /**
@@ -54,6 +48,20 @@ abstract class CommToolBarActivity : BaseActivity() {
         return mTitleBar
     }
 
+    open fun setTitleBar(title: String?, rightMenu: (MenuCallBack.() -> Unit)?) {
+        getTitleBar()?.apply {
+            this.title = title
+            rightMenu?.apply {
+                realMenuCallBack = object : MenuCallBack(){ }
+                realMenuCallBack?.apply {
+                    rightMenu()
+                    if(isTextMenu()) setRightTitle(menuText)
+                    else if(isIconMenu()) setRightIcon(icon)
+                }
+            }
+        }
+    }
+
 
      override fun initStatusBar() {
          StatusBarHelper.setDarkMode(fragmentActivity)
@@ -61,20 +69,6 @@ abstract class CommToolBarActivity : BaseActivity() {
          StatusBarHelper.setStatusBarHeight(fragmentActivity, fragmentActivity.findViewById(android.R.id.content))
     }
 
-    override fun showLoadingView() {
-        getStateView(R.id.view_content)?.showLoading()
-    }
 
-    override fun showContentView() {
-        getStateView(R.id.view_content)?.showContent()
-    }
-
-    override fun showEmptyView() {
-        getStateView(R.id.view_content)?.showEmpty()
-    }
-
-    override fun showErrorView(e: Throwable) {
-        getStateView(R.id.view_content)?.showEmpty()
-    }
 
 }

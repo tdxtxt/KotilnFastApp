@@ -16,11 +16,16 @@ import com.baselib.helper.DialogHelper
 import com.baselib.helper.HashMapParams
 import com.baselib.helper.LogA
 import com.baselib.helper.StatusBarHelper
+import com.baselib.rx.transformer.ProgressTransformer
+import com.baselib.rx.transformer.UIThreadTransformer
 import com.baselib.ui.dialog.child.ProgressDialog
 import com.baselib.ui.fragment.impl.StartForResultFragment1
 import com.baselib.ui.fragment.impl.StartForResultFragment2
 import com.fast.libdeveloper.AppContainer
 import com.lxj.statelayout.StateLayout
+import com.trello.rxlifecycle3.LifecycleTransformer
+import com.trello.rxlifecycle3.android.ActivityEvent
+import com.trello.rxlifecycle3.android.FragmentEvent
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
 import java.lang.Exception
 import java.lang.reflect.Method
@@ -29,7 +34,7 @@ import java.lang.reflect.ParameterizedType
 
 /**
  * @作者： ton
- * @创建时间： 2018\11\30 0030
+ * @创建时间： 2018\11\30
  * @功能描述： 所有activity的基类，必须继承它(强制),封装类容:调整方法
  * @传入参数说明： 无
  * @返回参数说明： 无
@@ -55,7 +60,8 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
 
     abstract fun getLayoutResId(): Int
     open fun initUi(){}
-
+    open fun reload(view: View?){}
+    open fun customConfigSateView(view: View, stateLayout: StateLayout){}
     /*private fun createViewBinding(): View {
         val superclass = javaClass.genericSuperclass
         val aClass = (superclass as ParameterizedType).actualTypeArguments[0] as Class<*>
@@ -79,40 +85,37 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     /**
      * 多状态通用页面
      */
-    fun getStateView(resId: Int = getLayoutResId()): StateLayout?{
-        var stateLayout = stateLayouts[resId]
+    fun getStateView(resId: Int) : StateLayout?{
+        var stateLayout: StateLayout? = stateLayouts.get(resId)
+
         if(stateLayout != null) return stateLayout
 
-        val view = findViewById<View>(resId)
-        if(view == null){
-            stateLayout = stateLayouts[android.R.id.content]
-            if(stateLayout == null){
-                stateLayout = StateLayout(this).wrap(this).apply { configStateView(findViewById(android.R.id.content), this) }.showContent()
-                stateLayouts.put(android.R.id.content, stateLayout)
-            }
-        }else{
-            stateLayout = StateLayout(this).wrap(view).apply { configStateView(view, this) }.showContent()
-            stateLayouts.put(resId, stateLayout)
-        }
+        val view: View = findViewById(resId)?: (findViewById<View>(android.R.id.content).apply { resId == android.R.id.content })
+
+        stateLayout = StateLayout(fragmentActivity!!)
+
+        initConfigStateView(view, stateLayout)
+        stateLayout.showContent()
+        stateLayouts.put(resId, stateLayout)
         return stateLayout
     }
 
+    private fun initConfigStateView(view: View, stateLayout: StateLayout){
+        stateLayout.configAll(
+                emptyText = "别看了，这里什么都没有",
+                loadingLayoutId = R.layout._loading_layout_loading, //自定义加载中布局
+                errorLayoutId = R.layout._loading_layout_error, //自定义加载失败布局
+                emptyLayoutId = R.layout._loading_layout_empty, //自定义数据位为空的布局
+                useContentBgWhenLoading = true, //加载过程中是否使用内容的背景
+                retryAutoLoading = true,
+//                enableLoadingShadow = true, //加载过程中是否启用半透明阴影盖在内容上面
+                retryAction = {
+                    //点击errorView的回调
+                    reload(view)
+                })
 
-    /**
-     * 多状态通用页面配置
-     */
-    open fun configStateView(view: View, stateLayout: StateLayout){
-        stateLayout.apply {
-            config(loadingLayoutId = R.layout._loading_layout_loading, //自定义加载中布局
-                    errorLayoutId = R.layout._loading_layout_error, //自定义加载失败布局
-                    emptyLayoutId = R.layout._loading_layout_empty, //自定义数据位为空的布局
-                    useContentBgWhenLoading = true, //加载过程中是否使用内容的背景
-                    enableLoadingShadow = true, //加载过程中是否启用半透明阴影盖在内容上面
-                    retryAction = {
-                        //点击errorView的回调
-
-                    })
-        }.wrap(view)
+        customConfigSateView(view, stateLayout)
+        stateLayout.wrap(view)
     }
 
     /**
@@ -128,29 +131,33 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         return mProgressDialog?.setDesc("正在加载...")?.apply { setCancelable(true) }
     }
 
+    override fun hideProgressBar() {
+        getProgressBar()?.hide()
+    }
+
     override fun showProgressBar() {
         if (isFinishing) return
         getProgressBar()?.setCancelableOnTouchOutside(false)?.show()
     }
 
-    override fun hideProgressBar() {
-        mProgressDialog?.dismiss()
+    override fun showProgressBar(desc: String, isCancel: Boolean) {
+        getProgressBar()?.setDesc(desc)?.setCancelable(isCancel)?.show();
     }
 
-    override fun showLoadingView() {
-        getStateView()?.showLoading()
+    override fun <T> bindLifecycle(): LifecycleTransformer<T> {
+        return this.bindUntilEvent(ActivityEvent.DESTROY);
     }
 
-    override fun showContentView() {
-        getStateView()?.showContent()
+    override fun <T> bindUIThread(): UIThreadTransformer<T> {
+        return UIThreadTransformer()
     }
 
-    override fun showEmptyView() {
-        getStateView()?.showEmpty()
+    override fun <T> bindProgress(): ProgressTransformer<T> {
+        return ProgressTransformer(getProgressBar())
     }
 
-    override fun showErrorView(e: Throwable) {
-        getStateView()?.showEmpty()
+    override fun <T> bindProgress(bindDialog: Boolean): ProgressTransformer<T> {
+        return ProgressTransformer(getProgressBar(), bindDialog)
     }
 
     open fun <T : Activity> getActivityNew(): T? = fragmentActivity as T
