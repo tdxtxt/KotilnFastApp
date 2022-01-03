@@ -47,6 +47,7 @@ class RemarkDialog constructor(activity: FragmentActivity) : BottomBaseDialog(ac
         oldRemark = source?.memo
         spinner?.setSelection(indexMap[oldStatus] ?: 0)
         etRemark?.setText(oldRemark?: "")
+        etRemark?.setSelection(oldRemark?.length?:0)
 
         findViewById<View>(R.id.btn_next)?.setOnClickListener {
             source?.apply {
