@@ -43,7 +43,7 @@ class UserCacheHelper constructor(userName: String) : CEngine by object : MMKVEn
     }
 
     fun getPowerValue(): Int = getInt("power_value", 30)?: 30
-    fun savePowerValue(value: Int) = put("power_value", value)
+    fun savePowerValue(value: Int) = putInt("power_value", value)
 
     fun isStartTask(taskId: String?) = getTask(taskId) != null
 
