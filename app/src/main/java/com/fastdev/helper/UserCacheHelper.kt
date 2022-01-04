@@ -42,6 +42,9 @@ class UserCacheHelper constructor(userName: String) : CEngine by object : MMKVEn
         return getParcelable("task_${taskId}", TaskEntity::class.java)
     }
 
+    fun getPowerValue(): Int = getInt("power_value", 30)?: 30
+    fun savePowerValue(value: Int) = put("power_value", value)
+
     fun isStartTask(taskId: String?) = getTask(taskId) != null
 
     companion object{

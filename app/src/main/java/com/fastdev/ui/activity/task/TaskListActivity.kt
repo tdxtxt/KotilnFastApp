@@ -73,16 +73,7 @@ class TaskListActivity : CommToolBarActivity() {
         setTitleBar("资产盘点"){
             menuText = TextSpanController().pushColorSpan(Color.parseColor("#666666")).append("参数设置").popSpan().build()
             onClick { rootView, any ->
-                Flowable.unsafeCreate<Boolean> {
-                    it.onNext(UHFSdk.syncOpen())
-                    it.onComplete()
-                }.compose(bindProgress()).subscribe { isOpen ->
-                    if(isOpen){
-                        ConfigDialog(fragmentActivity).show()
-                    }else{
-                        ToastHelper.showToast("设备打开失败")
-                    }
-                }
+                ConfigDialog(fragmentActivity).show()
             }
         }
         val fragments: MutableList<Pair<String, Fragment>> = mutableListOf()

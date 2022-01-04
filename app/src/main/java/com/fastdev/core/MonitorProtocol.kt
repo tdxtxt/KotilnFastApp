@@ -5,6 +5,7 @@ import android.os.HandlerThread
 import android.os.Looper
 import com.baselib.helper.ToastHelper
 import com.fastdev.data.repository.DbApiRepository
+import com.fastdev.helper.UserCacheHelper
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.seuic.uhf.UHFService
 import io.reactivex.Flowable
@@ -39,6 +40,7 @@ abstract class MonitorProtocol constructor(val looper: Looper?) {
         fun onResume(){
             Flowable.unsafeCreate<Unit> {
                 UHFSdk.resume()
+                UHFSdk.setPower(UserCacheHelper.getInstance().getPowerValue())
                 it.onNext(Unit)
                 it.onComplete()
             }.subscribeOn(Schedulers.io()).subscribe()
