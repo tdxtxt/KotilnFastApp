@@ -106,15 +106,22 @@
                 android:textSize="@dimen/_12sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_filter"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white_ffffff"
-            android:text="盘点范围"
-            android:padding="16dp"
-            android:textColor="@color/black_333333"
-            android:textSize="@dimen/_14sp" />
+            android:background="@color/white_ffffff">
+            <TextView
+                android:id="@+id/tv_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="盘点范围"
+                android:gravity="center_vertical"
+                android:drawableRight="@drawable/ic_expand_more_666666_24dp"
+                android:padding="16dp"
+                android:textColor="@color/black_333333"
+                android:textSize="@dimen/_14sp" />
+        </LinearLayout>
+
 
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/tabLayout"
