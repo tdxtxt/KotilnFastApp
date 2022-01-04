@@ -48,7 +48,8 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     private var scanDialogDisplay = false
 
     private var scanKeyService: ScanKeyService? = null
-    private var keyEventListener: WeakReference<IKeyEventCallback.Stub>? = null
+    private var keyEventListener: IKeyEventCallback.Stub? = null
+
 
 
     override fun getParams(bundle: Bundle?) {
@@ -64,7 +65,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     private fun initScanKey(){
         scanKeyService = try{ ScanKeyService.getInstance() } catch (e: Exception) { null }
         if(scanKeyService != null){
-            keyEventListener = WeakReference(SKeyEventCallback())
+            keyEventListener = SKeyEventCallback()
             val disposableDown =
                 RxBus.listen(TaskEventCode.KEY_DOWN::class.java)
                         .compose(bindLifecycle())
@@ -208,19 +209,18 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
     override fun onResume() {
         super.onResume()
         MonitorProtocol.onResume()
-        scanKeyService?.registerCallback(keyEventListener?.get(), null)
+        scanKeyService?.registerCallback(keyEventListener, null)
     }
 
     override fun onPause() {
         super.onPause()
         MonitorProtocol.onPause()
-        scanKeyService?.unregisterCallback(keyEventListener?.get())
+        scanKeyService?.unregisterCallback(keyEventListener)
     }
 
     override fun finish() {
         super.finish()
         scanKeyService = null
-        keyEventListener?.clear()
         keyEventListener = null
     }
 
