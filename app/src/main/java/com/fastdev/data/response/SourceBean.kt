@@ -1,6 +1,7 @@
 package com.fastdev.data.response
 
 import android.os.Parcelable
+import android.text.TextUtils
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import org.litepal.annotation.Column
@@ -57,6 +58,14 @@ data class SourceBean(
             else -> pp_act
         }
     }
+
+    fun getNonullName() = if(TextUtils.isEmpty(pp_name)) "未知" else pp_name
+
+    fun getNonullType() = if(TextUtils.isEmpty(pp_type)) "未知" else pp_type
+
+    fun getNonullModel() = if(TextUtils.isEmpty(pp_model)) "未知" else pp_model
+
+    fun getNonullAddr() = if(TextUtils.isEmpty(pp_addr)) "未知" else pp_addr
 
     override fun hashCode(): Int {
         return "sourceBean_${task_id}_${pp_code}".hashCode()

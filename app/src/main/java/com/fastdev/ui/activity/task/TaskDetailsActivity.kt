@@ -28,7 +28,6 @@ import com.seuic.scankey.IKeyEventCallback
 import com.seuic.scankey.ScanKeyService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_task_details.*
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 @AndroidEntryPoint

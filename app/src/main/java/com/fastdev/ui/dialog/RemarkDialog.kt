@@ -61,6 +61,9 @@ class RemarkDialog constructor(activity: FragmentActivity) : BottomBaseDialog(ac
             }
             dismiss()
         }
+        findViewById<View>(R.id.iv_close)?.setOnClickListener {
+            dismiss()
+        }
     }
 
     fun show(source: SourceBean, changeListener: (source: SourceBean?) -> Unit){

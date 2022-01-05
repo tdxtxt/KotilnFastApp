@@ -39,12 +39,12 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.adapter = object : BaseQuickLoadMoreAdapter<SourceBean, BaseViewHolder>(R.layout.item_source, R.layout.layout_empty_source){
             override fun convert(holder: BaseViewHolder, item: SourceBean) {
-                holder.setText(R.id.tv_name, item.pp_name?: "未知")
+                holder.setText(R.id.tv_name, item.getNonullName())
                         .setText(R.id.tv_code, item.pp_code)
                         .setText(R.id.tv_status, item.getStatusName())
-                        .setText(R.id.tv_model, item.pp_model)
-                        .setText(R.id.tv_specs, "未知")
-                        .setText(R.id.tv_position, item.pp_addr)
+                        .setText(R.id.tv_model, item.getNonullType())
+                        .setText(R.id.tv_specs, item.getNonullModel())
+                        .setText(R.id.tv_position, item.getNonullAddr())
                         .setText(R.id.tv_remark, item.memo)
                 holder.setTextColorRes(R.id.tv_status, when(item.pp_act){
                     SourceBean.STATUS_WAIT -> R.color.purple_9829ff
