@@ -1,6 +1,5 @@
 package com.fastdev.ui.activity.welcome;
 
-import android.content.Intent
 import android.os.Bundle
 import com.baselib.helper.*
 import com.baselib.ui.activity.BaseActivity
@@ -8,7 +7,6 @@ import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.helper.isLogin
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.login.LoginMainActivity
-import com.fastdev.ui.activity.main.MainActivity
 import com.fastdev.ui.activity.task.TaskListActivity
 import com.fastdev.ui.activity.welcome.child.AdFragment
 import com.fastdev.ui.activity.welcome.child.GuideFragment

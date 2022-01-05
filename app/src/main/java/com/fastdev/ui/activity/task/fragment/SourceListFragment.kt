@@ -177,6 +177,4 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
         fun getOutsideInstance() = SourceListFragment().apply { setArguments(Bundle().apply { putString("type", SourceBean.STATUS_PY) }) }
         fun getWaneInstance() = SourceListFragment().apply { setArguments(Bundle().apply { putString("type", SourceBean.STATUS_PK) }) }
     }
-
-
 }

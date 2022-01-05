@@ -7,13 +7,10 @@ import com.baselib.ui.mvp.view.BaseMvpView
 import com.fastdev.data.ResponseBody
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.repository.NetApiRepository
-import com.fastdev.data.response.SourceBean
 import com.fastdev.data.response.SourceResp
 import com.fastdev.data.response.TaskEntity
-import com.fastdev.helper.UserCacheHelper
 import com.fastdev.net.observer.BaseObserver
 import io.reactivex.Flowable
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**

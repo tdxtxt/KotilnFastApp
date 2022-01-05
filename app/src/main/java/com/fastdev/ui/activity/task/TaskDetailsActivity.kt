@@ -3,15 +3,10 @@ package com.fastdev.ui.activity.task
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import com.baselib.callback.StartForResultListener
-import com.baselib.helper.HashMapParams
-import com.baselib.helper.LogA
 import com.baselib.helper.ToastHelper
-import com.baselib.helper.composeUIThread
 import com.baselib.rx.event.RxBus
 import com.baselib.ui.mvp.view.activity.CommToolBarMvpActivity
 import com.fastdev.core.MonitorProtocol
@@ -32,7 +27,6 @@ import com.fastdev.ui.dialog.ScannerDialog
 import com.seuic.scankey.IKeyEventCallback
 import com.seuic.scankey.ScanKeyService
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.activity_task_details.*
 import java.lang.ref.WeakReference
 import javax.inject.Inject
@@ -234,5 +228,4 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
             }
         }
     }
-
 }

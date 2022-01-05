@@ -4,17 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import com.baselib.helper.ToastHelper
-import com.baselib.ui.fragment.BaseFragment
-import com.baselib.ui.mvp.presenter.BaseMvpPresenter
-import com.baselib.ui.mvp.view.BaseMvpView
 import com.baselib.ui.mvp.view.fragment.BaseMvpFragment
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.TaskDetailsActivity
 import com.fastdev.ui.activity.task.presenter.TaskListPresenter
-import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.fastdev.ui.activity.task.viewmodel.TaskListViewModel
 import com.fastdev.ui.adapter.BaseQuickLoadMoreAdapter
 import dagger.hilt.android.AndroidEntryPoint

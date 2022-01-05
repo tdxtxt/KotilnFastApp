@@ -1,17 +1,13 @@
 package com.fastdev.ui.activity.task.presenter
 
 import com.baselib.helper.ToastHelper
-import com.baselib.rx.event.RxBus
-import com.baselib.rx.event.RxEventCode
 import com.baselib.ui.mvp.presenter.AbsPresenter
 import com.baselib.ui.mvp.view.BaseMvpView
 import com.fastdev.data.ResponseBody
-import com.fastdev.data.event.TaskEventCode
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.repository.NetApiRepository
 import com.fastdev.net.observer.BaseObserver
 import com.fastdev.ui.activity.task.viewmodel.Quantity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 

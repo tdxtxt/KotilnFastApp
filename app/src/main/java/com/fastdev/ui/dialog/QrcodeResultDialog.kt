@@ -3,7 +3,6 @@ package com.fastdev.ui.dialog
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import com.baselib.ui.activity.BaseActivity
 import com.baselib.ui.dialog.CenterBaseDialog
 import com.baselib.ui.dialog.impl.IBDialog

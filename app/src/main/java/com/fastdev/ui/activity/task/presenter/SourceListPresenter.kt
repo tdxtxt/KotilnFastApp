@@ -4,12 +4,7 @@ import com.baselib.ui.mvp.presenter.AbsPresenter
 import com.baselib.ui.mvp.view.BaseMvpView
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.repository.NetApiRepository
-import com.fastdev.data.response.PlaceBean
 import com.fastdev.data.response.SourceBean
-import com.fastdev.ui.activity.task.viewmodel.Quantity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.lang.StringBuilder
 import javax.inject.Inject
 
 /**

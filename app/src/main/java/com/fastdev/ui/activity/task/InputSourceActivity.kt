@@ -5,15 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import com.baselib.helper.HashMapParams
 import com.baselib.helper.ToastHelper
 import com.baselib.ui.activity.CommToolBarActivity
-import com.baselib.ui.mvp.view.activity.CommToolBarMvpActivity
 import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_source_input.*
-import javax.inject.Inject
 
 /**
  * 功能描述:
