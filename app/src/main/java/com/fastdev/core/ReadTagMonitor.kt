@@ -29,9 +29,9 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var d
                 if(this) localData[it.getId()] = true
             }
         }?.map {
-            SourceBean().apply {
+            SourceBean().run {
                 pp_code = it.getId()
-                dbApiRepository.syncSaveOrUpdate(viewModel.taskId, this)
+                dbApiRepository.syncSaveOrUpdate(viewModel.taskId, this)?: this
             }
         }
 //        LogA.i("NewSource： $diffData")

@@ -48,7 +48,7 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
 
         recyclerView?.adapter = object : BaseQuickAdapter<SourceBean, BaseViewHolder>(R.layout.item_dialog_scanner){
             override fun convert(holder: BaseViewHolder, item: SourceBean) {
-                holder.setText(R.id.tv_code, item.pp_code)
+                holder.setText(R.id.tv_code, item.pp_code).setText(R.id.tv_name, item.pp_name)
             }
         }.apply { adapter = this }
 
