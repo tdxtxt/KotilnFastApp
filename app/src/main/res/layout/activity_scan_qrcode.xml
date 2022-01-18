@@ -91,4 +91,15 @@
 
     </LinearLayout>
 
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        app:leftColor="@color/white_ffffff"
+        app:leftIcon="@drawable/bar_icon_back_white"
+        app:titleColor="@color/white_ffffff"
+        app:lineVisible="false"/>
+
 </RelativeLayout>
