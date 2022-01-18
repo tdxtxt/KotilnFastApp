@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import com.baselib.helper.ToastHelper
 import com.baselib.ui.mvp.view.fragment.BaseMvpFragment
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.fastdev.data.response.SourceBean
 import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.TaskDetailsActivity
@@ -55,6 +56,14 @@ class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
                         .setText(R.id.tv_num_py, item.task_py_count)
                         .setText(R.id.tv_num_pk, item.task_pk_count)
                         .setGone(R.id.btn_next, isHistoryList())
+
+                holder.setTextColorRes(R.id.tv_status, when(item.task_status){
+                    TaskEntity.STATUS_ING -> R.color.purple_9829ff
+                    TaskEntity.STATUS_FINISH -> R.color.green_09bb07
+                    TaskEntity.STATUS_DEPRECATED -> R.color.black_999999
+                    TaskEntity.STATUS_WAIT -> R.color.red_f5222d
+                    else -> R.color.black_999999
+                })
             }
         }
         adapter.addChildClickViewIds(R.id.btn_next)

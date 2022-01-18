@@ -22,12 +22,19 @@ class TaskEntity (
     var task_wait_count: String? = "0", //待盘数量
     var task_complete_count: String? = "0" //已经盘点数量
 ): Parcelable{
+    companion object{
+        const val STATUS_WAIT = "10" //待开始
+        const val STATUS_ING = "20" //进行中
+        const val STATUS_FINISH = "30" //完成
+        const val STATUS_DEPRECATED = "-1" //作废
+    }
+
     fun getStatus(): String {
         return when (task_status) {
-            "10" -> "待开始"
-            "20" -> "进行中"
-            "30" -> "完成"
-            "-1" -> "作废"
+            STATUS_WAIT -> "待开始"
+            STATUS_ING -> "进行中"
+            STATUS_FINISH -> "完成"
+            STATUS_DEPRECATED -> "作废"
             else -> ""
         }
     }
