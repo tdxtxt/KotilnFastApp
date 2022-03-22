@@ -25,13 +25,13 @@ android {
     }
 //    TODO AS4.0
 //    Android Studio 4.0
-    buildFeatures{
-        viewBinding=true
-    }
-    //Android Studio 低于4.0
-//    viewBinding {
-//        enabled = true
+//    buildFeatures{
+//        viewBinding=true
 //    }
+    //Android Studio 低于4.0
+    viewBinding {
+        enabled = true
+    }
 
     //配置调用aar
     repositories {
@@ -146,6 +146,7 @@ dependencies {
 
     implementation project(path: ':libCommon')
 //    implementation project(path: ':libChatUI')
+    implementation project(path: ':libVideo')
 
     //查看数据库
 //    debugImplementation 'com.guolindev.glance:glance:1.1.0'

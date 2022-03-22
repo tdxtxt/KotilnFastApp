@@ -1,1 +1,2 @@
 include ':app', ':libCommon', ':libOpensource', ':libDeveloper'
+include ':libVideo'
