@@ -94,9 +94,9 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
 //
 //        lineChart.setData(LineData(lineDataSet))
         //https://juejin.cn/post/6844904160710803464
-        val chartlineOne: List<ILineChartData> = listOf(Point("1", 2f), Point("2", 90f), Point("3", 5f), Point("4", 104f))
-        val chartlineTwo: List<ILineChartData> = listOf(Point("1", 4f), Point("2", 60f), Point("3", 9f), Point("4", 6f))
-        LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo), mutableListOf("1", "2", "3", "4"), mutableListOf(Color.BLUE, Color.RED), 10)
+        val chartlineOne: List<ILineChartData> = listOf(Point("1", 2f), Point("2", 90f), Point("3", 5f), Point("4", 104f), Point("5", 45f),  Point("6", 300f), Point("7", 5f), Point("8", 104f), Point("9", 45f), Point("11", 35f))
+        val chartlineTwo: List<ILineChartData> = listOf(Point("1", 4f), Point("2", 60f), Point("3", 9f), Point("4", 6f), Point("5", 15f),  Point("6", 90f), Point("7", 5f), Point("8", 104f), Point("9", 45f), Point("11", 45f))
+        LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo), mutableListOf("1", "2", "3", "4", "5"), mutableListOf(Color.BLUE, Color.RED), 5)
     }
 
     override fun showXX() {

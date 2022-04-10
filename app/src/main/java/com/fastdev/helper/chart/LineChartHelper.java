@@ -108,7 +108,10 @@ public class LineChartHelper {
             barDataSet.setColor(barColors.get(i));
             barDataSet.setValueTextColor(barColors.get(i));
             barDataSet.setValueTextSize(10f);
-            barDataSet.setDrawCircles(false);
+            //设置直线图填充
+            barDataSet.setDrawFilled(true);
+            //设置填充颜色
+            barDataSet.setFillColor(Color.parseColor("#FFA2A2"));
             //显示圆点
             barDataSet.setDrawCircles(true);
             //设置圆点颜色(外圈)
@@ -118,7 +121,9 @@ public class LineChartHelper {
             //设置线条为平滑曲线
             barDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
             //不显示曲线点的具体数值
-            lineData.setDrawValues(false);
+            barDataSet.setDrawValues(false);
+
+
             lineData.addDataSet(barDataSet);
         }
         xAxis.setValueFormatter(new IndexAxisValueFormatter(xValue));
