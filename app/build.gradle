@@ -18,18 +18,18 @@ android {
         multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi","armeabi-v7a", "x86"/*, "arm64-v8a", "x86_64", */
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
 //    TODO AS4.0
     //Android Studio 4.0
-//    buildFeatures{
-//        viewBinding=true
-//    }
-    //Android Studio 低于4.0
-    viewBinding {
-        enabled = true
+    buildFeatures{
+        viewBinding=true
     }
+    //Android Studio 低于4.0
+//    viewBinding {
+//        enabled = true
+//    }
 
     //配置调用aar
     repositories {
@@ -132,6 +132,8 @@ dependencies {
 
     implementation project(path: ':libCommon')
     implementation project(path: ':libChatUI')
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 
 kapt {

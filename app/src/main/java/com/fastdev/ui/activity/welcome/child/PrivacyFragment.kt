@@ -16,6 +16,6 @@ class PrivacyFragment : BaseFragment(){
     }
 
     companion object{
-        var isPrivacyDisplay = false
+        var isPrivacyDisplay = true
     }
 }

@@ -44,6 +44,6 @@ class AdFragment : BaseFragment() {
     }
 
     companion object{
-        var isAdDisplay = false
+        var isAdDisplay = true
     }
 }

@@ -28,7 +28,7 @@ class PermissionApplyFragment : BaseFragment() {
     }
 
     companion object{
-        var isPermissionDisplay = false
+        var isPermissionDisplay = true
 
         val permissions = listOf(/*Manifest.permission.READ_PHONE_STATE,*/
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE
