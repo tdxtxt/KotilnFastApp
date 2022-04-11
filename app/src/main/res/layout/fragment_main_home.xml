@@ -1,41 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srlEnableLoadMore="false"
-        app:srlEnablePreviewInEditMode="true">
+        android:layout_height="300dp"/>
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <com.baselib.ui.view.container.RatioRoundFrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/blue_5c95f0"
-                    app:datumRatio="datumWidth"
-                    app:heightRatio="3"
-                    app:widthRatio="5">
-
-                    <com.youth.banner.Banner
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </com.baselib.ui.view.container.RatioRoundFrameLayout>
-
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-    <include layout="@layout/include_top_search" />
 </FrameLayout>
