@@ -3,8 +3,10 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -26,7 +28,7 @@ public class LineChartHelper {
     private YAxis yAxis;
     private XAxis xAxis;
 
-    public LineChartHelper(LineChart lineChart) {
+    public  LineChartHelper(LineChart lineChart) {
         this.lineChart = lineChart;
         yAxis = lineChart.getAxisLeft();
         xAxis = lineChart.getXAxis();
@@ -69,11 +71,15 @@ public class LineChartHelper {
         // 隐藏网格线
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
+//        lineChart.setRendererLeftYAxis(new YAxisRendererFix(lineChart.getViewPortHandler(), yAxis, lineChart.getTransformer(yAxis.getAxisDependency())));
         //y轴设置
         YAxis leftAxis = lineChart.getAxisLeft();
+//        leftAxis.setLabelCount(10, false);
+        leftAxis.setAxisMaximum(100);
         leftAxis.setDrawGridLines(false);
+        leftAxis.setSpaceMin(10f);
         //保证Y轴从0开始，不然会上移一点
-        leftAxis.setAxisMinimum(0f);
+//        leftAxis.setAxisMinimum(0f);
         lineChart.getXAxis().setAxisMinimum(0);
     }
 
@@ -81,11 +87,10 @@ public class LineChartHelper {
      * 展示折线图(多条)
      *
      * @param lineSetData    多个折线图数据
-     * @param labels         标签集合
      * @param barColors      颜色
      * @param singleBarChart 一页显示个数
      */
-    public void showMultipleLineChart(List<List<ILineChartData>> lineSetData, List<String> labels, List<Integer> barColors, int singleBarChart) {
+    public void showMultipleLineChart(List<List<ILineChartData>> lineSetData, List<Integer> barColors, int singleBarChart) {
         // 初始化图表X、Y轴属性
         initLineChart();
         // X轴真实显示lable
@@ -93,6 +98,7 @@ public class LineChartHelper {
         // 多折线图数据集
         LineData lineData = new LineData();
         // 多折线图循环，得到每一种折线图集合数据
+        float yMinValue = lineSetData.get(0).get(0).getValue();
         for (int i = 0; i < lineSetData.size(); i++) {
             List<ILineChartData> barSetDatum = lineSetData.get(i);
             // 单种柱状图数据集
@@ -101,10 +107,11 @@ public class LineChartHelper {
                 if (!xValue.contains(barSetDatum.get(j).getLabelName())) {
                     xValue.add(barSetDatum.get(j).getLabelName());
                 }
+                yMinValue = Math.min(yMinValue, barSetDatum.get(i).getValue());
                 entries.add(new Entry(j, barSetDatum.get(j).getValue()));
             }
             // 数据集合标签名
-            LineDataSet barDataSet = new LineDataSet(entries, (labels == null) ? "" : labels.get(i));
+            LineDataSet barDataSet = new LineDataSet(entries, "第" + i + "条线"/*(labels == null) ? "" : labels.get(i)*/);
             barDataSet.setColor(barColors.get(i));
             barDataSet.setValueTextColor(barColors.get(i));
             barDataSet.setValueTextSize(10f);
@@ -115,14 +122,18 @@ public class LineChartHelper {
             //显示圆点
             barDataSet.setDrawCircles(true);
             //设置圆点颜色(外圈)
-            barDataSet.setCircleColor(Color.parseColor("#008CFF"));
+            barDataSet.setCircleColor(barColors.get(i));
             //设置圆点填充颜色
-            barDataSet.setCircleHoleColor(Color.parseColor("#008CFF"));
+            barDataSet.setCircleHoleColor(Color.parseColor("#FFFFFF"));
             //设置线条为平滑曲线
-            barDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+            barDataSet.setMode(LineDataSet.Mode.LINEAR);
             //不显示曲线点的具体数值
             barDataSet.setDrawValues(false);
-
+            //选中十字架样式
+            barDataSet.setHighLightColor(barColors.get(i));
+            barDataSet.setHighlightEnabled(true);
+            barDataSet.setHighlightLineWidth(0.5f);
+            barDataSet.enableDashedHighlightLine(3, 5, 0);
 
             lineData.addDataSet(barDataSet);
         }
@@ -132,7 +143,7 @@ public class LineChartHelper {
         Matrix m = new Matrix();
         //两个参数分别是x,y轴的缩放比例。例如：将x轴的数据放大为之前的2倍
         if (xValue.size() > singleBarChart) {
-            m.postScale(xValue.size() / singleBarChart, 1f);
+//            m.postScale(xValue.size() / singleBarChart, 1f);
         }
         //将图表动画显示之前进行缩放
         lineChart.getViewPortHandler().refresh(m, lineChart, false);

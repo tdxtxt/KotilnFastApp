@@ -10,12 +10,15 @@ import com.fastdev.helper.chart.ILineChartData
 import com.fastdev.helper.chart.LineChartHelper
 import com.fastdev.mvp.HomePresenter
 import com.fastdev.ui.R
+import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main_home.*
 import kotlinx.android.synthetic.main.include_top_search.*
@@ -94,9 +97,34 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
 //
 //        lineChart.setData(LineData(lineDataSet))
         //https://juejin.cn/post/6844904160710803464
-        val chartlineOne: List<ILineChartData> = listOf(Point("1", 2f), Point("2", 90f), Point("3", 5f), Point("4", 104f), Point("5", 45f),  Point("6", 300f), Point("7", 5f), Point("8", 104f), Point("9", 45f), Point("11", 35f))
-        val chartlineTwo: List<ILineChartData> = listOf(Point("1", 4f), Point("2", 60f), Point("3", 9f), Point("4", 6f), Point("5", 15f),  Point("6", 90f), Point("7", 5f), Point("8", 104f), Point("9", 45f), Point("11", 45f))
-        LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo), mutableListOf("1", "2", "3", "4", "5"), mutableListOf(Color.BLUE, Color.RED), 5)
+        val chartlineOne: List<ILineChartData> = listOf(
+                Point("3-31", 50f), Point("4-01", 56f),
+                Point("4-02", 36f), Point("4-03", 90f),
+                Point("4-04", 44f), Point("4-05", 4f),
+                Point("4-06", 65f),  Point("4-07", 99f),
+                Point("4-08", 55f), Point("4-09", 84f),
+                Point("4-10", 35f), Point("4-11", 35f))
+        val chartlineTwo: List<ILineChartData> = listOf(
+                Point("4-02", 60f), Point("4-03", 60f),
+                Point("4-04", 49f), Point("4-05", 16f),
+                Point("4-06", 25f),  Point("4-07", 90f),
+                Point("4-08", 15f), Point("4-09", 14f),
+                Point("4-10", 15f), Point("4-11", 51f))
+        LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo), mutableListOf(Color.argb(150, 0, 0, 255), Color.argb(150, 255, 0, 0)), 5)
+
+//        lineChart.marker = object : MarkerView(context, R.layout.view_chart_market) {
+//            override fun refreshContent(e: Entry?, highlight: Highlight?) {
+//                ToastHelper.showToast(e.toString())
+//            }
+//        }
+
+        lineChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
+            override fun onValueSelected(e: Entry?, h: Highlight?) {
+                ToastHelper.showToast(e.toString())
+            }
+            override fun onNothingSelected() {
+            }
+        })
     }
 
     override fun showXX() {
@@ -107,7 +135,7 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
 
 class Point constructor(val x: String, val y: Float) : ILineChartData{
     override fun getLabelName(): String {
-        return "$x 月"
+        return x
     }
 
     override fun getValue(): Float {

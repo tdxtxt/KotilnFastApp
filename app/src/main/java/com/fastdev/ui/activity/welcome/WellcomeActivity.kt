@@ -1,5 +1,6 @@
 package com.fastdev.ui.activity.welcome;
 
+import android.content.Intent
 import android.os.Bundle
 import com.baselib.helper.*
 import com.baselib.ui.activity.BaseActivity
@@ -7,6 +8,7 @@ import com.baselib.ui.fragment.BaseFragment
 import com.fastdev.helper.isLogin
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.login.LoginMainActivity
+import com.fastdev.ui.activity.main.MainActivity
 import com.fastdev.ui.activity.task.TaskListActivity
 import com.fastdev.ui.activity.welcome.child.AdFragment
 import com.fastdev.ui.activity.welcome.child.GuideFragment
@@ -63,16 +65,17 @@ class WellcomeActivity : BaseActivity() {
     }
 
     fun startMain(){
-        if(CommonCacheHelper.isLogin()){
-            TaskListActivity.open(fragmentActivity)
-            finish()
-        }else{
-            LoginMainActivity.open(fragmentActivity, {
-                TaskListActivity.open(fragmentActivity)
-                finish()
-            }){
-                finish()
-            }
-        }
+        startActivity(Intent(this, MainActivity::class.java))
+//        if(CommonCacheHelper.isLogin()){
+//            TaskListActivity.open(fragmentActivity)
+//            finish()
+//        }else{
+//            LoginMainActivity.open(fragmentActivity, {
+//                TaskListActivity.open(fragmentActivity)
+//                finish()
+//            }){
+//                finish()
+//            }
+//        }
     }
 }

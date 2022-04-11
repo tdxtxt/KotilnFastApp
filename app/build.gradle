@@ -164,7 +164,6 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
-    implementation project(path: ':libChatUI')
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
