@@ -3,10 +3,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -57,13 +55,6 @@ public class LineChartHelper {
         //折线图例 标签 设置
         Legend legend = lineChart.getLegend();
         legend.setEnabled(false);//不显示图例
-//        legend.setForm(Legend.LegendForm.LINE);
-//        legend.setTextSize(11f);
-        //显示位置
-//        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-//        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-//        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-//        legend.setDrawInside(false);
         //x坐标轴设置
         XAxis xAxis = lineChart.getXAxis();
         // x轴对齐位置
@@ -71,16 +62,15 @@ public class LineChartHelper {
         // 隐藏网格线
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
-//        lineChart.setRendererLeftYAxis(new YAxisRendererFix(lineChart.getViewPortHandler(), yAxis, lineChart.getTransformer(yAxis.getAxisDependency())));
         //y轴设置
         YAxis leftAxis = lineChart.getAxisLeft();
 //        leftAxis.setLabelCount(10, false);
         leftAxis.setAxisMaximum(100);
         leftAxis.setDrawGridLines(false);
-        leftAxis.setSpaceMin(10f);
         //保证Y轴从0开始，不然会上移一点
 //        leftAxis.setAxisMinimum(0f);
         lineChart.getXAxis().setAxisMinimum(0);
+        lineChart.getTransformer()
     }
 
     /**

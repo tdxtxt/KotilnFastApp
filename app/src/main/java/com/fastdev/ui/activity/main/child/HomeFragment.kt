@@ -8,6 +8,8 @@ import com.baselib.ui.mvp.view.BaseMvpView
 import com.baselib.ui.mvp.view.fragment.BaseMvpFragment
 import com.fastdev.helper.chart.ILineChartData
 import com.fastdev.helper.chart.LineChartHelper
+import com.fastdev.helper.chart.XAxisMarkerView
+import com.fastdev.helper.chart.YAxisMarkerView
 import com.fastdev.mvp.HomePresenter
 import com.fastdev.ui.R
 import com.github.mikephil.charting.components.MarkerView
@@ -111,13 +113,12 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
                 Point("4-08", 15f), Point("4-09", 14f),
                 Point("4-10", 15f), Point("4-11", 51f))
         LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo), mutableListOf(Color.argb(150, 0, 0, 255), Color.argb(150, 255, 0, 0)), 5)
-
 //        lineChart.marker = object : MarkerView(context, R.layout.view_chart_market) {
 //            override fun refreshContent(e: Entry?, highlight: Highlight?) {
 //                ToastHelper.showToast(e.toString())
 //            }
 //        }
-
+        context?.also { lineChart.setYAxisMarker(YAxisMarkerView(it)); lineChart.setXAxisMarker(XAxisMarkerView(it)) }
         lineChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
             override fun onValueSelected(e: Entry?, h: Highlight?) {
                 ToastHelper.showToast(e.toString())
