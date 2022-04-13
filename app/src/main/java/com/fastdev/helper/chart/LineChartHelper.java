@@ -1,7 +1,11 @@
 package com.fastdev.helper.chart;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 
+import androidx.core.content.ContextCompat;
+
+import com.fastdev.ui.R;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -63,14 +67,14 @@ public class LineChartHelper {
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
         //y轴设置
-        YAxis leftAxis = lineChart.getAxisLeft();
-//        leftAxis.setLabelCount(10, false);
-        leftAxis.setAxisMaximum(100);
-        leftAxis.setDrawGridLines(false);
+        YAxis yAxis = lineChart.getAxisLeft();
+        yAxis.setLabelCount(5, true);
+        yAxis.setAxisMaximum(100);
+        yAxis.setDrawGridLines(true);
+        yAxis.setGridDashedLine(new DashPathEffect(new float[]{2f, 2f}, 0f));
         //保证Y轴从0开始，不然会上移一点
-//        leftAxis.setAxisMinimum(0f);
-        lineChart.getXAxis().setAxisMinimum(0);
-        lineChart.getTransformer()
+        yAxis.setAxisMinimum(0f);
+        xAxis.setAxisMinimum(0f);
     }
 
     /**
@@ -105,26 +109,28 @@ public class LineChartHelper {
             barDataSet.setColor(barColors.get(i));
             barDataSet.setValueTextColor(barColors.get(i));
             barDataSet.setValueTextSize(10f);
-            //设置直线图填充
-            barDataSet.setDrawFilled(true);
-            //设置填充颜色
-            barDataSet.setFillColor(Color.parseColor("#FFA2A2"));
-            //显示圆点
-            barDataSet.setDrawCircles(true);
-            //设置圆点颜色(外圈)
-            barDataSet.setCircleColor(barColors.get(i));
-            //设置圆点填充颜色
-            barDataSet.setCircleHoleColor(Color.parseColor("#FFFFFF"));
-            //设置线条为平滑曲线
-            barDataSet.setMode(LineDataSet.Mode.LINEAR);
             //不显示曲线点的具体数值
             barDataSet.setDrawValues(false);
+            barDataSet.setDrawCircles(false);
+            //设置线条为平滑曲线
+            barDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+            if(i == 2){
+                //设置直线图填充
+                barDataSet.setDrawFilled(true);
+                //设置填充颜色
+                barDataSet.setFillDrawable(ContextCompat.getDrawable(lineChart.getContext(), R.drawable.color_chart_fill));
+                //显示圆点
+                barDataSet.setDrawCircles(true);
+                //设置圆点颜色(外圈)
+                barDataSet.setCircleColor(barColors.get(i));
+                //设置圆点填充颜色
+                barDataSet.setCircleHoleColor(Color.parseColor("#4379FF"));
+            }
             //选中十字架样式
             barDataSet.setHighLightColor(barColors.get(i));
             barDataSet.setHighlightEnabled(true);
             barDataSet.setHighlightLineWidth(0.5f);
             barDataSet.enableDashedHighlightLine(3, 5, 0);
-
             lineData.addDataSet(barDataSet);
         }
         xAxis.setValueFormatter(new IndexAxisValueFormatter(xValue));

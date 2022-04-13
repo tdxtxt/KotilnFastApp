@@ -106,13 +106,24 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
                 Point("4-06", 65f),  Point("4-07", 99f),
                 Point("4-08", 55f), Point("4-09", 84f),
                 Point("4-10", 35f), Point("4-11", 35f))
+
         val chartlineTwo: List<ILineChartData> = listOf(
+                Point("3-31", 58f), Point("4-01",60f),
+                Point("4-02", 38f), Point("4-03", 88f),
+                Point("4-04", 42f), Point("4-05", 6f),
+                Point("4-06", 60f),  Point("4-07", 100f),
+                Point("4-08", 60f), Point("4-09", 85f),
+                Point("4-10", 31f), Point("4-11", 34f))
+
+        val chartlineThree: List<ILineChartData> = listOf(
                 Point("4-02", 60f), Point("4-03", 60f),
                 Point("4-04", 49f), Point("4-05", 16f),
                 Point("4-06", 25f),  Point("4-07", 90f),
                 Point("4-08", 15f), Point("4-09", 14f),
                 Point("4-10", 15f), Point("4-11", 51f))
-        LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo), mutableListOf(Color.argb(150, 0, 0, 255), Color.argb(150, 255, 0, 0)), 5)
+
+
+        LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo, chartlineThree), mutableListOf(Color.argb(255, 255, 158, 44), Color.argb(255, 66, 208, 182), Color.argb(255, 67, 121, 255)), 5)
 //        lineChart.marker = object : MarkerView(context, R.layout.view_chart_market) {
 //            override fun refreshContent(e: Entry?, highlight: Highlight?) {
 //                ToastHelper.showToast(e.toString())
