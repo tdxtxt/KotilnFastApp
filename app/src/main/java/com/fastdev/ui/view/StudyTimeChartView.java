@@ -170,7 +170,7 @@ public class StudyTimeChartView extends View {
 
 
 
-        canvas.rotate(-(180 - loseAngle / 2),0f,0f);
+        canvas.rotate(-(180 - loseAngle / 2f),0f,0f);
 
         float  y = length;
         y = - y;
