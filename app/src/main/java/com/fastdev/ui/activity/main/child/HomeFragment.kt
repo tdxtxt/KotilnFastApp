@@ -48,7 +48,7 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
 
     override fun initUi() {
         StatusBarHelper.setStatusBarHeight(activity, mRootView)
-        lineChart.setNoDataText("你还没有记录数据");
+        lineChart.setNoDataText("你还没有记录数据")
 //        lineChart.xAxis.apply {
 //            setDrawAxisLine(true) //是否显示x轴线
 //            axisLineColor = Color.BLUE //x轴线颜色
