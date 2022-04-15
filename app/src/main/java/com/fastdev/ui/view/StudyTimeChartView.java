@@ -6,9 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
-import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -21,15 +19,19 @@ import androidx.annotation.Nullable;
 // https://github.com/HotBitmapGG/CreditSesameRingView
 // https://github.com/clwater/AndroidDashBoard/blob/master/app/src/main/java/clwater/androiddashboard/DashBoard.java
 public class StudyTimeChartView extends View {
-    private Paint paint , tmpPaint , textPaint ,  strokePain;
+    private Paint scalePaint, scaleTextPaint , textPaint , progressPaint;
     private RectF rect;
+    private int[] gradientProgreess1;  // 圆环渐变色
+    private int[] gradientProgreess2;  // 圆环渐变色
+    private int progress1 = 60;      // 圆环进度(0-100)
+    private int progress2 = 30;      // 圆环进度(0-100)
     private int backGroundColor;    //背景色
-    private float per ;             //指数百分比
-    private float perOld ;          //变化前指针百分比
     private float length ;          //仪表盘半径
-    private float r ;
+    private float r ;              //view宽度一半
     private int loseAngle = 60;          //失去的角度
     private int scaleCount = 10;
+    int scaleWidth = 20; //刻度线宽度
+    int scaleSpace = 40; //刻度线距离外圆间距
 
 
     public StudyTimeChartView(Context context) {
@@ -56,21 +58,24 @@ public class StudyTimeChartView extends View {
         backGroundColor = Color.WHITE;
         r = specSize;
         length = r  / 4 * 3;
-        per = 0;
-        perOld = 0;
-    }
-
-    public void setR(float r) {
-        this.r = r;
-        this.length = r  / 4 * 3;
     }
 
     private void init() {
-        paint = new Paint();
         rect = new RectF();
         textPaint = new Paint();
-        tmpPaint = new Paint();
-        strokePain = new Paint();
+        scalePaint = new Paint();
+        scaleTextPaint = new Paint();
+
+        progressPaint = new Paint();
+        progressPaint.setStyle(Paint.Style.STROKE);    // 只描边，不填充
+        progressPaint.setStrokeCap(Paint.Cap.ROUND);   // 设置圆角
+        progressPaint.setAntiAlias(true);              // 设置抗锯齿
+        progressPaint.setDither(true);                 // 设置抖动
+        progressPaint.setStrokeWidth(30);
+
+        // 初始化进度圆环渐变色
+        gradientProgreess1 = new int[]{Color.parseColor("#95ACFF"), Color.parseColor("#4379FF")};
+        gradientProgreess2 = new int[]{Color.parseColor("#A2F3DB"), Color.parseColor("#42D0B6")};
     }
 
     @Override
@@ -80,8 +85,44 @@ public class StudyTimeChartView extends View {
         initRing(canvas);
         //刻度文字
         initScale(canvas);
+        //进度条1
+        initProgress1(canvas);
+        //进度条2
+        initProgress2(canvas);
         //提示内容
         initText(canvas);
+    }
+
+    private void initProgress1(Canvas canvas){
+        canvas.restore();
+        canvas.save();
+        canvas.translate(canvas.getWidth()/2, r);//平移画布坐标原点
+
+        int mrg = scaleSpace + scaleWidth + 30;
+        rect = new RectF(-length + mrg, -length + mrg, length - mrg, length - mrg);
+        progressPaint.setStrokeWidth(30);
+
+        progressPaint.setColor(Color.parseColor("#F5F6FA"));
+        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, false, progressPaint);
+
+        progressPaint.setColor(gradientProgreess1[0]);
+        canvas.drawArc(rect, 90 + loseAngle / 2, (360 - loseAngle) * (progress1 / 100f), false, progressPaint);
+    }
+
+    private void initProgress2(Canvas canvas){
+        canvas.restore();
+        canvas.save();
+        canvas.translate(canvas.getWidth()/2, r);//平移画布坐标原点
+
+        int mrg = scaleSpace + scaleWidth + 80;
+        rect = new RectF(-length + mrg, -length + mrg, length - mrg, length - mrg);
+        progressPaint.setStrokeWidth(30);
+
+        progressPaint.setColor(Color.parseColor("#F5F6FA"));
+        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, false, progressPaint);
+
+        progressPaint.setColor(gradientProgreess2[0]);
+        canvas.drawArc(rect, 90 + loseAngle / 2, (360 - loseAngle) * (progress2 / 100f), false, progressPaint);
     }
 
     private void initText(Canvas canvas) {
@@ -89,64 +130,35 @@ public class StudyTimeChartView extends View {
         canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2, r);
+        canvas.translate(canvas.getWidth()/2f , r);
 
         float rIndex = length ;
 
-        //设置文字展示的圆环
-        paint.setColor(Color.parseColor("#eeeeee"));
-        paint.setShader(null);
-        paint.setShadowLayer(5, 0, 0, 0x54000000);
         rect = new RectF( - (rIndex/ 3 ), - (rIndex / 3), rIndex / 3, rIndex / 3);
-        canvas.drawArc(rect, 0, 360, true, paint);
-
-        paint.clearShadowLayer();
-
-        canvas.restore();
-        canvas.save();
-        canvas.translate(canvas.getWidth()/2f , r);
-
 
         textPaint.setStrokeWidth(1);
         textPaint.setAntiAlias(true);
-
-        textPaint.setTextSize(60);
-        textPaint.setColor(Color.parseColor("#fc6555"));
         textPaint.setTextAlign(Paint.Align.RIGHT);
 
-
         //判断指数变化及颜色设定
-
-        int _per = (int) (per * 120);
-
-        if (_per < 60){
-            textPaint.setColor(Color.parseColor("#ff6450"));
-        }else if (_per < 100) {
-            textPaint.setColor(Color.parseColor("#f5a623"));
-        }else {
-            textPaint.setColor(Color.parseColor("#79d062"));
-        }
-
-        float swidth = textPaint.measureText(String.valueOf(_per));
-        //计算偏移量 是的数字和百分号整体居中显示
-        swidth =   (swidth - (swidth + 22) / 2);
-
-
-        canvas.translate( swidth , 0);
-        canvas.drawText("" + _per, 0, 0, textPaint);
-
         textPaint.setTextSize(30);
-        textPaint.setTextAlign(Paint.Align.LEFT);
+        textPaint.setColor(Color.parseColor("#131936"));
 
-        canvas.drawText("%" , 0, 0, textPaint);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setColor(Color.parseColor("#999999"));
+        String desc = "我的听课时长";
+        float swidth = textPaint.measureText(String.valueOf(desc));
+        //计算偏移量 是的数字和百分号整体居中显示
+        swidth = swidth / 2;
 
-
+        canvas.translate(swidth , 0);
+        canvas.drawText(desc, 0, 0, textPaint);
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2  , r + length / 3 /2 );
-        canvas.drawText("完成率" , 0, 0, textPaint);
+
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTextSize(100);
+        textPaint.setColor(Color.parseColor("#4379ff"));
+        canvas.translate(canvas.getWidth()/2  , r + length / 4);
+        canvas.drawText(String.valueOf(progress1) , 0, 0, textPaint);
 
 
 
@@ -161,36 +173,28 @@ public class StudyTimeChartView extends View {
         canvas.restore();
         canvas.save();
         canvas.translate(canvas.getWidth()/2, r);
-        paint.setColor(Color.parseColor("#999999"));
 
-        tmpPaint = new Paint(paint); //小刻度画笔对象
-        tmpPaint.setStrokeWidth(1);
-        tmpPaint.setTextSize(35);
-        tmpPaint.setTextAlign(Paint.Align.CENTER);
-
-
+        scaleTextPaint.setColor(Color.parseColor("#999999")); //小刻度画笔对象
+        scaleTextPaint.setStrokeWidth(1);
+        scaleTextPaint.setTextSize(35);
+        scaleTextPaint.setTextAlign(Paint.Align.CENTER);
 
         canvas.rotate(-(180 - loseAngle / 2),0f,0f);
 
         float  y = length;
         y = - y;
-        paint.setColor(backGroundColor);
 
         float tempRou = (360 - loseAngle) / (float)scaleCount;
 
-        paint.setColor(Color.parseColor("#666666"));
-        paint.setStrokeWidth(5);
+        scalePaint.setColor(Color.parseColor("#666666"));
+        scalePaint.setStrokeWidth(5);
 
-        int scaleWidth = 20; //刻度线宽度
-        int scaleSpace = 30; //刻度线距离外圆间距
         //绘制刻度和百分比
         for (int i = 0 ; i <= scaleCount ; i++){
 
-            if (i % 2 == 0 ) {
-                canvas.drawText(String.valueOf((i) * 10), 0, y - 20f, tmpPaint);
-            }
+            canvas.drawText(String.valueOf((i) * 10), 0, y - 20f, scaleTextPaint);
 
-            canvas.drawLine(0, y + scaleSpace , 0, y + scaleSpace + scaleWidth, paint);
+            canvas.drawLine(0, y + scaleSpace , 0, y + scaleSpace + scaleWidth, scalePaint);
 
             canvas.rotate(tempRou,0f,0f);
         }
@@ -199,42 +203,42 @@ public class StudyTimeChartView extends View {
 
 
     private void initRing(Canvas canvas) {
-        paint.setAntiAlias(true);
-        paint.setStrokeWidth(2);
+        scaleTextPaint.setAntiAlias(true);
+        scaleTextPaint.setStrokeWidth(2);
         canvas.restore();
         canvas.save();
         canvas.translate(canvas.getWidth()/2, r);//平移画布坐标原点
 
         //圆环
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.parseColor("#F95A37"));
+        scaleTextPaint.setStyle(Paint.Style.FILL);
+        scaleTextPaint.setColor(Color.parseColor("#f5f6fa"));
         rect = new RectF( -length, -length, length, length);
-        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, true, paint);
+        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, true, scaleTextPaint);
 
         int with = 5;
         //内部背景色填充
-        paint.setColor(backGroundColor);
-        paint.setShader(null);
+        scaleTextPaint.setColor(backGroundColor);
+        scaleTextPaint.setShader(null);
 
         rect = new RectF(-length + with, -length + with, length - with, length - with);
-        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, true, paint);
+        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, true, scaleTextPaint);
     }
 
 
 
-    public void cgangePer(float per ){
-        this.perOld = this.per;
-        this.per = per;
-        ValueAnimator va =  ValueAnimator.ofFloat(perOld,per);
-        va.setDuration(1000);
-        va.setInterpolator(new OvershootInterpolator());
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                invalidate();
-            }
-        });
-        va.start();
-
-    }
+//    public void cgangePer(float per ){
+//        this.perOld = this.per;
+//        this.per = per;
+//        ValueAnimator va =  ValueAnimator.ofFloat(perOld,per);
+//        va.setDuration(1000);
+//        va.setInterpolator(new OvershootInterpolator());
+//        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                invalidate();
+//            }
+//        });
+//        va.start();
+//
+//    }
 }
