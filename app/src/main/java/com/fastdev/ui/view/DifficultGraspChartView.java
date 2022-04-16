@@ -3,9 +3,11 @@ package com.fastdev.ui.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -30,6 +32,7 @@ public class DifficultGraspChartView extends View {
     private Paint regionColorPaint; //覆盖区域paint
     private Double[] percents = {0.91, 0.35, 0.12, 0.8, 0.5}; //覆盖区域百分比
     private String[] titles = {"dota","斗地主","大吉大利，晚上吃鸡","炉石传说","跳一跳"};//文字
+    private RectF rect;
 
     public DifficultGraspChartView(Context context) {
         super(context);
@@ -74,12 +77,13 @@ public class DifficultGraspChartView extends View {
     }
 
     @Override
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
+    public void onDraw(Canvas canvas) {
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
+//        drawLines(canvas);//画线
+//        drawText(canvas);//描绘文字
+//        drawRegion(canvas);//覆盖区域
+
         drawPolygon(canvas);//画边
-        drawLines(canvas);//画线
-        drawText(canvas);//描绘文字
-        drawRegion(canvas);//覆盖区域
     }
 
     /**
@@ -104,31 +108,30 @@ public class DifficultGraspChartView extends View {
      * 绘制多边形
      */
     private void drawPolygon(Canvas canvas) {
-        Path path = new Path();
-        float r = radius / layerCount;
-        for (int i = 1; i <= layerCount; i++) {
-            float curR = r * i; //当前所在层的半径
-            for (int j = 0; j < count; j++) {
-                if (j == 0) {
-                    //每一层第一个点坐标
-                    path.moveTo(centerX, centerY - curR);
-                } else {
-                    //顺时针记录其余顶角的点坐标
-                    float x = (float) (centerX + Math.sin(angle * j) * curR);
-                    float y = (float) (centerY - Math.cos(angle * j) * curR);
-                    path.lineTo(x, y);
-                }
+        canvas.save();
+        canvas.translate(canvas.getWidth() / 2f, canvas.getHeight() / 2f);//平移画布坐标原点
+        float r = radius;
+        int width = 4;
+
+        for (int i = 0; i < layerCount; i++) {
+            r = r - i * (radius / (float)layerCount);
+            if(i % 2 == 0 ){
+                circlePaint.setColor(Color.BLUE);
+            }else {
+                circlePaint.setColor(Color.RED);
             }
-            //最外层的顶角外面的五个小圆点(图中红色部分)
-            if (i == layerCount) {
-                for (int j = 0; j < count; j++) {
-                    float x = (float) (centerX + Math.sin(angle * j) * (curR + 12));
-                    float y = (float) (centerY - Math.cos(angle * j) * (curR + 12));
-                    canvas.drawCircle(x, y, 4, circlePaint);
-                }
-            }
-            path.close();
-            canvas.drawPath(path, polygonPaint);
+            canvas.drawCircle(0, 0, r, circlePaint);
+            circlePaint.setColor(Color.WHITE);
+            canvas.drawCircle(0, 0, r - width, circlePaint);
+
+//            rect = new RectF(-r, -r, r, r);
+//            circlePaint.setColor(Color.BLUE);
+//            canvas.drawCircle(rect, 360, 360, true, circlePaint);
+
+//            rect = new RectF(-r + width, -r + width, r - width, r - width);
+//            circlePaint.setColor(Color.RED);
+//            canvas.drawArc(rect, 360, 360, true, circlePaint);
+//            canvas.save();
         }
     }
 
@@ -136,6 +139,10 @@ public class DifficultGraspChartView extends View {
      * 绘制连线
      */
     private void drawLines(Canvas canvas) {
+        canvas.restore();
+        canvas.save();
+        canvas.translate(0f, 0f);
+
         float r = radius / layerCount;
         for (int i = 0; i < count; i++) {
             //起始坐标 从中心开始的话 startx=centerX , startY=centerY
