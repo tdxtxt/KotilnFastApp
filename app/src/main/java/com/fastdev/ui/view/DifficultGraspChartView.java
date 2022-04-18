@@ -4,20 +4,21 @@ package com.fastdev.ui.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+
 import com.baselib.ui.view.container.round.DensityUtil;
 import com.fastdev.ui.R;
 
-/**
- * https://mp.weixin.qq.com/s/MsU5nMQtaSEIjNRPy65dvQ
- */
 public class DifficultGraspChartView extends View {
     private int count = 5; //几边形
     private int layerCount = 4; //层数
@@ -25,14 +26,13 @@ public class DifficultGraspChartView extends View {
     private int centerX; //圆心x
     private int centerY; //圆心y
     private float radius; //半径
-    private Paint polygonPaint; //边框paint
     private Paint linePaint; //连线paint
     private Paint txtPaint; //文字paint
     private Paint circlePaint; //圆点paint
     private Paint regionColorPaint; //覆盖区域paint
-    private Double[] percents = {0.91, 0.35, 0.12, 0.8, 0.5}; //覆盖区域百分比
+    private Double[] percents1 = {0.91, 0.35, 0.72, 0.8, 0.5}; //覆盖区域百分比1
+    private Double[] percents2 = {0.63, 0.20, 0.55, 0.9, 0.8}; //覆盖区域百分比2
     private String[] titles = {"dota","斗地主","大吉大利，晚上吃鸡","炉石传说","跳一跳"};//文字
-    private RectF rect;
 
     public DifficultGraspChartView(Context context) {
         super(context);
@@ -46,13 +46,7 @@ public class DifficultGraspChartView extends View {
 
     private void initView(Context context){
         //计算圆心角
-        angle = (float) (Math.PI * 2 / count);
-
-        polygonPaint = new Paint();
-        polygonPaint.setColor(ContextCompat.getColor(context, R.color.red_f5222d));
-        polygonPaint.setAntiAlias(true);
-        polygonPaint.setStyle(Paint.Style.STROKE);
-        polygonPaint.setStrokeWidth(4f);
+        angle = 360f / count;
 
         linePaint = new Paint();
         linePaint.setColor(ContextCompat.getColor(context, R.color.bule_4379ff));
@@ -67,23 +61,22 @@ public class DifficultGraspChartView extends View {
         txtPaint.setTextSize(DensityUtil.dip2px(context, 12));
 
         circlePaint = new Paint();
-        circlePaint.setColor(ContextCompat.getColor(context, R.color.yellow_ffff00));
         circlePaint.setAntiAlias(true);
 
         regionColorPaint = new Paint();
-        regionColorPaint.setColor(ContextCompat.getColor(context, R.color.red_ff852b));
+//        regionColorPaint.setColor(ContextCompat.getColor(context, R.color.red_ff852b));
+        regionColorPaint.setAlpha(200);
         regionColorPaint.setStyle(Paint.Style.FILL);
         regionColorPaint.setAntiAlias(true);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
-//        drawLines(canvas);//画线
-//        drawText(canvas);//描绘文字
-//        drawRegion(canvas);//覆盖区域
-
+        super.onDraw(canvas);
         drawPolygon(canvas);//画边
+        drawLines(canvas);//画线
+        drawText(canvas);//描绘文字
+        drawRegion(canvas);//覆盖区域
     }
 
     /**
@@ -100,8 +93,9 @@ public class DifficultGraspChartView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
         //优化组件高度
-        setMeasuredDimension(width, width);
+        setMeasuredDimension(Math.min(width, height), Math.min(width, height));
     }
 
     /**
@@ -109,29 +103,19 @@ public class DifficultGraspChartView extends View {
      */
     private void drawPolygon(Canvas canvas) {
         canvas.save();
-        canvas.translate(canvas.getWidth() / 2f, canvas.getHeight() / 2f);//平移画布坐标原点
-        float r = radius;
+        canvas.translate(centerX, centerY);//平移画布坐标原点
         int width = 4;
-
-        for (int i = 0; i < layerCount; i++) {
-            r = r - i * (radius / (float)layerCount);
-            if(i % 2 == 0 ){
-                circlePaint.setColor(Color.BLUE);
-            }else {
-                circlePaint.setColor(Color.RED);
+        circlePaint.setStyle(Paint.Style.STROKE);
+        circlePaint.setStrokeWidth(width);
+        for (int i = 1; i <= layerCount; i++) {
+            if(i == layerCount){
+                circlePaint.setColor(Color.parseColor("#7ba1ff"));
+                circlePaint.setPathEffect(null);
+            }else{
+                circlePaint.setColor(Color.parseColor("#c4d0ff"));
+                circlePaint.setPathEffect(new DashPathEffect(new float[] { 10, 10 }, 0));
             }
-            canvas.drawCircle(0, 0, r, circlePaint);
-            circlePaint.setColor(Color.WHITE);
-            canvas.drawCircle(0, 0, r - width, circlePaint);
-
-//            rect = new RectF(-r, -r, r, r);
-//            circlePaint.setColor(Color.BLUE);
-//            canvas.drawCircle(rect, 360, 360, true, circlePaint);
-
-//            rect = new RectF(-r + width, -r + width, r - width, r - width);
-//            circlePaint.setColor(Color.RED);
-//            canvas.drawArc(rect, 360, 360, true, circlePaint);
-//            canvas.save();
+            canvas.drawCircle(0, 0, i * (radius / (float)layerCount), circlePaint);
         }
     }
 
@@ -141,17 +125,18 @@ public class DifficultGraspChartView extends View {
     private void drawLines(Canvas canvas) {
         canvas.restore();
         canvas.save();
-        canvas.translate(0f, 0f);
+        canvas.translate(centerX, centerY);
 
-        float r = radius / layerCount;
         for (int i = 0; i < count; i++) {
-            //起始坐标 从中心开始的话 startx=centerX , startY=centerY
-            float startX = (float) (centerX + Math.sin(angle * i) * r);
-            float startY = (float) (centerY - Math.cos(angle * i) * r);
-            //末端坐标
-            float endX = (float) (centerX + Math.sin(angle * i) * radius);
-            float endY = (float) (centerY - Math.cos(angle * i) * radius);
-            canvas.drawLine(startX, startY, endX, endY, linePaint);
+            double degrees;
+            if(count == 5){
+                degrees = (angle - (90 - angle)) + angle * i;
+            }else{
+                degrees = angle * i;
+            }
+            float endX = (float) (Math.cos(Math.toRadians(degrees)) * radius);
+            float endY = (float) (Math.sin(Math.toRadians(degrees)) * radius);
+            canvas.drawLine(0, 0, endX, endY, linePaint);
         }
     }
 
@@ -159,41 +144,50 @@ public class DifficultGraspChartView extends View {
      * 绘制文字
      */
     private void drawText(Canvas canvas) {
+        canvas.restore();
+        canvas.save();
+        canvas.translate(centerX, centerY);
+        int marginText = 20;
         for (int i = 0; i < count; i++) {
-            //获取到雷达图最外边的坐标
-            float x = (float) (centerX + Math.sin(angle * i) * (radius + 12));
-            float y = (float) (centerY - Math.cos(angle * i) * (radius + 12));
-            if (angle * i == 0) {
-                //第一个文字位于顶角正上方
-                txtPaint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText(titles[i], x, y - 18, txtPaint);
-                txtPaint.setTextAlign(Paint.Align.LEFT);
-            } else if (angle * i > 0 && angle * i < Math.PI / 2) {
-                //微调
-                canvas.drawText(titles[i], x + 18, y + 10, txtPaint);
-            } else if (angle * i >= Math.PI / 2 && angle * i < Math.PI) {
-                //最右下的文字获取到文字的长、宽，按文字长度百分比向左移
-                String txt = titles[i];
-                Rect bounds = new Rect();
-                txtPaint.getTextBounds(txt, 0, txt.length(), bounds);
-                float height = bounds.bottom - bounds.top;
-                float width = txtPaint.measureText(txt);
-                canvas.drawText(txt, x - width * 0.4f, y + height + 18, txtPaint);
-            } else if (angle * i >= Math.PI && angle * i < 3 * Math.PI / 2) {
-                //同理最左下的文字获取到文字的长、宽，按文字长度百分比向左移
-                String txt = titles[i];
-                Rect bounds = new Rect();
-                txtPaint.getTextBounds(txt, 0, txt.length(), bounds);
-                float width = txtPaint.measureText(txt);
-                float height = bounds.bottom - bounds.top;
-                canvas.drawText(txt, x - width * 0.6f, y + height + 18, txtPaint);
-            } else if (angle * i >= 3 * Math.PI / 2 && angle * i < 2 * Math.PI) {
-                //文字向左移动
-                String txt = titles[i];
-                float width = txtPaint.measureText(txt);
-                canvas.drawText(txt, x - width - 18, y + 10, txtPaint);
+            float degrees;
+            if(count == 5){
+                degrees = (angle - (90 - angle)) + angle * i;
+            }else{
+                degrees = angle * i;
             }
 
+            degrees = degrees % 360f;
+
+            //获取到雷达图最外边的坐标
+            float x = (float) (Math.cos(Math.toRadians(degrees)) * (radius + marginText));
+            float y = (float) (Math.sin(Math.toRadians(degrees)) * (radius + marginText));
+            String txt = titles[i];
+            if(0 <= degrees && degrees < 90){//0-90度,右下方
+                txtPaint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText(txt, x, y, txtPaint);
+            }else if(degrees == 90){ //90度，正下方
+                txtPaint.setTextAlign(Paint.Align.CENTER);
+                Rect bounds = new Rect();
+                txtPaint.getTextBounds(txt, 0, txt.length(), bounds);
+//                float txtWidth = txtPaint.measureText(txt);
+                float txtHeight = bounds.bottom - bounds.top;
+                canvas.drawText(txt, x, y + txtHeight, txtPaint);
+            }else if(90 < degrees && degrees <= 180){//90-180度,左下方
+                txtPaint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText(txt, x, y, txtPaint);
+            }else if(180 < degrees && degrees < 270) {//180-270度,左上方
+                txtPaint.setTextAlign(Paint.Align.RIGHT);
+                canvas.drawText(txt, x, y, txtPaint);
+            }else if(degrees == 270){//正上方
+                txtPaint.setTextAlign(Paint.Align.CENTER);
+                Rect bounds = new Rect();
+                txtPaint.getTextBounds(txt, 0, txt.length(), bounds);
+                float txtHeight = bounds.bottom - bounds.top;
+                canvas.drawText(txt, x, y - txtHeight / 2f, txtPaint);
+            }else if(270 < degrees && degrees < 360){//右上方
+                txtPaint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText(txt, x, y, txtPaint);
+            }
         }
     }
 
@@ -201,32 +195,56 @@ public class DifficultGraspChartView extends View {
      * 绘制区域
      */
     private void drawRegion(Canvas canvas) {
-        Path path = new Path();
-        float r = radius / layerCount;//每层的间距
+        canvas.restore();
+        canvas.save();
+        canvas.translate(centerX, centerY);
+
+        Path path1 = new Path();
+        Path path2 = new Path();
         for (int i = 0; i < count; i++) {
-            if (i == 0) {
-                path.moveTo(centerX, (float) (centerY - r - (radius - r) * percents[i]));
+            float degrees;
+            if (count == 5) {
+                degrees = (angle - (90 - angle)) + angle * i;
             } else {
-                float x = (float) (centerX + Math.sin(angle * i) * (percents[i] * (radius - r) + r));
-                float y = (float) (centerY - Math.cos(angle * i) * (percents[i] * (radius - r) + r));
-                path.lineTo(x, y);
+                degrees = angle * i;
+            }
+
+            //获取到雷达图最外边的坐标
+            float x1 = (float) (Math.cos(Math.toRadians(degrees)) * (radius * percents1[i]));
+            float y1 = (float) (Math.sin(Math.toRadians(degrees)) * (radius * percents1[i]));
+
+            float x2 = (float) (Math.cos(Math.toRadians(degrees)) * (radius * percents2[i]));
+            float y2 = (float) (Math.sin(Math.toRadians(degrees)) * (radius * percents2[i]));
+
+            if(i == 0){
+                path1.moveTo(x1, y1);
+                path2.moveTo(x2, y2);
+            }else{
+                path1.lineTo(x1, y1);
+                path2.lineTo(x2, y2);
             }
         }
-        path.close();
-        canvas.drawPath(path, regionColorPaint);
+        path1.close();
+        RadialGradient gradient = new RadialGradient(0f, 0f, radius, Color.parseColor("#95ACFF"), Color.parseColor("#4379FF"), Shader.TileMode.MIRROR);
+        regionColorPaint.setShader(gradient);
+        canvas.drawPath(path1, regionColorPaint);
+
+        RadialGradient gradient2 = new RadialGradient(0f, 0f, radius, Color.parseColor("#A2F3DB"), Color.parseColor("#42D0B6"), Shader.TileMode.MIRROR);
+        regionColorPaint.setShader(gradient2);
+        canvas.drawPath(path2, regionColorPaint);
     }
 
 
-    //设置几边形，**注意：设置几边形需要重新计算圆心角**
-    public void setCount(int count){
-        this.count = count;
-        angle = (float) (Math.PI * 2 / count);
-        invalidate();
-    }
-
-    //设置层数
-    public void setLayerCount(int layerCount){
-        this.layerCount = layerCount;
-        invalidate();
-    }
+//    //设置几边形，**注意：设置几边形需要重新计算圆心角**
+//    public void setCount(int count){
+//        this.count = count;
+//        angle = (float) (Math.PI * 2 / count);
+//        invalidate();
+//    }
+//
+//    //设置层数
+//    public void setLayerCount(int layerCount){
+//        this.layerCount = layerCount;
+//        invalidate();
+//    }
 }

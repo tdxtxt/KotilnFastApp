@@ -48,7 +48,7 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
 
     override fun initUi() {
         StatusBarHelper.setStatusBarHeight(activity, mRootView)
-        lineChart.setNoDataText("你还没有记录数据")
+//        lineChart.setNoDataText("你还没有记录数据")
 //        lineChart.xAxis.apply {
 //            setDrawAxisLine(true) //是否显示x轴线
 //            axisLineColor = Color.BLUE //x轴线颜色
@@ -123,20 +123,20 @@ class HomeFragment : BaseMvpFragment(), HomePresenter.IViewHome {
                 Point("4-10", 15f), Point("4-11", 51f))
 
 
-        LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo, chartlineThree), mutableListOf(Color.argb(255, 255, 158, 44), Color.argb(255, 66, 208, 182), Color.argb(255, 67, 121, 255)), 5)
+//        LineChartHelper(lineChart).showMultipleLineChart(mutableListOf(chartlineOne, chartlineTwo, chartlineThree), mutableListOf(Color.argb(255, 255, 158, 44), Color.argb(255, 66, 208, 182), Color.argb(255, 67, 121, 255)), 5)
 //        lineChart.marker = object : MarkerView(context, R.layout.view_chart_market) {
 //            override fun refreshContent(e: Entry?, highlight: Highlight?) {
 //                ToastHelper.showToast(e.toString())
 //            }
 //        }
-        context?.also { lineChart.setYAxisMarker(YAxisMarkerView(it)); lineChart.setXAxisMarker(XAxisMarkerView(it)) }
-        lineChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
-            override fun onValueSelected(e: Entry?, h: Highlight?) {
-                ToastHelper.showToast(e.toString())
-            }
-            override fun onNothingSelected() {
-            }
-        })
+//        context?.also { lineChart.setYAxisMarker(YAxisMarkerView(it)); lineChart.setXAxisMarker(XAxisMarkerView(it)) }
+//        lineChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
+//            override fun onValueSelected(e: Entry?, h: Highlight?) {
+//                ToastHelper.showToast(e.toString())
+//            }
+//            override fun onNothingSelected() {
+//            }
+//        })
     }
 
     override fun showXX() {

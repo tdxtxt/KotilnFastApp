@@ -1,6 +1,5 @@
 package com.fastdev.ui.view;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,7 +8,6 @@ import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
 
 import androidx.annotation.Nullable;
 
@@ -18,6 +16,7 @@ import androidx.annotation.Nullable;
 //齿轮半圆环 https://juejin.cn/post/6844903777548386318
 // https://github.com/HotBitmapGG/CreditSesameRingView
 // https://github.com/clwater/AndroidDashBoard/blob/master/app/src/main/java/clwater/androiddashboard/DashBoard.java
+
 public class StudyTimeChartView extends View {
     private Paint scalePaint, scaleTextPaint , textPaint , progressPaint;
     private RectF rect;
@@ -48,7 +47,7 @@ public class StudyTimeChartView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
 
-        int heitht = (int) (width / 2 * (1 + Math.cos(Math.toRadians(loseAngle / 2))));
+        int heitht = (int) (width / 2 * (1 + Math.cos(Math.toRadians(loseAngle / 2f))));
         initIndex(width / 2);
         //优化组件高度
         setMeasuredDimension(width, heitht);
@@ -80,7 +79,6 @@ public class StudyTimeChartView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
         //颜色指示的环
         initRing(canvas);
         //刻度文字
@@ -96,38 +94,38 @@ public class StudyTimeChartView extends View {
     private void initProgress1(Canvas canvas){
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2, r);//平移画布坐标原点
+        canvas.translate(canvas.getWidth()/2f, r);//平移画布坐标原点
 
         int mrg = scaleSpace + scaleWidth + 30;
         rect = new RectF(-length + mrg, -length + mrg, length - mrg, length - mrg);
         progressPaint.setStrokeWidth(30);
 
         progressPaint.setColor(Color.parseColor("#F5F6FA"));
-        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, false, progressPaint);
+        canvas.drawArc(rect, 90 + loseAngle / 2f, 360 - loseAngle, false, progressPaint);
 
         progressPaint.setColor(gradientProgreess1[0]);
-        canvas.drawArc(rect, 90 + loseAngle / 2, (360 - loseAngle) * (progress1 / 100f), false, progressPaint);
+        canvas.drawArc(rect, 90 + loseAngle / 2f, (360 - loseAngle) * (progress1 / 100f), false, progressPaint);
     }
 
     private void initProgress2(Canvas canvas){
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2, r);//平移画布坐标原点
+        canvas.translate(canvas.getWidth()/2f, r);//平移画布坐标原点
 
         int mrg = scaleSpace + scaleWidth + 80;
         rect = new RectF(-length + mrg, -length + mrg, length - mrg, length - mrg);
         progressPaint.setStrokeWidth(30);
 
         progressPaint.setColor(Color.parseColor("#F5F6FA"));
-        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, false, progressPaint);
+        canvas.drawArc(rect, 90 + loseAngle / 2f, 360 - loseAngle, false, progressPaint);
 
         progressPaint.setColor(gradientProgreess2[0]);
-        canvas.drawArc(rect, 90 + loseAngle / 2, (360 - loseAngle) * (progress2 / 100f), false, progressPaint);
+        canvas.drawArc(rect, 90 + loseAngle / 2f, (360 - loseAngle) * (progress2 / 100f), false, progressPaint);
     }
 
     private void initText(Canvas canvas) {
         //抗锯齿
-        canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG));
+        canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG| Paint.FILTER_BITMAP_FLAG));
         canvas.restore();
         canvas.save();
         canvas.translate(canvas.getWidth()/2f , r);
@@ -145,7 +143,7 @@ public class StudyTimeChartView extends View {
         textPaint.setColor(Color.parseColor("#131936"));
 
         String desc = "我的听课时长";
-        float swidth = textPaint.measureText(String.valueOf(desc));
+        float swidth = textPaint.measureText(desc);
         //计算偏移量 是的数字和百分号整体居中显示
         swidth = swidth / 2;
 
@@ -157,22 +155,16 @@ public class StudyTimeChartView extends View {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(100);
         textPaint.setColor(Color.parseColor("#4379ff"));
-        canvas.translate(canvas.getWidth()/2  , r + length / 4);
+        canvas.translate(canvas.getWidth()/2f  , r + length / 4);
         canvas.drawText(String.valueOf(progress1) , 0, 0, textPaint);
 
-
-
     }
 
-
-    public void setBackGroundColor(int color){
-        this.backGroundColor = color;
-    }
 
     private void initScale(Canvas canvas) {
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2, r);
+        canvas.translate(canvas.getWidth()/2f, r);
 
         scaleTextPaint.setColor(Color.parseColor("#999999")); //小刻度画笔对象
         scaleTextPaint.setStrokeWidth(1);
@@ -205,15 +197,14 @@ public class StudyTimeChartView extends View {
     private void initRing(Canvas canvas) {
         scaleTextPaint.setAntiAlias(true);
         scaleTextPaint.setStrokeWidth(2);
-        canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2, r);//平移画布坐标原点
+        canvas.translate(canvas.getWidth()/2f, r);//平移画布坐标原点
 
         //圆环
         scaleTextPaint.setStyle(Paint.Style.FILL);
         scaleTextPaint.setColor(Color.parseColor("#f5f6fa"));
         rect = new RectF( -length, -length, length, length);
-        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, true, scaleTextPaint);
+        canvas.drawArc(rect, 90 + loseAngle / 2f, 360 - loseAngle, true, scaleTextPaint);
 
         int with = 5;
         //内部背景色填充
@@ -221,7 +212,7 @@ public class StudyTimeChartView extends View {
         scaleTextPaint.setShader(null);
 
         rect = new RectF(-length + with, -length + with, length - with, length - with);
-        canvas.drawArc(rect, 90 + loseAngle / 2, 360 - loseAngle, true, scaleTextPaint);
+        canvas.drawArc(rect, 90 + loseAngle / 2f, 360 - loseAngle, true, scaleTextPaint);
     }
 
 
