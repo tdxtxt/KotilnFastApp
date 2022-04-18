@@ -25,8 +25,10 @@ public class StudyTimeChartView extends View {
     private int progress1 = 60;      // 圆环进度(0-100)
     private int progress2 = 30;      // 圆环进度(0-100)
     private int backGroundColor;    //背景色
-    private float length ;          //仪表盘半径
-    private float r ;              //view宽度一半
+    private float radius;          //仪表盘半径
+    private float spanWidth ;              //view宽度一半
+    private float centerX;
+    private float centerY;
     private int loseAngle = 60;          //失去的角度
     private int scaleCount = 10;
     int scaleWidth = 20; //刻度线宽度
@@ -46,18 +48,20 @@ public class StudyTimeChartView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-
-        int heitht = (int) (width / 2 * (1 + Math.cos(Math.toRadians(loseAngle / 2f))));
-        initIndex(width / 2);
+        int height = (int) (width / 2 * (1 + Math.cos(Math.toRadians(loseAngle / 2f))));
         //优化组件高度
-        setMeasuredDimension(width, heitht);
+        setMeasuredDimension(width, height);
     }
 
-    private void initIndex(int specSize) {
-        backGroundColor = Color.WHITE;
-        r = specSize;
-        length = r  / 4 * 3;
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        spanWidth = w / 2;
+        radius = spanWidth / 4f * 3;
+        centerX = w / 2;
+        centerY = h / 2;
     }
+
 
     private void init() {
         rect = new RectF();
@@ -71,6 +75,8 @@ public class StudyTimeChartView extends View {
         progressPaint.setAntiAlias(true);              // 设置抗锯齿
         progressPaint.setDither(true);                 // 设置抖动
         progressPaint.setStrokeWidth(30);
+
+        backGroundColor = Color.WHITE;
 
         // 初始化进度圆环渐变色
         gradientProgreess1 = new int[]{Color.parseColor("#95ACFF"), Color.parseColor("#4379FF")};
@@ -94,10 +100,10 @@ public class StudyTimeChartView extends View {
     private void initProgress1(Canvas canvas){
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2f, r);//平移画布坐标原点
+        canvas.translate(centerX, spanWidth);//平移画布坐标原点
 
         int mrg = scaleSpace + scaleWidth + 30;
-        rect = new RectF(-length + mrg, -length + mrg, length - mrg, length - mrg);
+        rect = new RectF(-radius + mrg, -radius + mrg, radius - mrg, radius - mrg);
         progressPaint.setStrokeWidth(30);
 
         progressPaint.setColor(Color.parseColor("#F5F6FA"));
@@ -110,10 +116,10 @@ public class StudyTimeChartView extends View {
     private void initProgress2(Canvas canvas){
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2f, r);//平移画布坐标原点
+        canvas.translate(canvas.getWidth()/2f, spanWidth);//平移画布坐标原点
 
         int mrg = scaleSpace + scaleWidth + 80;
-        rect = new RectF(-length + mrg, -length + mrg, length - mrg, length - mrg);
+        rect = new RectF(-radius + mrg, -radius + mrg, radius - mrg, radius - mrg);
         progressPaint.setStrokeWidth(30);
 
         progressPaint.setColor(Color.parseColor("#F5F6FA"));
@@ -128,9 +134,9 @@ public class StudyTimeChartView extends View {
         canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG| Paint.FILTER_BITMAP_FLAG));
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2f , r);
+        canvas.translate(canvas.getWidth()/2f , spanWidth);
 
-        float rIndex = length ;
+        float rIndex = radius;
 
         rect = new RectF( - (rIndex/ 3 ), - (rIndex / 3), rIndex / 3, rIndex / 3);
 
@@ -155,7 +161,7 @@ public class StudyTimeChartView extends View {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(100);
         textPaint.setColor(Color.parseColor("#4379ff"));
-        canvas.translate(canvas.getWidth()/2f  , r + length / 4);
+        canvas.translate(canvas.getWidth()/2f  , spanWidth + radius / 4);
         canvas.drawText(String.valueOf(progress1) , 0, 0, textPaint);
 
     }
@@ -164,7 +170,7 @@ public class StudyTimeChartView extends View {
     private void initScale(Canvas canvas) {
         canvas.restore();
         canvas.save();
-        canvas.translate(canvas.getWidth()/2f, r);
+        canvas.translate(canvas.getWidth()/2f, spanWidth);
 
         scaleTextPaint.setColor(Color.parseColor("#999999")); //小刻度画笔对象
         scaleTextPaint.setStrokeWidth(1);
@@ -173,7 +179,7 @@ public class StudyTimeChartView extends View {
 
         canvas.rotate(-(180 - loseAngle / 2f),0f,0f);
 
-        float  y = length;
+        float  y = radius;
         y = - y;
 
         float tempRou = (360 - loseAngle) / (float)scaleCount;
@@ -198,12 +204,12 @@ public class StudyTimeChartView extends View {
         scaleTextPaint.setAntiAlias(true);
         scaleTextPaint.setStrokeWidth(2);
         canvas.save();
-        canvas.translate(canvas.getWidth()/2f, r);//平移画布坐标原点
+        canvas.translate(canvas.getWidth()/2f, spanWidth);//平移画布坐标原点
 
         //圆环
         scaleTextPaint.setStyle(Paint.Style.FILL);
         scaleTextPaint.setColor(Color.parseColor("#f5f6fa"));
-        rect = new RectF( -length, -length, length, length);
+        rect = new RectF( -radius, -radius, radius, radius);
         canvas.drawArc(rect, 90 + loseAngle / 2f, 360 - loseAngle, true, scaleTextPaint);
 
         int with = 5;
@@ -211,7 +217,7 @@ public class StudyTimeChartView extends View {
         scaleTextPaint.setColor(backGroundColor);
         scaleTextPaint.setShader(null);
 
-        rect = new RectF(-length + with, -length + with, length - with, length - with);
+        rect = new RectF(-radius + with, -radius + with, radius - with, radius - with);
         canvas.drawArc(rect, 90 + loseAngle / 2f, 360 - loseAngle, true, scaleTextPaint);
     }
 

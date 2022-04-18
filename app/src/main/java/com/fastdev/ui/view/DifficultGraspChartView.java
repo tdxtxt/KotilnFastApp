@@ -64,9 +64,7 @@ public class DifficultGraspChartView extends View {
         circlePaint.setAntiAlias(true);
 
         regionColorPaint = new Paint();
-//        regionColorPaint.setColor(ContextCompat.getColor(context, R.color.red_ff852b));
-        regionColorPaint.setAlpha(200);
-        regionColorPaint.setStyle(Paint.Style.FILL);
+        regionColorPaint.setStrokeWidth(5);
         regionColorPaint.setAntiAlias(true);
     }
 
@@ -224,14 +222,32 @@ public class DifficultGraspChartView extends View {
                 path2.lineTo(x2, y2);
             }
         }
-        path1.close();
-        RadialGradient gradient = new RadialGradient(0f, 0f, radius, Color.parseColor("#95ACFF"), Color.parseColor("#4379FF"), Shader.TileMode.MIRROR);
-        regionColorPaint.setShader(gradient);
-        canvas.drawPath(path1, regionColorPaint);
-
+        path2.close();
         RadialGradient gradient2 = new RadialGradient(0f, 0f, radius, Color.parseColor("#A2F3DB"), Color.parseColor("#42D0B6"), Shader.TileMode.MIRROR);
         regionColorPaint.setShader(gradient2);
+        regionColorPaint.setStyle(Paint.Style.FILL);
+        regionColorPaint.setAlpha(150);
         canvas.drawPath(path2, regionColorPaint);
+
+        regionColorPaint  .setStyle(Paint.Style.STROKE);
+        regionColorPaint.setShader(null);
+        regionColorPaint.setAlpha(255);
+        regionColorPaint.setColor(Color.parseColor("#42D0B6"));
+        canvas.drawPath(path2, regionColorPaint);
+        path2.close();
+
+        RadialGradient gradient = new RadialGradient(0f, 0f, radius, Color.parseColor("#95ACFF"), Color.parseColor("#4379FF"), Shader.TileMode.MIRROR);
+        regionColorPaint.setShader(gradient);
+        regionColorPaint.setStyle(Paint.Style.FILL);
+        regionColorPaint.setAlpha(150);
+        canvas.drawPath(path1, regionColorPaint);
+
+        regionColorPaint .setStyle(Paint.Style.STROKE);
+        regionColorPaint.setAlpha(255);
+        regionColorPaint.setShader(null);
+        regionColorPaint.setColor(Color.parseColor("#4379FF"));
+        canvas.drawPath(path1, regionColorPaint);
+        path2.close();
     }
 
 
