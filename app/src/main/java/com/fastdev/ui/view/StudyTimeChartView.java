@@ -100,7 +100,7 @@ public class StudyTimeChartView extends View {
     private void initProgress1(Canvas canvas){
         canvas.restore();
         canvas.save();
-        canvas.translate(centerX, spanWidth);//平移画布坐标原点
+        canvas.translate(canvas.getWidth()/2f, spanWidth);//平移画布坐标原点
 
         int mrg = scaleSpace + scaleWidth + 30;
         rect = new RectF(-radius + mrg, -radius + mrg, radius - mrg, radius - mrg);

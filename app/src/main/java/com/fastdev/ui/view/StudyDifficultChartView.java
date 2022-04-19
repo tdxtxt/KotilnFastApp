@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat;
 import com.baselib.ui.view.container.round.DensityUtil;
 import com.fastdev.ui.R;
 
-public class DifficultGraspChartView extends View {
+public class StudyDifficultChartView extends View {
     private int count = 5; //几边形
     private int layerCount = 4; //层数
     private float angle; //每条边对应的圆心角
@@ -34,12 +34,12 @@ public class DifficultGraspChartView extends View {
     private Double[] percents2 = {0.63, 0.20, 0.55, 0.9, 0.8}; //覆盖区域百分比2
     private String[] titles = {"dota","斗地主","大吉大利，晚上吃鸡","炉石传说","跳一跳"};//文字
 
-    public DifficultGraspChartView(Context context) {
+    public StudyDifficultChartView(Context context) {
         super(context);
         initView(context);
     }
 
-    public DifficultGraspChartView(Context context, @Nullable AttributeSet attrs) {
+    public StudyDifficultChartView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
