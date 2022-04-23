@@ -71,6 +71,7 @@ class ScanQrcodeActivity : CommToolBarMvpActivity(), QRCodeView.Delegate, ScanQr
     override fun getLayoutResId() = R.layout.activity_scan_qrcode
 
     override fun initUi() {
+        StatusBarHelper.setStatusBarHeight(this, titlebar)
         StatusBarHelper.transparentStatusBar(this)
         setInterceptBackEvent(false){
             setResult(Activity.RESULT_CANCELED)

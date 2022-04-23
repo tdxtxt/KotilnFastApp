@@ -13,6 +13,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:name="com.fastdev.app.CustomApp"
         android:allowBackup="true"
+        android:resizeableActivity="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
@@ -46,6 +47,7 @@
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
+
     </application>
 
 </manifest>

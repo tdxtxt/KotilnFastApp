@@ -3,6 +3,7 @@ package com.fastdev.ui.activity.task
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -126,10 +127,12 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                     }
                     tv_filter -> {
                         if(placeList == null) placeList = presenter.queryPlaceList(viewModel.taskId)
-                        NewSourceFilterDialog(fragmentActivity, placeList).show{ sqlWhere ->
-                            viewModel.sqlWhere = sqlWhere
-                            //刷新全部
-                            viewModel.refreshGlobal.value = true
+                        presenter.queryStatusQuantity(task.task_id){
+                            NewSourceFilterDialog(fragmentActivity, placeList).show(it){ sqlWhere ->
+                                viewModel.sqlWhere = sqlWhere
+                                //刷新全部
+                                viewModel.refreshGlobal.value = true
+                            }
                         }
                     }
                 }

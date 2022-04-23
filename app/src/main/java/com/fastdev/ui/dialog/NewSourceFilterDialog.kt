@@ -2,12 +2,14 @@ package com.fastdev.ui.dialog
 
 import android.text.TextUtils
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import cn.wzbos.android.widget.linked.LinkedView
 import com.baselib.ui.dialog.BottomBaseDialog
 import com.baselib.ui.dialog.impl.IBDialog
 import com.fastdev.data.response.PlaceBean
 import com.fastdev.ui.R
+import com.fastdev.ui.activity.task.viewmodel.Quantity
 import java.lang.StringBuilder
 
 /**
@@ -17,13 +19,17 @@ import java.lang.StringBuilder
  */
 class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeList: List<PlaceBean>?) : BottomBaseDialog(activity) {
     var action: ((String) -> Unit)? = null
+    var quantity: Quantity? = null
 
     private var linkedView: LinkedView? = null
+    private var tvTitle: TextView? = null
 
     override fun getLayoutId() = R.layout.dialog_source_filter2
 
     override fun onCreate(dialog: IBDialog) {
         linkedView = findViewById(R.id.linked)
+        tvTitle = findViewById(R.id.tv_title)
+        tvTitle?.setText("盘点范围(${quantity?.wait_count}/${quantity?.all_count})")
 //        val roomList1 = mutableListOf(PlaceBean("1101", "1栋1楼101房间"), PlaceBean("1102", "1栋1楼102房间"), PlaceBean("1103", "1栋1楼103房间")
 //                , PlaceBean("1104", "1栋1楼104房间"), PlaceBean("1105", "1栋1楼105房间"))
 //        val roomList2 = mutableListOf(PlaceBean("1201", "1栋2楼201房间"), PlaceBean("1202", "1栋2楼202房间"), PlaceBean("1203", "1栋2楼203房间")
@@ -138,7 +144,8 @@ class NewSourceFilterDialog constructor(activity: FragmentActivity, val placeLis
         return resutWhere.toString()
     }
 
-    fun show(action: (String) -> Unit){
+    fun show(quantity: Quantity?, action: (String) -> Unit){
+        this.quantity = quantity
         this.action = action
         super.show()
     }

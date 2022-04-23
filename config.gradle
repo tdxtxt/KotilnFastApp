@@ -6,7 +6,7 @@ ext{
             minSdk        : 19,
             buildTools    : '29.0.2',
             versionCode   : 1,
-            versionName   : "v1.0.1",
+            versionName   : "v1.0.2",
     ]
 
     appkey = [
@@ -115,7 +115,7 @@ ext{
             /**指示器 https://github.com/hackware1993/MagicIndicator**/
             indicator : 'com.github.hackware1993:MagicIndicator:1.7.0',
             /**沉浸式状态栏 https://github.com/gyf-dev/ImmersionBar **/
-//            statusBar: "com.gyf.immersionbar:immersionbar:3.0.0",
+            statusBar: "com.gyf.immersionbar:immersionbar:3.0.0",
 
     ]
 
