@@ -189,7 +189,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
 
     private fun updateTask(){
         tv_task_name.text = task.task_name
-        tv_task_createname.text = "接口未返"
+        tv_task_createname.text = ""
         tv_task_starttime.text = task.task_time
         tv_task_desc.text = task.task_info
     }

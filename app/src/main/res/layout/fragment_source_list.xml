@@ -7,6 +7,51 @@
     android:layout_height="match_parent"
     android:scrollbars="vertical">
 
+    <LinearLayout
+        android:id="@+id/view_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_isSticky="true"
+        android:background="@color/white_ffffff"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <top.androidman.SuperButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:paddingStart="5dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="3dp"
+            app:open_pressed_effect="true"
+            app:text="全选"
+            app:textColor="@color/blue_2981ff"
+            app:textSize="@dimen/_12sp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <top.androidman.SuperButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:paddingStart="5dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="3dp"
+            app:open_pressed_effect="true"
+            app:text="删除"
+            app:textColor="@color/black_666666"
+            app:textSize="@dimen/_12sp" />
+    </LinearLayout>
+
+    <!--这里需要包装到NestedScrollView内部，主要原因是根容器的子view必须未可滑动的控件，在使用状态视图时候布局结构发生变化，导致显示不完整-->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"

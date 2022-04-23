@@ -46,7 +46,7 @@ class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
             override fun convert(holder: BaseViewHolder, item: TaskEntity) {
                 holder.setText(R.id.tv_name, item.task_name)
                         .setText(R.id.tv_status, item.getStatus())
-                        .setText(R.id.tv_create_name, "接口未返回")
+                        .setText(R.id.tv_create_name, "")
                         .setText(R.id.tv_starttime, item.task_time)
                         .setText(R.id.tv_remark, item.task_info)
                         .setText(R.id.tv_num_all, item.task_pd_count)
