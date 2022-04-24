@@ -42,7 +42,7 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
                 holder.setText(R.id.tv_name, item.getNonullName())
                         .setText(R.id.tv_code, item.pp_code)
                         .setText(R.id.tv_status, item.getStatusName())
-                        .setText(R.id.tv_model, item.getNonullName())
+                        .setText(R.id.tv_model, item.getNonullType())
                         .setText(R.id.tv_specs, item.getNonullModel())
                         .setText(R.id.tv_position, item.getNonullAddr())
                         .setText(R.id.tv_remark, item.memo)
@@ -119,13 +119,13 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
                 })
             }
             SourceBean.STATUS_PK ->{
-                view_menu.visibility = View.VISIBLE
+                view_menu.visibility = View.GONE
                 viewModel?.refreshPK?.observe(this, Observer {
                     optAdapter(it)
                 })
             }
             SourceBean.STATUS_PY ->{
-                view_menu.visibility = View.VISIBLE
+                view_menu.visibility = View.GONE
                 viewModel?.refreshPY?.observe(this, Observer {
                     optAdapter(it)
                 })

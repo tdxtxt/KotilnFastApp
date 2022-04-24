@@ -17,7 +17,7 @@ object UHFSdk {
 
     fun start(){
         //开始寻卡是否清空之前EPC
-//        device?.setParameters(UHFService.PARAMETER_CLEAR_EPCLIST_WHEN_START_INVENTORY, 1)
+        device?.setParameters(UHFService.PARAMETER_HIDE_PC, 1)
         device?.inventoryStart()
     }
 

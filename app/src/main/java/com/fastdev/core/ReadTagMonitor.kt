@@ -25,17 +25,17 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var d
         //读取任务
         val data = UHFSdk.read()
         val diffData = data?.filter {
-            (localData[it.getId()] != true).apply {
+            (localData[it.getId()] != true && !it.getId().startsWith("E")).apply {
                 if(this) localData[it.getId()] = true
             }
         }?.map {
-            SourceBean().run {
-                pp_code = it.getId()
-                dbApiRepository.syncSaveOrUpdate(viewModel.taskId, this)?: this
-            }
+            LogA.i("【扫描卡片信息】： $it")
+            val sourceBean = SourceBean(pp_code = it.getId())
+            dbApiRepository.syncSaveOrUpdate(viewModel.taskId, sourceBean)?: sourceBean
         }
 //        LogA.i("NewSource： $diffData")
         if((diffData?.size?:0) > 0){
+            LogA.i("【显示卡片信息】： $diffData")
             playSound()
             //将数据传递到主线程之中
             viewModel.sourceViewModel.postValue(diffData?.toMutableList())
