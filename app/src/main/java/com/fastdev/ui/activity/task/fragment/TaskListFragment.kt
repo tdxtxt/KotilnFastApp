@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import com.baselib.helper.ToastHelper
 import com.baselib.ui.mvp.view.fragment.BaseMvpFragment
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.fastdev.data.response.SourceBean
 import com.fastdev.data.response.TaskEntity
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.TaskDetailsActivity

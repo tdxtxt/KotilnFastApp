@@ -2,6 +2,7 @@ package com.fastdev.data.response
 
 import android.os.Parcelable
 import android.text.TextUtils
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import org.litepal.annotation.Column
@@ -40,7 +41,13 @@ data class SourceBean(
 
     var house_code: String? = null, //房间id
 
-    var memo: String? = null //备注
+    var memo: String? = null, //备注
+
+    @Expose(serialize = false, deserialize = false)
+    var from_where: String? = null, //来源  1 任务装载接口
+
+    @Expose(serialize = false, deserialize = false)
+    var isCheck: Boolean = false //是否被选中
 ): LitePalSupport(), Parcelable {
     companion object{
         const val STATUS_ALL = "all"
@@ -48,6 +55,9 @@ data class SourceBean(
         const val STATUS_PY = "10" //盘盈
         const val STATUS_PK = "20" //盘亏
         const val STATUS_FINISH = "30" //已盘
+
+
+        const val FROMWHERE_LOAD = "1"
     }
     fun getStatusName(): String{
         return when (pp_act) {

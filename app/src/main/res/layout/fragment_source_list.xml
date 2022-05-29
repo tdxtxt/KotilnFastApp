@@ -19,7 +19,21 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
+        <com.fastdev.ui.view.HookCheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            app:hcb_check_circle_color="@color/blue_2981ff"
+            app:hcb_check_hook_color="@color/white_ffffff"
+            app:hcb_is_check="false"
+            app:hcb_style="hollow_out"
+            app:hcb_uncheck_circle_color="@color/black_999999"
+            app:hcb_uncheck_hook_color="@color/white_ffffff" />
+
         <top.androidman.SuperButton
+            android:id="@+id/checkBoxText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -29,8 +43,8 @@
             android:paddingBottom="3dp"
             app:open_pressed_effect="true"
             app:text="全选"
-            app:textColor="@color/blue_2981ff"
-            app:textSize="@dimen/_12sp" />
+            app:textColor="@color/black_666666"
+            app:textSize="@dimen/_14sp" />
 
         <Space
             android:layout_width="0dp"
@@ -38,6 +52,7 @@
             android:layout_weight="1"/>
 
         <top.androidman.SuperButton
+            android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -48,7 +63,7 @@
             app:open_pressed_effect="true"
             app:text="删除"
             app:textColor="@color/black_666666"
-            app:textSize="@dimen/_12sp" />
+            app:textSize="@dimen/_14sp" />
     </LinearLayout>
 
     <!--这里需要包装到NestedScrollView内部，主要原因是根容器的子view必须未可滑动的控件，在使用状态视图时候布局结构发生变化，导致显示不完整-->

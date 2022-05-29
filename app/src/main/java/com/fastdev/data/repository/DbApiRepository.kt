@@ -31,7 +31,7 @@ class DbApiRepository @Inject constructor(){
      */
     fun syncSave(taskId: String, data: SourceResp?): Boolean{
         if(data == null) return false
-        val sourceList = data.property_list?.map { it.apply { task_id = taskId } } ?: return false
+        val sourceList = data.property_list?.map { it.apply { task_id = taskId; from_where = SourceBean.FROMWHERE_LOAD } } ?: return false
         if(data.area_list == null) return false
 
         val result = LitePal.runInTransaction {
@@ -116,6 +116,34 @@ class DbApiRepository @Inject constructor(){
     fun deleteCacheByTask(taskId: String?): Flowable<Boolean>{
         return Flowable.unsafeCreate<Boolean> {
             it.onNext(syncDeleteCacheByTask(taskId))
+            it.onComplete()
+        }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
+    }
+
+    /**
+     * 删除资源
+     */
+    fun syncDeleteSourceByTask(taskId: String?, source: SourceBean?){
+        //查询本地存储的资源
+        val existSourceBean = LitePal.where("task_id = ? AND pp_code = ?", taskId, source?.pp_code).findFirst(SourceBean::class.java)
+                ?: return
+
+        if(existSourceBean.from_where == SourceBean.FROMWHERE_LOAD){
+            val b = LitePal.update(SourceBean::class.java, ContentValues().apply {
+                put("pp_act", SourceBean.STATUS_WAIT)
+            }, existSourceBean.id)
+            LogA.e("资产${existSourceBean.pp_code}更新：$b (状态${existSourceBean.pp_act})")
+        }else{
+            LitePal.delete(SourceBean::class.java, existSourceBean.id)
+        }
+    }
+
+    fun deleteSourcesByTask(taskId: String?, sources: List<SourceBean>?): Flowable<Boolean>{
+        return Flowable.unsafeCreate<Boolean> {
+            sources?.forEach {
+                syncDeleteSourceByTask(taskId, it)
+            }
+            it.onNext(true)
             it.onComplete()
         }.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread())
     }

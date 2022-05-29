@@ -69,6 +69,15 @@ class SourceListPresenter @Inject constructor(val netRepository: NetApiRepositor
                     }
     }
 
+    fun deleteSource(taskId: String?, sources: List<SourceBean>?, callback: () -> Unit){
+        //删掉源库中没有的
+        dbRepository.deleteSourcesByTask(taskId, sources)
+                .compose(baseView?.bindLifecycle())
+                .subscribe {
+                    callback.invoke()
+                }
+    }
+
     interface BaseMvpImpl: BaseMvpView{
         fun updateView(pageNum: Int, data: MutableList<SourceBean>?)
     }

@@ -2,7 +2,9 @@ package com.fastdev.ui.activity.task.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.baselib.helper.DialogHelper
 import com.baselib.ui.mvp.view.fragment.BaseMvpFragment
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fastdev.data.response.SourceBean
@@ -12,6 +14,7 @@ import com.fastdev.ui.activity.task.viewmodel.Option
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.fastdev.ui.adapter.BaseQuickLoadMoreAdapter
 import com.fastdev.ui.dialog.RemarkDialog
+import com.fastdev.ui.view.HookCheckBox
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_source_list.*
 import javax.inject.Inject
@@ -39,6 +42,9 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.adapter = object : BaseQuickLoadMoreAdapter<SourceBean, BaseViewHolder>(R.layout.item_source, R.layout.layout_empty_source){
             override fun convert(holder: BaseViewHolder, item: SourceBean) {
+                holder.setGone(R.id.checkbox, type != SourceBean.STATUS_PK && type != SourceBean.STATUS_PY)
+                val checkBox =  holder.getView<HookCheckBox>(R.id.checkbox)
+                checkBox.isCheck = item.isCheck
                 holder.setText(R.id.tv_name, item.getNonullName())
                         .setText(R.id.tv_code, item.pp_code)
                         .setText(R.id.tv_status, item.getStatusName())
@@ -96,6 +102,17 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
                     }
                 }
             }
+            setOnItemClickListener { adapt, view, position ->
+                val checkbox = adapter.getViewByPosition(position, R.id.checkbox)
+                if(checkbox?.visibility == View.VISIBLE){
+                    if(checkbox is HookCheckBox){
+                        val item = adapter.getItem(position)
+                        item.isCheck = !item.isCheck
+                        checkbox.isCheck = item.isCheck
+                        checkChange()
+                    }
+                }
+            }
             adapter = this
         }
 
@@ -131,18 +148,69 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
                 })
             }
         }
+
+        btn_delete.setOnClickListener {
+            DialogHelper.showCommDialog(fragmentActivity,  "温馨提示", "确定是否删除选中的资产", { menuText = "取消"},
+                    {
+                        menuText = "删除"
+                        onClick { rootView, any ->
+                            presenter.deleteSource(viewModel?.taskId, adapter.data.filter { it.isCheck }){
+                                //刷新全部数据
+                                viewModel?.refreshGlobal?.value = true
+                            }
+                        }
+                    })
+        }
+        checkBox.setOnCheckChangeListener {
+            if(checkBox.isPressed){
+                adapter.data.forEach { source ->
+                    source.isCheck = it
+                }
+                btn_delete.setTextColor(if(it) ContextCompat.getColor(btn_delete.context, R.color.blue_2981ff) else ContextCompat.getColor(btn_delete.context, R.color.black_666666))
+                btn_delete.isEnabled = it
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun checkChange(){
+        if(type != SourceBean.STATUS_PK && type != SourceBean.STATUS_PY) return
+
+        var isAllCheck = true
+        var hasCheck = false
+        adapter.data.forEach {
+            if(it.isCheck) hasCheck = true
+            if(!it.isCheck) isAllCheck= false
+        }
+        if(adapter.data.size == 0){
+            isAllCheck = false
+            hasCheck = false
+        }
+        checkBox.isCheck = isAllCheck
+        checkBoxText.setTextColor(if(isAllCheck) ContextCompat.getColor(btn_delete.context, R.color.blue_2981ff) else ContextCompat.getColor(btn_delete.context, R.color.black_666666))
+        btn_delete.setTextColor(if(hasCheck) ContextCompat.getColor(btn_delete.context, R.color.blue_2981ff) else ContextCompat.getColor(btn_delete.context, R.color.black_666666))
+        btn_delete.isEnabled = hasCheck
+    }
+
+    private fun dataChange(){
+        if(type != SourceBean.STATUS_PK && type != SourceBean.STATUS_PY) return
+
+        view_menu.visibility = if(adapter.data.size > 0) View.VISIBLE else View.GONE
     }
 
     private fun optAdapter(opt: Pair<Option, SourceBean?>){
         if(opt.first == Option.INSERT){
             if(opt.second != null) adapter.addData(opt.second)
+            dataChange()
         }else if(opt.first == Option.UPDATE){
             adapter.updateItem(opt.second)
         }else if(opt.first == Option.DELETE){
             if(opt.second != null) adapter.remove(opt.second)
+            dataChange()
         }else if(opt.first == Option.RELOAD){
             reload(null)
         }
+        checkChange()
     }
 
     override fun reload(view: View?) {
@@ -172,6 +240,7 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
 
     override fun updateView(pageNum: Int, data: MutableList<SourceBean>?) {
         adapter.updateData(pageNum, data)
+        if(pageNum == 1) dataChange()
         this.pageNum ++
     }
 
