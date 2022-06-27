@@ -1,16 +1,19 @@
 package com.fastdev.ui.dialog
 
+import android.text.TextUtils
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.baselib.ui.dialog.CenterBaseDialog
 import com.baselib.ui.dialog.impl.IBDialog
+import com.baselib.ui.view.other.TextSpanController
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.fastdev.core.MonitorProtocol
 import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
+import com.fastdev.ui.activity.task.viewmodel.Quantity
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
@@ -27,11 +30,15 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
     var btnSwicth: SuperButton? = null
     var btnNext: SuperButton? = null
     var ivAnimation: GifImageView? = null
+    var tvTotal: TextView? = null
+    var tvNumWait: TextView? = null
+    var tvNumFinish: TextView? = null
 
     var action: (() -> Unit)? = null
 
     lateinit var viewModel: TaskDetailsViewModel
     lateinit var observer: Observer<MutableList<SourceBean>>
+    lateinit var observerQuantity: Observer<Pair<String, Quantity>>
     lateinit var observerSwitcher: Observer<Boolean>
     lateinit var adapter: BaseQuickAdapter<SourceBean, BaseViewHolder>
 
@@ -43,6 +50,9 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
         btnSwicth = findViewById(R.id.btn_pause)
         btnNext = findViewById(R.id.btn_ok)
         tvCount = findViewById(R.id.tv_count)
+        tvNumWait = findViewById(R.id.tv_num_wait)
+        tvTotal = findViewById(R.id.tv_total)
+        tvNumFinish = findViewById(R.id.tv_num_finish)
         ivAnimation = findViewById(R.id.iv_animation)
         val gifDrwable = ivAnimation?.drawable as GifDrawable?
 
@@ -53,11 +63,8 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
         }.apply { adapter = this }
 
         viewModel = TaskDetailsViewModel.get(activity)
-        setCancelListener {
-            viewModel.sourceViewModel.removeObserver(observer)
-            viewModel.switchScanner.removeObserver(observerSwitcher)
-        }
         observer = Observer<MutableList<SourceBean>> {
+            viewModel.refreshQuantity.value = ""
             adapter.addData(it)
             tvCount?.text = "已扫描${adapter.itemCount}条数据"
             recyclerView?.scrollToPosition(adapter.itemCount - 1)
@@ -71,14 +78,28 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
                 btnSwicth?.setText("继续")
             }
         }
+        observerQuantity = Observer {
+            if(TextUtils.isEmpty(it.first)){
+                tvTotal?.text = TextSpanController().append(it.second.all_cout_by_server).append("\n全部").build()
+                tvNumWait?.text = TextSpanController().append(it.second.wait_count).append("\n待盘").build()
+                tvNumFinish?.text = TextSpanController().append(it.second.finish_count).append("\n已盘").build()
+            }
+        }
+        viewModel.quantityViewModel.observeForever(observerQuantity)
         viewModel.sourceViewModel.observeForever(observer)
-        viewModel.switchScanner.observeForever(observerSwitcher)
+        viewModel.switchScannerViewModel.observeForever(observerSwitcher)
+
+        setCancelListener {
+            viewModel.sourceViewModel.removeObserver(observer)
+            viewModel.switchScannerViewModel.removeObserver(observerSwitcher)
+            viewModel.quantityViewModel.removeObserver(observerQuantity)
+        }
 
         btnSwicth?.setOnClickListener {
             if(MonitorProtocol.isRun){
-                viewModel.switchScanner.postValue(false)
+                viewModel.switchScannerViewModel.postValue(false)
             }else{
-                viewModel.switchScanner.postValue(true)
+                viewModel.switchScannerViewModel.postValue(true)
             }
         }
 
@@ -88,8 +109,9 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
             MonitorProtocol.stopReadMonitor()
             dismiss()
         }
-
+        viewModel.refreshQuantity.value = ""
         btnSwicth?.performClick()
+
     }
 
     fun show(action: () -> Unit): ScannerDialog{

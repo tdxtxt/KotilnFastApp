@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Looper
 import com.baselib.app.ApplicationDelegate
 import com.baselib.helper.LogA
+import com.baselib.helper.ToastHelper
 import com.fastdev.data.repository.DbApiRepository
 import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
@@ -19,14 +20,14 @@ import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
  */
 class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var dbApiRepository: DbApiRepository) : MonitorProtocol(looper) {
     private var soundPool: SoundPool? = null
-    private val localData: HashMap<String, Boolean> = HashMap()
+//    private val localData: HashMap<String, Boolean> = HashMap()
 
     override fun task() {
         //读取任务
         val data = UHFSdk.read()
         val diffData = data?.filter {
-            (localData[it.getId()] != true && !it.getId().startsWith("E")).apply {
-                if(this) localData[it.getId()] = true
+            (viewModel.localData[it.getId()] != true && !it.getId().startsWith("E")).apply {
+                if(this) viewModel.localData[it.getId()] = true
             }
         }?.map {
             LogA.i("【扫描卡片信息】： $it")
@@ -35,23 +36,26 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var d
         }
 //        LogA.i("NewSource： $diffData")
         if((diffData?.size?:0) > 0){
+            costTime = 0
             LogA.i("【显示卡片信息】： $diffData")
             playSound()
             //将数据传递到主线程之中
             viewModel.sourceViewModel.postValue(diffData?.toMutableList())
+        }else{
+            if(costTime >= 4) ToastHelper.showToast("未扫描到新的资产信息")
         }
     }
 
     override fun start() {
         super.start()
         UHFSdk.start()
-        viewModel.switchScanner.postValue(true)
+        viewModel.switchScannerViewModel.postValue(true)
     }
 
     override fun close() {
         UHFSdk.stop()
-        localData.clear()
-        viewModel.switchScanner.postValue(false)
+//        localData.clear()
+        viewModel.switchScannerViewModel.postValue(false)
         super.close()
     }
 

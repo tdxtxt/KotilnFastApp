@@ -17,18 +17,18 @@ class TaskDetailsViewModel : ViewModel(){
 //    var selectFoorList: List<PlaceBean>? = null
 //    var selectRoomList: List<PlaceBean>? = null
     var sqlWhere: String = ""
-
+    val localData: HashMap<String, Boolean> = HashMap()
     val sourceViewModel = MutableLiveData<MutableList<SourceBean>>()
-    val quantityViewModel = MutableLiveData<Quantity>()
+    val quantityViewModel = MutableLiveData<Pair<String, Quantity>>()
     //扫描器开关
-    val switchScanner = MutableLiveData<Boolean>()
+    val switchScannerViewModel = MutableLiveData<Boolean>()
 
     val refreshAll = MutableLiveData<Pair<Option, SourceBean?>>()
     val refreshPK = MutableLiveData<Pair<Option, SourceBean?>>()
     val refreshPY = MutableLiveData<Pair<Option, SourceBean?>>()
     val refreshWait = MutableLiveData<Pair<Option, SourceBean?>>()
     val refreshFinish = MutableLiveData<Pair<Option, SourceBean?>>()
-    val refreshQuantity = MutableLiveData<Boolean>()
+    val refreshQuantity = MutableLiveData<String>()
     val refreshGlobal = MutableLiveData<Boolean>()
 
 
@@ -45,5 +45,6 @@ class Quantity(
     var wait_count: Int = 0, //待盘数量
     var finish_count: Int = 0, //已经盘点数量
     var py_count: Int = 0, //盘盈数量
-    var pk_count: Int = 0 //盘亏数量
+    var pk_count: Int = 0, //盘亏数量
+    var all_cout_by_server: String? = "", //服务器的总数据
 )

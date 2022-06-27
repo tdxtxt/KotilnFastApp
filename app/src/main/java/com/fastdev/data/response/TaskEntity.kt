@@ -1,6 +1,7 @@
 package com.fastdev.data.response
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -20,7 +21,9 @@ class TaskEntity (
     var task_py_count: String? = "0", //盘盈数量
     var task_pk_count: String? = "0", //盘亏数量
     var task_wait_count: String? = "0", //待盘数量
-    var task_complete_count: String? = "0" //已经盘点数量
+    var task_complete_count: String? = "0", //已经盘点数量
+    @SerializedName(value = "task_create_user", alternate = ["task_create_by"])
+    var task_create_by: String? = "" //创建人
 ): Parcelable{
     companion object{
         const val STATUS_WAIT = "10" //待开始

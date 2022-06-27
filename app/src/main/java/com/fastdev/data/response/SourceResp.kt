@@ -9,4 +9,6 @@ class SourceResp {
     var detail: TaskEntity? = null
     var property_list: MutableList<SourceBean>? = null
     var area_list: List<PlaceBean>? = null
+
+    fun isEmpty() = property_list?.size?:0 == 0
 }

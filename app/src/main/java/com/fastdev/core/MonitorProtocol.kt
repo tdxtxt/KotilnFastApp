@@ -54,10 +54,12 @@ abstract class MonitorProtocol constructor(val looper: Looper?) {
     }
 
     var refreshHandler: Handler? = null
+    var costTime: Int = 0
 
     private val runnable  = Runnable {
         task()
         next()
+        costTime ++
     }
 
     abstract fun task()
@@ -70,6 +72,7 @@ abstract class MonitorProtocol constructor(val looper: Looper?) {
     open fun close(){
         refreshHandler?.removeCallbacks(runnable)
         refreshHandler = null
+        costTime = 0
     }
 
     fun next(){

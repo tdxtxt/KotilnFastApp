@@ -90,8 +90,13 @@ class TaskListPresenter @Inject constructor(val netRepository: NetApiRepository,
             netRepository.queryAllSourceByTask(task.task_id)
                     .filter {
                         if(it.isSuccess()){
-                            //资源存数据库
-                            dbRepository.syncSave(task.task_id, it.data?.getData())
+                            if(it.data?.getData()?.isEmpty() == true){
+                                ToastHelper.showToast("没有盘点资产数据").run { false }
+                            }else{
+                                //资源存数据库
+                                dbRepository.syncSave(task.task_id, it.data?.getData())
+                            }
+
                         }else{
                             ToastHelper.showToast(it.getMessage())
                             false

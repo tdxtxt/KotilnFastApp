@@ -96,7 +96,7 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
                                     SourceBean.STATUS_WAIT -> viewModel?.refreshWait?.postValue(Pair(Option.INSERT, existNewItem))
                                 }
 
-                                viewModel?.refreshQuantity?.postValue(true)
+                                viewModel?.refreshQuantity?.postValue(viewModel?.sqlWhere)
                             }
                         }
                     }
@@ -136,13 +136,13 @@ class SourceListFragment : BaseMvpFragment(), SourceListPresenter.BaseMvpImpl {
                 })
             }
             SourceBean.STATUS_PK ->{
-                view_menu.visibility = View.GONE
+                view_menu.visibility = View.VISIBLE
                 viewModel?.refreshPK?.observe(this, Observer {
                     optAdapter(it)
                 })
             }
             SourceBean.STATUS_PY ->{
-                view_menu.visibility = View.GONE
+                view_menu.visibility = View.VISIBLE
                 viewModel?.refreshPY?.observe(this, Observer {
                     optAdapter(it)
                 })

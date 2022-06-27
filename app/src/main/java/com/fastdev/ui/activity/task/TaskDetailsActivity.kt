@@ -3,7 +3,6 @@ package com.fastdev.ui.activity.task
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -66,7 +65,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                         .compose(bindUIThread())
                         .subscribe {
                             if(scanDialogDisplay){
-                                if(viewModel.switchScanner.value == false) viewModel.switchScanner.postValue(true)
+                                if(viewModel.switchScannerViewModel.value == false) viewModel.switchScannerViewModel.postValue(true)
                             }else{
                                 btn_start.performClick()
                             }
@@ -76,7 +75,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
                 RxBus.listen(TaskEventCode.KEY_UP::class.java)
                         .compose(bindLifecycle())
                         .subscribe {
-                            viewModel.switchScanner.postValue(false)
+                            viewModel.switchScannerViewModel.postValue(false)
                         }
         }
     }
@@ -102,6 +101,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         }
 
         setInterceptBackEvent(false){
+            viewModel.localData.clear()
             MonitorProtocol.stopReadMonitor()
             setResult(Activity.RESULT_OK)
             finish()
@@ -152,24 +152,24 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         tabLayout.onPageSelected(0)
 
         viewModel.quantityViewModel.observe(this, Observer {
-            tabLayout.getTitleView(0)?.text = "全部(${it.all_count})"
-            tabLayout.getTitleView(1)?.text = "待盘(${it.wait_count})"
-            tabLayout.getTitleView(2)?.text = "已盘(${it.finish_count})"
-            tabLayout.getTitleView(3)?.text = "盘盈(${it.py_count})"
-            tabLayout.getTitleView(4)?.text = "盘亏(${it.pk_count})"
+            if(viewModel.sqlWhere == it.first){
+                tabLayout.getTitleView(0)?.text = "全部(${it.second.all_count})"
+                tabLayout.getTitleView(1)?.text = "待盘(${it.second.wait_count})"
+                tabLayout.getTitleView(2)?.text = "已盘(${it.second.finish_count})"
+                tabLayout.getTitleView(3)?.text = "盘盈(${it.second.py_count})"
+                tabLayout.getTitleView(4)?.text = "盘亏(${it.second.pk_count})"
+            }
         })
 
-        viewModel.refreshQuantity.observe(this, Observer { isRefresh ->
-            if(isRefresh){
-                viewModel.refreshQuantity.value = false
-                presenter.queryStatusQuantity(task.task_id, viewModel.sqlWhere){
-                    viewModel.quantityViewModel.value = it
-                }
+        viewModel.refreshQuantity.observe(this, Observer { sqlWhere ->
+            presenter.queryStatusQuantity(task.task_id, sqlWhere) {
+                it.all_cout_by_server = task.task_pd_count
+                viewModel.quantityViewModel.value = Pair(sqlWhere, it)
             }
         })
         viewModel.refreshGlobal.observe(this, Observer { isRefresh ->
             if(isRefresh){
-                viewModel.refreshQuantity.value = true
+                viewModel.refreshQuantity.value = viewModel.sqlWhere
                 viewModel.refreshAll.value = Pair(Option.RELOAD, null)
                 viewModel.refreshWait.value = Pair(Option.RELOAD, null)
                 viewModel.refreshPY.value = Pair(Option.RELOAD, null)
@@ -181,7 +181,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         })
         updateTask()
         viewModel.refreshGlobal.value = true
-        viewModel.switchScanner.observe(this, Observer { switch ->
+        viewModel.switchScannerViewModel.observe(this, Observer { switch ->
             if(switch){
                 MonitorProtocol.startReadMonitor(viewModel, presenter.dbRepository())
             }else{
@@ -192,9 +192,10 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
 
     private fun updateTask(){
         tv_task_name.text = task.task_name
-        tv_task_createname.text = ""
+        tv_task_createname.text = task.task_create_by
         tv_task_starttime.text = task.task_time
         tv_task_desc.text = task.task_info
+        tv_task_source_total_num.text = task.task_pd_count
     }
 
     override fun commitSuc() {
