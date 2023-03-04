@@ -71,6 +71,7 @@ class ScannerDialog constructor(val activity: FragmentActivity) : CenterBaseDial
         }
         observerSwitcher = Observer { switch ->
             if(switch){
+                viewModel.sourceViewModel.value?.clear()
                 gifDrwable?.start()
                 btnSwicth?.setText("暂停")
             }else{

@@ -81,7 +81,8 @@ class DbApiRepository @Inject constructor(){
     /**
      * 更新扫描资源数据，根据任务查询所有资产，若存在则根据状态来更新,不存在则存储并更新状态
      */
-    fun syncSaveOrUpdate(taskId: String, beans: List<SourceBean>){
+    fun syncSaveOrUpdate(taskId: String, beans: List<SourceBean>?){
+        if(beans == null) return
         val list = LitePal.where("task_id = ?", taskId).find(SourceBean::class.java)
         if(list.isEmpty()){
             beans.forEach { it.pp_act == SourceBean.STATUS_PY }
@@ -90,8 +91,9 @@ class DbApiRepository @Inject constructor(){
             beans.forEach {bean ->
                 val existSourceBean = list.firstOrNull { it.pp_code == bean.pp_code }
                 if(existSourceBean == null){
-                    bean.pp_act = SourceBean.STATUS_PY;
-                    bean.save()
+                    bean.pp_act = SourceBean.STATUS_PY
+                    val b = bean.save()
+                    LogA.e("资产${bean.pp_code}新增：$b (状态${bean.pp_act})")
                 }else{
                     if(existSourceBean.pp_act == SourceBean.STATUS_WAIT){
                         existSourceBean.pp_act = SourceBean.STATUS_FINISH

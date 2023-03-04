@@ -10,6 +10,7 @@ import com.fastdev.data.response.SourceBean
 import com.fastdev.data.response.SourceResp
 import com.fastdev.data.response.TaskEntity
 import io.reactivex.Flowable
+import io.reactivex.SingleObserver
 import javax.inject.Inject
 
 /**
@@ -42,5 +43,9 @@ class NetApiRepository @Inject constructor() : BaseRepository() {
 
     fun postAllSource(taskId: String?, sources: List<SourceBean>): Flowable<ResponseBody<Any>>{
         return netApi.postAllSource(SourceRequest(taskId, sources))
+    }
+
+    fun querySourceByRoom(code: String?): ResponseBody<SourceBean>?{
+        return netApi.querySourceByRoom(code).execute().body()
     }
 }

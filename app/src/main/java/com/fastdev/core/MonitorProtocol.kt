@@ -5,6 +5,7 @@ import android.os.HandlerThread
 import android.os.Looper
 import com.baselib.helper.ToastHelper
 import com.fastdev.data.repository.DbApiRepository
+import com.fastdev.data.repository.NetApiRepository
 import com.fastdev.helper.UserCacheHelper
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
 import com.seuic.uhf.UHFService
@@ -22,12 +23,12 @@ abstract class MonitorProtocol constructor(val looper: Looper?) {
         private var monitorThread: HandlerThread? = null
         private var readMonitor: MonitorProtocol? = null
 
-        fun startReadMonitor(viewModel: TaskDetailsViewModel, dbApiRepository: DbApiRepository){
+        fun startReadMonitor(viewModel: TaskDetailsViewModel, dbApiRepository: DbApiRepository, netApiRepository: NetApiRepository){
             if(isRun) return
             isRun = true
             monitorThread = HandlerThread("monitor_thread")
             monitorThread?.start()
-            readMonitor = ReadTagMonitor(monitorThread?.looper, viewModel, dbApiRepository)
+            readMonitor = ReadTagMonitor(monitorThread?.looper, viewModel, dbApiRepository, netApiRepository)
             readMonitor?.start()
         }
         fun stopReadMonitor(){

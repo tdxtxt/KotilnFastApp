@@ -183,7 +183,7 @@ class TaskDetailsActivity : CommToolBarMvpActivity(), TaskDetailsPresenter.BaseM
         viewModel.refreshGlobal.value = true
         viewModel.switchScannerViewModel.observe(this, Observer { switch ->
             if(switch){
-                MonitorProtocol.startReadMonitor(viewModel, presenter.dbRepository())
+                MonitorProtocol.startReadMonitor(viewModel, presenter.dbRepository(), presenter.netRepository)
             }else{
                 MonitorProtocol.stopReadMonitor()
             }

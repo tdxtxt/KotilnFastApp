@@ -12,6 +12,7 @@ import com.fastdev.ui.activity.task.TaskDetailsActivity
 import com.fastdev.ui.activity.task.presenter.TaskListPresenter
 import com.fastdev.ui.activity.task.viewmodel.TaskListViewModel
 import com.fastdev.ui.adapter.BaseQuickLoadMoreAdapter
+import com.lxj.statelayout.StateLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_task_list.*
 import javax.inject.Inject
@@ -99,6 +100,10 @@ class TaskListFragment : BaseMvpFragment(), TaskListPresenter.BaseMvpImpl {
         refreshLayout.finishRefresh()
         ToastHelper.showToast(errorMsg)
         getStateView(R.id.refreshLayout)?.showError()
+    }
+
+    override fun customConfigSateView(view: View, stateLayout: StateLayout) {
+        stateLayout.configEmptyLayoutId(isEmptyViewRetryEable = true)
     }
 
     override fun updateView(pageNum: Int, data: MutableList<TaskEntity>?) {

@@ -7,7 +7,11 @@ import com.fastdev.data.response.SourceBean
 import com.fastdev.data.response.SourceResp
 import com.fastdev.data.response.TaskEntity
 import io.reactivex.Flowable
-import retrofit2.http.*
+import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface NetApi {
     @POST("api/pd/public/login.do")
@@ -24,4 +28,7 @@ interface NetApi {
 
     @POST("api/pd/saveData.do")
     fun postAllSource(@Body parmas: SourceRequest): Flowable<ResponseBody<Any>>
+
+    @GET("api/pd/getHousePropertyList.do")
+    fun querySourceByRoom(@Query("house_code") code: String?, ): Call<ResponseBody<SourceBean>>
 }
