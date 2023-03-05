@@ -13,6 +13,7 @@ import com.fastdev.data.repository.NetApiRepository
 import com.fastdev.data.response.SourceBean
 import com.fastdev.ui.R
 import com.fastdev.ui.activity.task.viewmodel.TaskDetailsViewModel
+import com.seuic.uhf.EPC
 
 /**
  * 功能描述:
@@ -26,7 +27,6 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var d
     override fun task() {
         //读取任务
         val data = UHFSdk.read()
-        data?.filter { it.getId()?.startsWith("f")?: false }
 
         val diffData = data?.filter {
             (viewModel.localData[it.getId()] != true && !it.getId().startsWith("E")).apply {
@@ -35,7 +35,7 @@ class ReadTagMonitor(looper: Looper?, var viewModel: TaskDetailsViewModel, var d
         }?.map {
             LogA.i("【扫描卡片信息】： $it")
             if(it.getId().startsWith("f")){//是房间
-                val roomSource = netApiRepository.querySourceByRoom(it.getId())
+                val roomSource = netApiRepository.sycquerySourceByRoom(it.getId())
                 if(roomSource?.isSuccess() == true && roomSource.data?.isEmpty() == false){
                     val sourceList = roomSource.data.getListData()
                     dbApiRepository.syncSaveOrUpdate(viewModel.taskId, sourceList)

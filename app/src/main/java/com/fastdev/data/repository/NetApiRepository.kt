@@ -2,15 +2,14 @@ package com.fastdev.data.repository
 
 import com.fastdev.data.ResponseBody
 import com.fastdev.data.repository.api.NetApi
-import com.fastdev.net.ApiClient
 import com.fastdev.data.repository.base.BaseRepository
 import com.fastdev.data.request.SourceRequest
 import com.fastdev.data.response.LoginEntity
 import com.fastdev.data.response.SourceBean
 import com.fastdev.data.response.SourceResp
 import com.fastdev.data.response.TaskEntity
+import com.fastdev.net.ApiClient
 import io.reactivex.Flowable
-import io.reactivex.SingleObserver
 import javax.inject.Inject
 
 /**
@@ -45,7 +44,11 @@ class NetApiRepository @Inject constructor() : BaseRepository() {
         return netApi.postAllSource(SourceRequest(taskId, sources))
     }
 
-    fun querySourceByRoom(code: String?): ResponseBody<SourceBean>?{
-        return netApi.querySourceByRoom(code).execute().body()
+    fun sycquerySourceByRoom(code: String?): ResponseBody<SourceBean>?{
+        return netApi.sycQuerySourceByRoom(code).execute().body()
+    }
+
+    fun aycquerySourceByRoom(code: String?): Flowable<ResponseBody<SourceBean>>{
+        return netApi.aycQuerySourceByRoom(code)
     }
 }

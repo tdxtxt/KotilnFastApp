@@ -30,5 +30,8 @@ interface NetApi {
     fun postAllSource(@Body parmas: SourceRequest): Flowable<ResponseBody<Any>>
 
     @GET("api/pd/getHousePropertyList.do")
-    fun querySourceByRoom(@Query("house_code") code: String?, ): Call<ResponseBody<SourceBean>>
+    fun sycQuerySourceByRoom(@Query("house_code") code: String?, ): Call<ResponseBody<SourceBean>>
+
+    @GET("api/pd/getHousePropertyList.do")
+    fun aycQuerySourceByRoom(@Query("house_code") code: String?, ): Flowable<ResponseBody<SourceBean>>
 }
